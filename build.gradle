@@ -34,12 +34,12 @@ android {
     //     }
     // }
     // 
-    compileSdkVersion 17
+    compileSdkVersion 25
     buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "com.weidi.artifact"
-        minSdkVersion 17
-        targetSdkVersion 17
+        minSdkVersion 23
+        targetSdkVersion 25
         signingConfig signingConfigs.debug
 //        multiDexEnabled true
 

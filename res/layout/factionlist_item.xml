@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dimen_16_dp"
+    android:layout_marginBottom="@dimen/dimen_16_dp"
+    android:background="@drawable/item_bg">
+
+    <ImageView
+        android:id="@+id/home_factionlist_image"
+        android:layout_width="72dip"
+        android:layout_height="72dip"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/applock"/>
+
+    <TextView
+        android:id="@+id/home_factionlist_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/home_factionlist_image"
+        android:layout_marginTop="@dimen/dimen_6_dp"
+        android:layout_centerHorizontal="true"
+        android:text="class打成jar包"
+        android:textColor="#000000"
+        android:textSize="20sp"/>
+
+</RelativeLayout>

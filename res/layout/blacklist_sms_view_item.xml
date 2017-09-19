@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    
+    <ImageView 
+        android:id="@+id/iv_blacklistsms_icon"
+	    android:src="@drawable/blacklistsms"
+	    android:paddingLeft="5dip"
+	    android:layout_centerVertical="true"
+	    android:layout_width="wrap_content"
+	   	android:layout_height="wrap_content"/>
+    
+	<CheckBox 
+        android:id="@+id/cb_blacklistsms_check"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dip"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+	   	android:layout_height="wrap_content"/>
+    <LinearLayout 
+        android:id="@+id/ll_blacklistsms"
+        android:layout_toRightOf="@id/iv_blacklistsms_icon"
+        android:layout_toLeftOf="@id/cb_blacklistsms_check"
+        android:layout_marginTop="5dip"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_width="wrap_content"
+	   	android:layout_height="wrap_content"
+	   	android:orientation="vertical">
+	    <RelativeLayout 
+	        android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content">
+	    	<RelativeLayout 
+	    	    android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content">
+			    <TextView 
+			        android:id="@+id/tv_blacklistsms_number"
+			        android:layout_width="wrap_content"
+			   		android:layout_height="wrap_content"
+			        android:textColor="#D20000"
+			        android:textSize="15sp"
+			        android:text="13661440148"/>
+			    <TextView 
+			        android:id="@+id/tv_blacklistsms_address"
+			        android:layout_below="@id/tv_blacklistsms_number"
+			        android:layout_width="wrap_content"
+			   		android:layout_height="wrap_content"
+			   		android:textSize="10sp"
+			        android:text="未知地方"/>
+		    </RelativeLayout>
+		    <RelativeLayout 
+	    	    android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content">
+			    <TextView 
+			        android:layout_alignParentRight="true"
+			        android:id="@+id/tv_blacklistsms_time"
+			        android:layout_width="wrap_content"
+			   		android:layout_height="wrap_content"
+			        android:textColor="#0196AF"
+			        android:text="2015-4-17 22:40"/>
+			    <TextView 
+			        android:layout_below="@id/tv_blacklistsms_time"
+			        android:layout_alignParentRight="true"
+			        android:layout_width="wrap_content"
+			   		android:layout_height="wrap_content"
+			   		android:textSize="10sp"
+			        android:text="黑名单"/>
+		    </RelativeLayout>
+		</RelativeLayout>
+		<TextView 
+	        android:id="@+id/tv_blacklistsms_body"
+	        android:layout_width="wrap_content"
+	   		android:layout_height="wrap_content"
+	   		android:textSize="13sp"
+	        android:text="这几天心神老是不宁，想这想那的，不想又做不到，想了又烦恼。该怎么办呢？马上可以找工作了，不知道到时候会是一种怎样的情况。"/>
+	</LinearLayout>
+    
+</RelativeLayout>

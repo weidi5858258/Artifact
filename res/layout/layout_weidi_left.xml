@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<View xmlns:android="http://schemas.android.com/apk/res/android"
+
+      android:layout_width="@dimen/line_width"
+      android:layout_height="match_parent"
+      android:layout_gravity="left"
+      android:background="@color/lavenderblush">
+    <!--android:background="@drawable/none_png"-->
+    <!--android:background="@color/lavenderblush"-->
+
+</View>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+    <TextView 
+        android:id="@+id/mytoast_address"
+        android:background="@drawable/shape_mytoast"
+        android:drawableLeft="@android:drawable/stat_sys_phone_call"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+   		android:layout_height="wrap_content"
+        android:textSize="35sp"
+   		android:textColor="#D20000"/>
+	
+</LinearLayout>

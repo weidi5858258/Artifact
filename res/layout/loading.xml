@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loading"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:visibility="gone">
+
+    <ProgressBar
+        android:id="@+id/pb_appsmanager_progress"
+        android:layout_width="65dip"
+        android:layout_height="65dip"
+        android:layout_centerInParent="true"/>
+    <TextView
+        android:id="@+id/pb_appsmanager_alert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pb_appsmanager_progress"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dip"
+        android:text="正在加载...马上就好"
+        android:textColor="#FF0000"
+        android:textSize="35sp"/>
+
+</RelativeLayout>

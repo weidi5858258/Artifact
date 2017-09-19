@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView 
+        android:background="#8866ff00"
+        android:gravity="center"
+        android:textSize="35sp"
+        android:layout_width="match_parent"
+   		android:layout_height="wrap_content"
+   		android:text="设置套餐"/>
+	
+	<EditText 
+        android:id="@+id/et_inputdialog_input"
+         android:inputType="number"
+        android:layout_width="match_parent"
+   	    android:layout_height="wrap_content"
+   	    android:textSize="20sp"
+   	    android:hint="请输入最大套餐值"/>
+    <LinearLayout 
+        android:layout_width="match_parent"
+   	    android:layout_height="wrap_content"
+   	    android:orientation="horizontal">
+	<Button 
+	    android:id="@+id/bt_inputdialog_sure"
+	    android:layout_weight="1"
+	    android:layout_width="0dip"
+   	    android:layout_height="wrap_content"
+   	    android:text="确定"/>
+	<Button 
+	    android:id="@+id/bt_inputdialog_cancel"
+	    android:layout_weight="1"
+	    android:layout_width="0dip"
+   	    android:layout_height="wrap_content"
+   	    android:text="取消"/>
+	</LinearLayout>
+</LinearLayout>

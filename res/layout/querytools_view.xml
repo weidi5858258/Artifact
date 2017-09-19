@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    <TextView 
+        android:id="@+id/tv_querytools_title"
+        android:background="#8866ff00"
+        android:textSize="35sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+   		android:layout_height="wrap_content"
+   		android:text="好玩吗"/>
+	<EditText
+	    android:id="@+id/et_querytools_name"
+	    android:hint=""
+	    android:layout_width="match_parent"
+   		android:layout_height="wrap_content"/>
+	<EditText
+	    android:id="@+id/et_querytools_number"
+	    android:hint=""
+	    android:inputType="phone"
+	    android:layout_width="match_parent"
+   		android:layout_height="wrap_content"/>
+	
+	<LinearLayout
+	    android:layout_width="match_parent"
+   		android:layout_height="wrap_content"
+   		android:orientation="horizontal">
+		<Button
+		    android:id="@+id/bt_querytools_sure"
+		    android:layout_width="wrap_content"
+	   		android:layout_height="wrap_content"
+	   		android:layout_weight="1"
+	   		android:text="确定"/>
+		<Button
+		    android:id="@+id/bt_querytools_cancel"
+		    android:layout_width="wrap_content"
+	   		android:layout_height="wrap_content"
+	   		android:layout_weight="1"
+	   		android:text="取消"/>
+	</LinearLayout>
+</LinearLayout>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+	<TextView 
+	    android:gravity="center"
+    	android:background="#8866ff00"
+	    android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:textColor="#000000"
+    	android:textSize="38sp"
+    	android:text="手机杀毒"/>
+	
+	<LinearLayout 
+	    android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal">
+
+    	<FrameLayout
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content" >
+
+    	    <ImageView
+    	        android:src="@drawable/ic_scanner_malware"
+    	        android:layout_width="100dip"
+    	        android:layout_height="100dip"
+    	        android:padding="5dip" />
+    	    <ImageView 
+    	        android:id="@+id/iv_killervirus_scan"
+    	        android:src="@drawable/scanning"
+    	        android:layout_width="100dip"
+    	        android:layout_height="100dip"/>
+    	</FrameLayout>
+	    
+	    <LinearLayout 
+	        android:layout_gravity="center"
+	        android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	    	android:orientation="vertical">
+		    <TextView 
+		        android:id="@+id/tv_killervirus_info"
+		        android:layout_gravity="center_horizontal"
+		        android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"
+	    		android:textSize="30sp"
+	    		android:text="正在扫描..."/>
+		    <ProgressBar 
+		        android:id="@+id/pb_killervirus_progress"
+		        style="@style/Widget_MyProgressBar_Horizontal"
+		        android:layout_marginTop="5dip"
+				android:layout_marginRight="5dip"		        
+		        android:layout_width="match_parent"
+	    		android:layout_height="wrap_content"/>
+	    </LinearLayout>
+	</LinearLayout>
+	
+	
+	<ListView 
+	    android:id="@+id/lv_killervirus_appname"
+	    android:layout_weight="1000"
+	    android:layout_width="match_parent"
+    	android:layout_height="match_parent"/>
+    <!-- <ScrollView 
+   	    android:layout_width="match_parent"
+   		android:layout_height="match_parent">
+		<LinearLayout 
+		    android:id="@+id/ll_killervirus_appname"
+		    android:layout_weight="1000"
+		    android:layout_width="match_parent"
+	    	android:layout_height="match_parent"
+	    	android:orientation="vertical"/>
+	</ScrollView> -->
+</LinearLayout>

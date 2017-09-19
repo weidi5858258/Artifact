@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_bg">
+
+    <ImageView
+        android:id="@+id/iv_sms_icon"
+        android:layout_width="55dip"
+        android:layout_height="55dip"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ai"/>
+
+    <LinearLayout
+        android:id="@+id/ll_sms_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/iv_sms_icon"
+        android:orientation="vertical"
+        android:paddingLeft="5dip">
+
+        <TextView
+            android:id="@+id/tv_sms_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#E3B87D"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/tv_sms_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv_appinfos_uid"
+            android:textColor="#000000"
+            android:textSize="13sp"/>
+
+        <TextView
+            android:id="@+id/tv_sms_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textColor="#8000FF"
+            android:textSize="15sp"/>
+            <!--android:maxLines="3"-->
+    </LinearLayout>
+
+</RelativeLayout>

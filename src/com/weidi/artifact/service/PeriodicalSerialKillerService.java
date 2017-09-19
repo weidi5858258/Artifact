@@ -1,0 +1,550 @@
+package com.weidi.artifact.service;
+
+import android.app.ActivityManager;
+import android.app.Service;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Looper;
+import android.os.RemoteException;
+
+import com.weidi.artifact.application.MyApplication;
+import com.weidi.artifact.constant.Constant;
+import com.weidi.callsystemmethod.ICallSystemMethod;
+import com.weidi.eventbus.EventBus;
+import com.weidi.log.Log;
+import com.weidi.threadpool.ThreadPool;
+import com.weidi.utils.MyToast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import static com.weidi.utils.MyToast.show;
+
+public class PeriodicalSerialKillerService extends Service implements EventBus.EventListener {
+
+    private static final String TAG = "PeriodicalSerialKillerService";
+    private ArrayList<String> mCannotBeKilledPackageNameList = new ArrayList<String>();
+    private ArrayList<Intent> mRecentTaskIntentList = new ArrayList<Intent>();
+    private ArrayList<String> mRecentTaskPackageNameList = new ArrayList<String>();
+    private boolean mIsRunning = true;
+    private Handler mHandler;
+    private File mCannotBeKilledPackageNameListFile;
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public void onCreate() {
+        Log.d(TAG, "onCreate(): " + this);
+
+        EventBus.getDefault().register(this);
+
+        mCannotBeKilledPackageNameListFile = new File(
+                getFilesDir().toString() + "CannotBeKilledPackageNameFile.txt");
+        if (mCannotBeKilledPackageNameListFile != null
+                && !mCannotBeKilledPackageNameListFile.exists()) {
+            try {
+                mCannotBeKilledPackageNameListFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        restoreData();
+
+        saveMMandQQ();
+
+        List<ApplicationInfo> mApplicationInfoList = ((MyApplication) getApplicationContext())
+                .mPackageManager.getInstalledApplications(0);
+        int mApplicationInfoListCount = mApplicationInfoList.size();
+        final ArrayList<String> systemApplicationList = new
+                ArrayList<String>();
+        final ArrayList<ApplicationInfo> userApplicationInfoList = new
+                ArrayList<ApplicationInfo>();
+        for (int i = 0; i < mApplicationInfoListCount; i++) {
+            ApplicationInfo applicationInfo = mApplicationInfoList.get(i);
+            if ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                userApplicationInfoList.add(applicationInfo);
+            } else if ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 1) {
+                systemApplicationList.add(applicationInfo.processName);
+            }
+        }
+
+        /*for (ApplicationInfo applicationInfo : userApplicationInfoList) {
+            Log.d(TAG, "packagename = " + applicationInfo.processName);
+        }*/
+
+        ThreadPool.getFixedThreadPool(Constant.FIXEDTHREADPOOLCOUNT).execute(new Runnable() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                mHandler = new Handler() {
+                    public void handleMessage(android.os.Message msg) {
+                        serialKiller(systemApplicationList, userApplicationInfoList);
+                        if (mIsRunning && mHandler != null) {
+                            mHandler.sendEmptyMessageDelayed(0, 1 * 1000);
+                        }
+                    }
+                };
+                if (mHandler != null) {
+                    mHandler.sendEmptyMessage(0);
+                }
+                Looper.loop();
+            }
+        });
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStartCommand():intent = " + intent +
+                " flags = " + flags + " startId = " + startId + " " + this);
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        return super.onUnbind(intent);
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy(): " + this);
+        mIsRunning = false;
+        mHandler.removeMessages(0);
+        mHandler = null;
+        if (mCannotBeKilledPackageNameList != null) {
+            mCannotBeKilledPackageNameList.clear();
+            saveOrUpdataData();
+            mCannotBeKilledPackageNameList = null;
+        }
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onEvent(int what, Object object) {
+        switch (what) {
+            case Constant.PERIODICALSERIALKILLERSERVICE:
+                stopSelf();
+                break;
+
+            case Constant.BEKILLEDPROCESSNAME:
+                String packageName = (String) object;
+                if (mCannotBeKilledPackageNameList != null
+                        && mCannotBeKilledPackageNameList.contains(packageName)) {
+                    mCannotBeKilledPackageNameList.remove(packageName);
+                    saveOrUpdataData();
+
+                    for (Intent intent : mRecentTaskIntentList) {
+                        String pkgName = intent.getComponent().getPackageName();
+                        if (pkgName.equals(packageName)
+                                && mRecentTaskIntentList.contains(intent)
+                                && mRecentTaskPackageNameList.contains(pkgName)) {
+                            mRecentTaskIntentList.remove(intent);
+                            mRecentTaskPackageNameList.remove(packageName);
+                            break;
+                        }
+                    }
+                    /*for (Intent intent : mRecentTaskIntentList) {
+                        ComponentName componentName = intent.getComponent();
+                        String className = componentName.getClassName();
+                        Log.d(TAG, "className3 = " + className);
+                    }*/
+                }
+                break;
+
+            case Constant.CHANGEAPP:
+                /*for (Intent intent : mRecentTaskIntentList) {
+                    // Log.d(TAG, "intent = " + intent.toString());
+                    ComponentName componentName = intent.getComponent();
+                    String className = componentName.getClassName();
+                    Log.d(TAG, "className1 = " + className);
+                }*/
+                if (mRecentTaskIntentList != null
+                        && mRecentTaskIntentList.size() > 1) {
+                    Intent intent0 = mRecentTaskIntentList.get(0);
+                    Intent intent1 = mRecentTaskIntentList.get(1);
+                    intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent1);
+                    mRecentTaskIntentList.remove(intent0);
+                    mRecentTaskIntentList.remove(intent1);
+                    mRecentTaskIntentList.add(0, intent0);
+                    mRecentTaskIntentList.add(0, intent1);
+                    // 超过42个字符就要换行
+                    MyToast.show(intent0.getComponent().getClassName());
+                }
+                /*for (Intent intent : mRecentTaskIntentList) {
+                    // Log.d(TAG, "intent = " + intent.toString());
+                    ComponentName componentName = intent.getComponent();
+                    String className = componentName.getClassName();
+                    Log.d(TAG, "className2 = " + className);
+                }*/
+                break;
+
+            default:
+        }
+    }
+
+
+    // 杀后台，不杀前台
+    private void serialKiller(
+            ArrayList<String> systemApplicationList,
+            ArrayList<ApplicationInfo> userApplicationInfoList) {
+        ICallSystemMethod call = ((MyApplication) getApplicationContext()).getSystemCall();
+        if (call == null) {
+            Log.d(TAG, "call == null " + this);
+            return;
+        }
+
+        List<ActivityManager.RecentTaskInfo> recentTaskInfoList =
+                ((MyApplication) getApplication())
+                        .mActivityManager.getRecentTasks(
+                        5858, ActivityManager.RECENT_IGNORE_UNAVAILABLE);
+
+        String topAppPackageName = null;
+        String secondAppPackageName = null;
+
+        List<ActivityManager.RunningTaskInfo> runningTaskInfoList =
+                ((MyApplication) getApplicationContext()).mActivityManager.getRunningTasks(100);
+
+        // 白名单
+        ArrayList<String> userPackageNameList = ((MyApplication) getApplicationContext()).pkgList;
+
+        int runningTaskInfoListCount = runningTaskInfoList.size();
+        // Log.d(TAG, "runningTaskInfoListCount = " + runningTaskInfoListCount);
+        // 当前正在运行的应用
+        if (runningTaskInfoListCount > 0) {
+            topAppPackageName = runningTaskInfoList.get(0).topActivity.getPackageName();
+            if (!userPackageNameList.contains(topAppPackageName)
+                    && mCannotBeKilledPackageNameList != null
+                    && !mCannotBeKilledPackageNameList.contains(topAppPackageName)
+                    && !systemApplicationList.contains(topAppPackageName)) {
+                mCannotBeKilledPackageNameList.add(topAppPackageName);
+                saveOrUpdataData();
+            }
+            for (ActivityManager.RecentTaskInfo recentTaskInfo : recentTaskInfoList) {
+                String packageName = recentTaskInfo.baseIntent.getComponent().getPackageName();
+                if (topAppPackageName.equals(packageName)
+                        && !Constant.LAUNCHER.equals(packageName)) {
+                    Intent intent = recentTaskInfo.baseIntent;
+                    String pkgName = intent.getComponent().getPackageName();
+                    if (!mRecentTaskIntentList.contains(intent)
+                            && !mRecentTaskPackageNameList.contains(pkgName)
+                            && !getPackageName().equals(topAppPackageName)) {
+                        /*for (Intent inten : mRecentTaskIntentList) {
+                            ComponentName componentName = inten.getComponent();
+                            String className = componentName.getClassName();
+                            Log.d(TAG, "className1 = " + className);
+                        }*/
+                        Log.d(TAG, "pkgName1 = " + pkgName);
+                        // 在添加的时候之前的位置排列有时会反过来,还不知道怎么回事
+                        mRecentTaskIntentList.add(intent);
+                        mRecentTaskPackageNameList.add(pkgName);
+                        /*for (Intent inten : mRecentTaskIntentList) {
+                            ComponentName componentName = inten.getComponent();
+                            String className = componentName.getClassName();
+                            Log.d(TAG, "className2 = " + className);
+                        }*/
+                        break;
+                    } else {
+                        /*Iterator<Intent> iter = mRecentTaskIntentList.iterator();
+                        Intent intenT = null;
+                        while (iter.hasNext()) {
+                            Intent intentTemp = iter.next();
+                            String pName = intentTemp.getComponent().getPackageName();
+                            if (pName.equals(topAppPackageName)) {
+                                intenT = intentTemp;
+                                iter.remove();
+                                mRecentTaskIntentList.add(0, intenT);
+                                break;
+                            }
+                        }*/
+                        for (Intent intenT : mRecentTaskIntentList) {
+                            String pName = intenT.getComponent().getPackageName();
+                            if (pName.equals(topAppPackageName)) {
+                                mRecentTaskIntentList.remove(intenT);
+                                mRecentTaskIntentList.add(0, intenT);
+                                // Log.d(TAG, "=====================================");
+                                break;
+                            }
+                        }
+                        /*for (Intent inten : mRecentTaskIntentList) {
+                            ComponentName componentName = inten.getComponent();
+                            String className = componentName.getClassName();
+                            Log.d(TAG, "className = " + className);
+                        }*/
+                    }
+                }
+            }
+
+            if (Constant.LAUNCHER.equals(topAppPackageName)) {
+                if (runningTaskInfoListCount > 1) {
+                    topAppPackageName = runningTaskInfoList.get(1).topActivity.getPackageName();
+                    if (!userPackageNameList.contains(topAppPackageName)
+                            && mCannotBeKilledPackageNameList != null
+                            && !mCannotBeKilledPackageNameList.contains(topAppPackageName)
+                            && !systemApplicationList.contains(topAppPackageName)) {
+                        mCannotBeKilledPackageNameList.add(topAppPackageName);
+                        saveOrUpdataData();
+                    }
+                    for (ActivityManager.RecentTaskInfo recentTaskInfo : recentTaskInfoList) {
+                        String packageName = recentTaskInfo.baseIntent.getComponent()
+                                .getPackageName();
+                        if (topAppPackageName.equals(packageName)
+                                && !Constant.LAUNCHER.equals(packageName)) {
+                            Intent intent = recentTaskInfo.baseIntent;
+                            String pkgName = intent.getComponent().getPackageName();
+                            if (!mRecentTaskIntentList.contains(intent)
+                                    && !mRecentTaskPackageNameList.contains(pkgName)
+                                    && !getPackageName().equals(topAppPackageName)) {
+                                Log.d(TAG, "pkgName2 = " + pkgName);
+                                mRecentTaskIntentList.add(intent);
+                                mRecentTaskPackageNameList.add(pkgName);
+                                break;
+                            } else {
+                                for (Intent intenT : mRecentTaskIntentList) {
+                                    String pName = intenT.getComponent().getPackageName();
+                                    if (pName.equals(topAppPackageName)) {
+                                        mRecentTaskIntentList.remove(intenT);
+                                        mRecentTaskIntentList.add(0, intenT);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (runningTaskInfoListCount > 2) {
+                    secondAppPackageName = runningTaskInfoList.get(2).topActivity.getPackageName();
+                    if (!userPackageNameList.contains(secondAppPackageName)
+                            && mCannotBeKilledPackageNameList != null
+                            && !mCannotBeKilledPackageNameList.contains(secondAppPackageName)
+                            && !systemApplicationList.contains(secondAppPackageName)) {
+                        mCannotBeKilledPackageNameList.add(secondAppPackageName);
+                        saveOrUpdataData();
+                    }
+                    for (ActivityManager.RecentTaskInfo recentTaskInfo : recentTaskInfoList) {
+                        String packageName = recentTaskInfo.baseIntent.getComponent()
+                                .getPackageName();
+                        if (secondAppPackageName.equals(packageName)
+                                && !Constant.LAUNCHER.equals(packageName)) {
+                            Intent intent = recentTaskInfo.baseIntent;
+                            String pkgName = intent.getComponent().getPackageName();
+                            if (!mRecentTaskIntentList.contains(intent)
+                                    && !mRecentTaskPackageNameList.contains(pkgName)
+                                    && !getPackageName().equals(secondAppPackageName)) {
+                                Log.d(TAG, "pkgName3 = " + pkgName);
+                                mRecentTaskIntentList.add(intent);
+                                mRecentTaskPackageNameList.add(pkgName);
+                                break;
+                            } else {
+                                for (Intent intenT : mRecentTaskIntentList) {
+                                    String pName = intenT.getComponent().getPackageName();
+                                    if (pName.equals(topAppPackageName)) {
+                                        mRecentTaskIntentList.remove(intenT);
+                                        mRecentTaskIntentList.add(0, intenT);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (runningTaskInfoListCount > 1) {
+                    // Log.d(TAG, "runningTaskInfoListCount = " + runningTaskInfoListCount);
+                    secondAppPackageName = runningTaskInfoList.get(1).topActivity.getPackageName();
+                    if (!userPackageNameList.contains(secondAppPackageName)
+                            && mCannotBeKilledPackageNameList != null
+                            && !mCannotBeKilledPackageNameList.contains(secondAppPackageName)
+                            && !systemApplicationList.contains(secondAppPackageName)) {
+                        mCannotBeKilledPackageNameList.add(secondAppPackageName);
+                        saveOrUpdataData();
+                    }
+                    for (ActivityManager.RecentTaskInfo recentTaskInfo : recentTaskInfoList) {
+                        String packageName = recentTaskInfo.baseIntent.getComponent()
+                                .getPackageName();
+                        if (secondAppPackageName.equals(packageName)
+                                && !Constant.LAUNCHER.equals(packageName)) {
+                            Intent intent = recentTaskInfo.baseIntent;
+                            String pkgName = intent.getComponent().getPackageName();
+                            if (!mRecentTaskIntentList.contains(intent)
+                                    && !mRecentTaskPackageNameList.contains(pkgName)
+                                    && !getPackageName().equals(secondAppPackageName)) {
+                                Log.d(TAG, "pkgName4 = " + pkgName);
+                                mRecentTaskIntentList.add(intent);
+                                mRecentTaskPackageNameList.add(pkgName);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        /*for (Intent intent : mRecentTaskIntentList) {
+            // Log.d(TAG, "intent = " + intent.toString());
+            ComponentName componentName = intent.getComponent();
+            String className = componentName.getClassName();
+            Log.d(TAG, "className = " + className);
+        }*/
+
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfoList =
+                ((MyApplication) getApplicationContext())
+                        .mActivityManager.getRunningAppProcesses();
+
+        int runningAppProcessInfoListCount = runningAppProcessInfoList.size();
+        int userApplicationInfoListCount = userApplicationInfoList.size();
+
+        for (int i = 0; i < runningAppProcessInfoListCount; i++) {
+            // 进程名可能就不单纯是应用的包名了
+            String runningAppProcessName = runningAppProcessInfoList.get(i).processName;
+            // Log.d(TAG, "正在运行的进程名: " + runningAppProcessName);
+
+            for (int j = 0; j < userApplicationInfoListCount; j++) {
+                // 应用的包名
+                String userPackageName = userApplicationInfoList.get(j).processName;
+                // 正在运行的进程是用户进程
+                if ((runningAppProcessName.equals(userPackageName)
+                        || runningAppProcessName.contains(userPackageName))// 可能就是包含":"
+                        || runningAppProcessName.startsWith(".")) {
+                    // Log.d(TAG, "正在运行的进程名: " + runningAppProcessName);
+                    if (runningAppProcessName.contains(":")) {
+                        String processNameTemp = runningAppProcessName.split(":")[0];
+                        if (!userPackageNameList.contains(processNameTemp)
+                                && mCannotBeKilledPackageNameList != null
+                                && !mCannotBeKilledPackageNameList.contains(processNameTemp)) {
+                            try {
+                                call.forceStopPackage(processNameTemp);
+                                call.forceStopPackage(runningAppProcessName);
+                                // Log.d(TAG, "被杀的进程名1: " + processNameTemp);
+                                // Log.d(TAG, "被杀的进程名2: " + runningAppProcessName);
+                            } catch (RemoteException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        break;
+                    }
+                    if (!userPackageNameList.contains(runningAppProcessName)
+                            && mCannotBeKilledPackageNameList != null
+                            && !mCannotBeKilledPackageNameList.contains(runningAppProcessName)) {
+                        try {
+                            call.forceStopPackage(runningAppProcessName);
+                            // Log.d(TAG, "被杀的进程名3: " + runningAppProcessName);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        // 目的:为了防止像爱奇艺这样的流氓软件杀不掉而执行
+        for (ApplicationInfo applicationInfo : userApplicationInfoList) {
+            String userPackageName = applicationInfo.processName;
+            if (!userPackageNameList.contains(userPackageName)
+                    && mCannotBeKilledPackageNameList != null
+                    && !mCannotBeKilledPackageNameList.contains(userPackageName)) {
+                try {
+                    call.forceStopPackage(userPackageName);
+                    // Log.d(TAG, "被杀的进程名4: " + userPackageName);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        /*runningTaskInfoList.clear();
+        runningAppProcessInfoList.clear();
+        runningTaskInfoList = null;
+        runningAppProcessInfoList = null;
+        topAppPackageName = null;
+        secondAppPackageName = null;*/
+    }
+
+    private void saveOrUpdataData() {
+        try {
+            if (mCannotBeKilledPackageNameListFile != null
+                    && mCannotBeKilledPackageNameListFile.exists()) {
+                mCannotBeKilledPackageNameListFile.delete();
+                mCannotBeKilledPackageNameListFile.createNewFile();
+            }
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+                    new FileOutputStream(mCannotBeKilledPackageNameListFile, true));
+            objectOutputStream.writeObject(mCannotBeKilledPackageNameList);
+            objectOutputStream.flush();
+            objectOutputStream.close();
+            for (String pkgName : mCannotBeKilledPackageNameList) {
+                Log.d(TAG, "add pkgName = " + pkgName);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void restoreData() {
+        if (mCannotBeKilledPackageNameListFile == null
+                || !mCannotBeKilledPackageNameListFile.exists()
+                || mCannotBeKilledPackageNameListFile.length() <= 0
+                || mCannotBeKilledPackageNameList == null) {
+            return;
+        }
+        ObjectInputStream objectInputStream = null;
+        try {
+            objectInputStream = new ObjectInputStream(
+                    new FileInputStream(mCannotBeKilledPackageNameListFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (objectInputStream == null) {
+            return;
+        }
+        if (!mCannotBeKilledPackageNameList.isEmpty()) {
+            mCannotBeKilledPackageNameList.clear();
+        }
+        try {
+            Object object = objectInputStream.readObject();
+            if (object != null && object instanceof ArrayList) {
+                ArrayList<String> list = (ArrayList<String>) object;
+                mCannotBeKilledPackageNameList = list;
+                for (String pkgName : mCannotBeKilledPackageNameList) {
+                    Log.d(TAG, "restore pkgName = " + pkgName);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveMMandQQ() {
+        List<ActivityManager.RecentTaskInfo> recentTaskInfoList =
+                ((MyApplication) getApplication())
+                        .mActivityManager.getRecentTasks(
+                        5858, ActivityManager.RECENT_IGNORE_UNAVAILABLE);
+        for (ActivityManager.RecentTaskInfo recentTaskInfo : recentTaskInfoList) {
+            String packageName = recentTaskInfo.baseIntent.getComponent().getPackageName();
+            if (("com.tencent.mm".equals(packageName) || "com.tencent.mobileqq".equals(packageName))
+                    && (!Constant.LAUNCHER.equals(packageName)
+                    || !getPackageName().equals(packageName))) {
+                Intent intent = recentTaskInfo.baseIntent;
+                if (!mRecentTaskIntentList.contains(intent)
+                        && !mRecentTaskPackageNameList.contains(packageName)) {
+                    mRecentTaskIntentList.add(intent);
+                    mRecentTaskPackageNameList.add(packageName);
+                }
+            }
+        }
+    }
+
+}

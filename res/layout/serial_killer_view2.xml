@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/serial_killer_ll"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/serial_killer_back"
+            style="@style/TextView_Content_Function"
+            android:text="@string/goback"/>
+        <TextView
+            android:id="@+id/serial_killer_home"
+            style="@style/TextView_Content_Function"
+            android:visibility="gone"
+            android:text="@string/gohome"/>
+        <TextView
+            android:id="@+id/serial_killer_foreground"
+            style="@style/TextView_Content_Function"
+            android:visibility="gone"
+            android:text="@string/foreground"/>
+        <TextView
+            android:id="@+id/serial_killer_background"
+            style="@style/TextView_Content_Function"
+            android:visibility="gone"
+            android:text="@string/background"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/serial_killer_turnoff"
+            style="@style/TextView_Content_Function"
+            android:text="@string/lockscreen"/>
+        <TextView
+            android:id="@+id/serial_killer_process_count"
+            style="@style/TextView_Content_Function"
+            android:text="@string/process_count"
+            android:textColor="#FF0000"/>
+    </LinearLayout>
+
+</LinearLayout>

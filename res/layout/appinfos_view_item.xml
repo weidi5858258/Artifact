@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_bg">
+    <ImageView
+        android:id="@+id/iv_appinfos_icon"
+        android:layout_width="55dip"
+        android:layout_height="55dip"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dip"
+        android:src="@drawable/ai"/>
+
+    <LinearLayout
+        android:id="@+id/ll_appinfos_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/iv_appinfos_icon"
+        android:orientation="vertical"
+        android:paddingLeft="5dip">
+        <TextView
+            android:id="@+id/tv_appinfos_appname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="金山手机卫士"
+            android:textColor="#E3B87D"
+            android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/tv_appinfos_uid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="uid:10010"
+                android:textColor="#0000FF"
+                android:textSize="13sp"/>
+            <TextView
+                android:id="@+id/tv_appinfos_spaceusage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/tv_appinfos_uid"
+                android:text="Space：100.888MB"
+                android:textColor="#000000"
+                android:textSize="13sp"/>
+        <!--<RelativeLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content">-->
+        <!--</RelativeLayout>-->
+        <TextView
+            android:id="@+id/tv_appinfos_packagename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="packageName"
+            android:textColor="#8000FF"
+            android:textSize="15sp"/>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/iv_applock_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/unlock"/>
+</RelativeLayout>

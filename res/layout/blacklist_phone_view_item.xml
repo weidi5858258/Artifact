@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    
+    <ImageView 
+        android:id="@+id/iv_blacklistphone_icon"
+	    android:src="@drawable/blacklistphone"
+	    android:paddingLeft="5dip"
+	    android:layout_centerVertical="true"
+	    android:layout_width="wrap_content"
+	   	android:layout_height="wrap_content"/>
+    
+    <RelativeLayout 
+        android:id="@+id/rl_blacklistphone"
+        android:layout_marginTop="5dip"
+        android:layout_marginLeft="5dip"
+        android:layout_toRightOf="@id/iv_blacklistphone_icon"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content">
+	    <TextView 
+	        android:id="@+id/tv_blacklistphone_number"
+	        android:layout_width="wrap_content"
+	   		android:layout_height="wrap_content"
+	        android:textColor="#D20000"
+	        android:textSize="20sp"
+	        android:text="13661440148"/>
+	    <TextView 
+	        android:id="@+id/tv_blacklistphone_address"
+	        android:layout_below="@id/tv_blacklistphone_number"
+	        android:layout_width="wrap_content"
+	   		android:layout_height="wrap_content"
+	   		android:layout_marginTop="5dip"
+	   		android:textSize="13sp"
+	        android:text="移动联通电信"/>
+	</RelativeLayout>
+	
+    <!-- <CheckBox 
+        android:id="@+id/cb_blacklistphone_check"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dip"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+	   	android:layout_height="wrap_content"/> -->
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dip"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical" >
+
+	    <TextView 
+	        android:id="@+id/tv_blacklistphone_time"
+	        android:layout_gravity="right"
+	        android:layout_width="wrap_content"
+	   		android:layout_height="wrap_content"
+	        android:textColor="#0196AF"
+	        android:textSize="15sp"
+	        android:text="2015-04-17 22:40"/>
+	    <TextView 
+	        android:id="@+id/tv_blacklistphone_duration"
+	        android:layout_gravity="left"
+	        android:layout_width="wrap_content"
+	   		android:layout_height="wrap_content"
+	   		android:layout_marginTop="5dip"
+	   		android:textSize="13sp"
+	        android:text="通话时间：100秒"/>
+   	</LinearLayout>
+    
+    
+    
+</RelativeLayout>

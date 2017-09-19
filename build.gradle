@@ -1,0 +1,159 @@
+buildscript {
+    System.properties['com.android.build.gradle.overrideVersionCheck'] = 'true'
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.3'
+    }
+}// buildscript
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs.add('-Xbootclasspath/p:\\libs\\services.jar')
+        }
+    }
+}
+
+apply plugin: 'com.android.application'
+
+///////////////////////////////////////The above parts do not modify///////////////////////////////////////
+
+android {
+    // sign
+    // signingConfigs {
+    //     debug {
+    //         keyAlias 'androiddebugkey'
+    //         keyPassword 'android'
+    //         storeFile file('/mydev/tool/SignTool/debug.keystore')
+    //         storePassword 'android'
+    //     }
+    // }
+    // 
+    compileSdkVersion 17
+    buildToolsVersion '25.0.2'
+    defaultConfig {
+        applicationId "com.weidi.artifact"
+        minSdkVersion 17
+        targetSdkVersion 17
+        signingConfig signingConfigs.debug
+//        multiDexEnabled true
+
+        /*ndk {
+            moduleName "encrypt"
+            ldLibs "log", "z", "m"
+            abiFilters "armeabi", "armeabi-v7a", "x86"
+        }*/
+        /*ndk {
+            // 选择要添加的对应cpu类型的.so库（不需要的删除即可）。
+            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+        }*/
+
+        /*manifestPlaceholders = [
+                JPUSH_PKGNAME: applicationId,
+                JPUSH_APPKEY : "b63fea20a6a1ea0198f0e0b5", //JPush上注册的包名对应的appkey（*换成你的*）
+                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+        ]*/
+    }
+    packagingOptions {
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE.txt'
+    }
+    sourceSets {
+        main {
+            def folder = './'
+            def srcFolder = [folder + 'src']
+            def resFolder = [folder + 'res']
+            def libsFolder = [folder + 'libs']
+            def assetsFolder = [folder + 'assets']
+            def aidlFolder = [folder, 'aidl']
+            def jniFolder = [srcFolder + 'jni']
+
+            manifest.srcFile file('./AndroidManifest.xml')
+            java.srcDirs = srcFolder
+            res.srcDirs = resFolder
+            jniLibs.srcDirs = libsFolder
+            assets.srcDirs = assetsFolder
+            aidl.srcDirs = aidlFolder
+            jni.srcDirs = jniFolder
+
+        }// main
+
+        debug.setRoot('build-types/debug')
+        // release.setRoot('build-types/release')
+    }// sourceSets
+
+    /*tasks.withType(JavaCompile) {
+        compileTask -> compileTask.dependsOn ndkBuild
+    }
+    // call regular ndk-build(.cmd) script from app directory
+    task ndkBuild(type: Exec) {
+        if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+            commandLine 'ndk-build.cmd', '-C', file('src/jni').absolutePath
+        } else {
+            commandLine '/mydev/tools/AndroidSDK/ndk-bundle', '-C', file('src/jni').absolutePath
+        }
+    }*/
+
+    sourceSets.main.jni.srcDirs = []
+    sourceSets.main.jniLibs.srcDir 'libs'
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+    productFlavors {
+    }
+}// android
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'lib')
+    compile project(':weidi_library')
+    compile files('libs/xUtils-2.6.14.jar')
+    provided files('libs/services.jar')
+    // compile 'com.android.support:appcompat-v7:21.0.3'
+    // compile 'com.android.support:recyclerview-v7:25.1.0'
+    // compile 'com.android.support:multidex:1.0.0'
+    // compile 'cn.jiguang:jpush:2.1.8'
+}
+
+android {
+    lintOptions {
+        abortOnError false
+    }
+}
+
+/*tasks.withType(JavaCompile) {
+    compileTask -> compileTask.dependsOn ndkBuild
+}
+task ndkBuild(type: Exec) {
+    workingDir file('com.weidi.jni')
+    commandLine getNdkBuildCmd()
+}
+task cleanNative(type: Exec) {
+    workingDir file('com.weidi.jni')
+    commandLine getNdkBuildCmd(), 'clean'
+}
+// clean.dependsOn cleanNative
+def getNdkBuildCmd() {
+    def ndkbuild = "/mydev/tools/AndroidSDK/ndk-bundle/ndk-build"
+    // def ndkbuild = getNdkDir() + "/build/ndk-build"
+    // ndkbuild += ".cmd"
+    return ndkbuild
+}
+def getNdkDir() {
+    if (System.env.ANDROID_NDK_ROOT != null)
+        return System.env.ANDROID_NDK_ROOT
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def ndkdir = properties.getProperty('ndk.dir', null)
+    if (ndkdir == null)
+        throw new GradleException("NDK location not found. Define location with ndk.dir in the " +
+                "local.properties file or with an ANDROID_NDK_ROOT environment variable.")
+    return ndkdir
+}*/
+

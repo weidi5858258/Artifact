@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.weidi.artifact"
+          android:versionCode="1"
+          android:versionName="1.0">
+
+    <!-- <uses-sdk -->
+    <!-- android:minSdkVersion="14"/> -->
+
+
+    <!-- <uses-permission android:name="android.permission.CALL_PHONE"/> -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.WRITE_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
+    <uses-permission android:name="android.permission.NEW_OUTGOING_CALL"/>
+    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/> <!-- 屏蔽HOME键需要的权限 -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
+    <uses-permission android:name="android.permission.ACCESS_SUPERUSER"/>
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+
+    <!-- 友盟需要的权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <!--
+    经典蓝牙一样，应用使用蓝牙，需要声明BLUETOOTH权限，
+    如果需要扫描设备或者操作蓝牙设置，则还需要BLUETOOTH_ADMIN权限
+    -->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED"/>
+
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false"/>
+
+    <permission
+        android:name="jackpal.androidterm.permission.RUN_SCRIPT"
+        android:description="@string/permdesc_run_script"
+        android:label="@string/perm_run_script"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="dangerous"/>
+    <permission
+        android:name="jackpal.androidterm.permission.APPEND_TO_PATH"
+        android:description="@string/permdesc_append_to_path"
+        android:label="@string/perm_append_to_path"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="dangerous"/>
+    <permission
+        android:name="jackpal.androidterm.permission.PREPEND_TO_PATH"
+        android:description="@string/permdesc_prepend_to_path"
+        android:label="@string/perm_prepend_to_path"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="dangerous"/>
+    <!--
+    <instrumentation android:name="android.test.InstrumentationTestRunner"
+                     android:targetPackage="com.weidi.artifact"/>
+    -->
+    <!-- android:supportsRtl="false" -->
+    <application
+        android:name=".application.MyApplication"
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/app_icon"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Light.NoTitleBar"
+        android:vmSafeMode="true"
+        tools:replace="android:name">
+
+        <!-- <uses-library android:name="android.test.runner"/> -->
+        <!-- <uses-library android:name="services"/> -->
+
+        <activity android:name="com.weidi.activity.base.BaseActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <!-- 主界面 -->
+        <activity
+            android:name=".activity.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+
+            <!-- android:screenOrientation="portrait" -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.AppsLockActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"/> <!-- 程序锁 -->
+        <!-- android:excludeFromRecents="true"在最近的任务栏里不列出这个Activity -->
+        <activity
+            android:name=".activity.ReceiveSMSsActivity"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog.NoActionBar"/> <!-- 接收短信 -->
+        <activity
+            android:name=".activity.RecentTaskActivity"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog.NoActionBar"/> <!-- 列出最近使用的应用 -->
+        <activity
+            android:name=".activity.CameraActivity"
+            android:theme="@android:style/Theme.Translucent"/> <!-- 拍照 -->
+
+        <activity
+            android:name=".activity.SecurityPhoneActivity"
+            android:launchMode="singleTask"/> <!-- 手机防盗 -->
+        <activity android:name=".activity.CommunicationGuardActivity"/> <!-- 通讯卫士 -->
+        <activity android:name=".activity.AppsManagerActivity"/> <!-- 软件管理 -->
+        <activity android:name=".activity.ProcessesManagerActivity"/> <!-- 进程管理 -->
+        <activity android:name=".activity.TrafficStatisticsActivity"/> <!-- 流量统计 -->
+        <activity android:name=".activity.NetworkSettingsActivity"/> <!-- 联网设置 -->
+        <activity android:name=".activity.KillerVirusActivity"/> <!-- 手机杀毒 -->
+        <activity android:name=".activity.CleanCacheActivity"/> <!-- 缓存清理 -->
+        <activity android:name=".activity.SecurityPhoneSetup1Activity"/> <!-- 手机防盗中的设置步骤 -->
+        <activity android:name=".activity.SecurityPhoneSetup2Activity"/>
+        <activity android:name=".activity.SecurityPhoneSetup3Activity"/>
+        <activity android:name=".activity.SecurityPhoneSetup4Activity"/>
+        <activity android:name=".activity.PhoneNumberAddressQueryActivity"/> <!-- 号码归属地查询 -->
+        <activity
+            android:name=".activity.RocketActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/> <!-- 火箭 -->
+        <activity android:name=".activity.AdvancedToolsActivity"/> <!-- 高级工具 -->
+        <activity android:name=".activity.SettingsActivity"/> <!-- 设置中心 -->
+        <activity android:name=".activity.MusicPlayActivity"/> <!-- 音乐播放 -->
+        <activity android:name=".activity.FileManagerActivity"/> <!-- 文件管理 -->
+        <activity android:name=".activity.ContactsActivity"/> <!-- 联系人 -->
+
+        <receiver android:name=".receiver.BootCompleteBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="com.weidi.artifact.receiver.BootCompleteBroadcastReceiver"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.CoreServiceBroadcastReceiver">
+            <intent-filter>
+
+                <!-- 每分钟广播一次 -->
+                <action android:name="android.intent.action.TIME_TICK"/>
+                <action android:name="android.intent.action.UID_REMOVED"/>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
+                <action android:name="android.media.RINGER_MODE_CHANGED"/>
+                <action android:name="android.media.VIBRATE_SETTING_CHANGED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.AntitheftProtectionRemoteFunctionsReceiver">
+            <intent-filter android:priority="2147483647">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+                <action
+                    android:name="com.aowin.mobilesafe.receiver.AntitheftProtectionRemoteFunctionsReceiver"/>
+            </intent-filter>
+        </receiver>
+        <!-- 桌面控件的广播 -->
+        <receiver android:name=".receiver.MSAppWidgetProvider">
+
+            <!-- 第一句为固定格式，第二句为引用res/xml文件夹下的资源 -->
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_ms"/>
+
+            <intent-filter>
+
+                <!-- 即使有自定义的广播，下面一句也必须要有 -->
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="com.aowin.mobilesafe.appwidget"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.MyDeviceAdmin"
+            android:description="@string/sample_device_admin_description"
+            android:label="@string/sample_device_admin"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin_sample"/>
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.NetworkChangedReceiver">
+            <intent-filter android:priority="2147483647">
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.intent.action.PACKAGE_INSTALL"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <!--
+                     <action android:name="android.net.wifi.NETWORK_IDS_CHANGED"/>
+                     <action android:name="android.net.wifi.STATE_CHANGE"/>
+                     <action android:name="android.net.wifi.WIFI_STATE_CHANGED"/>
+                     <action android:name="android.net.wifi.p2p.CONNECTION_STATE_CHANGE"/>
+                     <action android:name="android.net.wifi.p2p.STATE_CHANGED"/>
+                     <action android:name="android.net.wifi.supplicant.CONNECTION_CHANGE"/>
+                     <action android:name="android.net.wifi.supplicant.STATE_CHANGE"/>
+                -->
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.JPushBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action
+                    android:name="cn.jpush.android.intent.REGISTRATION"/> <!-- Required  用户注册SDK的intent -->
+                <action
+                    android:name="cn.jpush.android.intent.MESSAGE_RECEIVED"/> <!-- Required  用户接收SDK消息的intent -->
+                <action
+                    android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED"/> <!-- Required  用户接收SDK通知栏信息的intent -->
+                <action
+                    android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/> <!-- Required  用户打开自定义通知栏的intent -->
+                <action
+                    android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK"/> <!-- Optional 用户接受Rich Push Javascript 回调函数的intent -->
+                <action
+                    android:name="cn.jpush.android.intent.CONNECTION"/> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <category android:name="com.weidi.artifact"/>
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".service.SMSReceiverService"/>
+        <service android:name=".service.GPSService"/>
+        <service android:name=".service.WipeDataService"/>
+        <service android:name=".service.LockScreenService"/>
+        <service android:name=".service.CopyPhoneNumberAddressQueryDdIntentService"/>
+        <service android:name=".service.ShowAttributionService"/>
+        <service android:name=".service.CoreService"/>
+        <service
+            android:name=".service.RemoteService"
+            android:process=":remote"/>
+        <service android:name=".service.PeriodicalSerialKillerService"/>
+        <service android:name=".service.TopWindowService"/>
+        <service android:name=".service.AppsLockService"/>
+        <service android:name=".service.AlarmClockService"/>
+        <service android:name=".service.DataBackupAndRestoreIntentService"/>
+        <service android:name=".service.AlarmIntentService">
+            <intent-filter>
+                <action android:name="com.aowin.mobilesafe.traffic"/>
+                <action android:name="com.aowin.mobilesafe.securityphone"/>
+            </intent-filter>
+        </service>
+        <service android:name=".service.TakePictureService">
+
+            <!--
+            <intent-filter>
+                <action android:name="com.aowin.mobilesafe.traffic"/>
+                <action android:name="com.aowin.mobilesafe.securityphone"/>
+            </intent-filter>
+            -->
+        </service>
+
+        <!-- 下面两个是一起的 -->
+        <service
+            android:name=".service.accessibilityservice.RobMoneyAccessibilityService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/rob_service_config"/>
+        </service>
+
+        <receiver
+            android:name=".service.accessibilityservice.MyDeviceAdmin"
+            android:description="@string/sample_device_admin_description"
+            android:label="@string/sample_device_admin"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin_sample"/>
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- Terminal -->
+        <activity
+            android:name="jackpal.androidterm.Term"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:icon="@drawable/ic_term_launcher"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme"
+            android:windowSoftInputMode="adjustResize|stateAlwaysVisible">
+            <intent-filter>
+
+                <!--
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                -->
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity-alias
+            android:name=".TermInternal"
+            android:exported="false"
+            android:targetActivity="jackpal.androidterm.Term">
+            <intent-filter>
+                <action android:name="jackpal.androidterm.private.OPEN_NEW_WINDOW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="jackpal.androidterm.private.SWITCH_WINDOW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity-alias>
+
+        <activity
+            android:name="jackpal.androidterm.RemoteInterface"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="jackpal.androidterm.OPEN_NEW_WINDOW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity-alias
+            android:name=".TermHere"
+            android:exported="true"
+            android:label="@string/activity_term_here_title"
+            android:targetActivity="jackpal.androidterm.RemoteInterface">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+
+                <data android:mimeType="*/*"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity-alias>
+
+        <activity
+            android:name="jackpal.androidterm.RunScript"
+            android:excludeFromRecents="true"
+            android:permission="jackpal.androidterm.permission.RUN_SCRIPT">
+            <intent-filter>
+                <action android:name="jackpal.androidterm.RUN_SCRIPT"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="jackpal.androidterm.RunShortcut"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="jackpal.androidterm.RUN_SHORTCUT"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="jackpal.androidterm.TermPreferences"
+            android:label="@string/preferences"/>
+        <activity
+            android:name="jackpal.androidterm.WindowList"
+            android:label="@string/window_list"/>
+
+        <service android:name="jackpal.androidterm.TermService"/>
+
+        <activity
+            android:name="jackpal.androidterm.shortcuts.AddShortcut"
+            android:configChanges="orientation|keyboard|keyboardHidden"
+            android:label="@string/activity_shortcut_create"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT"/>
+            </intent-filter>
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data android:mimeType="text/*"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="jackpal.androidterm.shortcuts.FSNavigator"
+            android:configChanges="orientation|keyboardHidden"
+            android:exported="true"
+            android:label="@string/addshortcut_button_find_command"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.PICK"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.GET_CONTENT"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.OPENABLE"/>
+
+                <data android:mimeType="*/*"/>
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.sec.android.support.multiwindow"
+            android:value="true">
+        </meta-data>
+
+    </application>
+
+</manifest>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/title"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/appsmanager_tv_phonememoryinfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="5dip"
+                android:text="ROM Available：100.88MB"
+                android:textColor="#E3B87D"/>
+            <TextView
+                android:id="@+id/appsmanager_tv_sdinfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:paddingRight="5dip"
+                android:text="SD Available：100.88MB"
+                android:textColor="#E3B87D"/>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_appsmanager_appcounts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dip"
+            android:text="用户程序xx个"
+            android:textColor="#0000FF"
+            android:textSize="20sp"
+            android:visibility="invisible"/>
+        <!-- android:overScrollMode="never"不过度滚动 -->
+        <ListView
+            android:id="@+id/appsmanager_ll_appsinfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"/>
+    </LinearLayout>
+
+    <include
+        layout="@layout/loading"/>
+
+</FrameLayout>

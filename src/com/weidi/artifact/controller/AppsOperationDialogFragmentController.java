@@ -17,7 +17,7 @@ import com.weidi.artifact.db.dao.ProcessDao;
 import com.weidi.artifact.fragment.AppsOperationDialogFragment;
 import com.weidi.artifact.fragment.base.BaseDialogFragment;
 import com.weidi.artifact.listener.OnResultListener;
-import com.weidi.callsystemmethod.ICallSystemMethod;
+//import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.log.Log;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
@@ -131,7 +131,7 @@ public class AppsOperationDialogFragmentController extends BaseFragmentControlle
                 break;
             case R.id.app_delete_btn:
                 if (!TextUtils.isEmpty(packageName)) {
-                    final ICallSystemMethod call = ((MyApplication) mContext
+                    /*final ICallSystemMethod call = ((MyApplication) mContext
                             .getApplicationContext())
                             .getSystemCall();
                     if (call != null && !mContext.getPackageName().equals(packageName)) {
@@ -186,7 +186,7 @@ public class AppsOperationDialogFragmentController extends BaseFragmentControlle
 
                                 });
                         ThreadPool.getCachedThreadPool().execute(mCustomRunnable);
-                    }
+                    }*/
                 }
                 break;
             case R.id.app_share_btn:

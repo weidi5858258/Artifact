@@ -22,7 +22,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.net.ConnectivityManager;
-import android.net.NetworkUtils;
+//import android.net.NetworkUtils;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.os.Environment;
@@ -71,7 +71,7 @@ import com.weidi.artifact.db.dao.BlacklistDao;
 import com.weidi.artifact.db.dao.PhoneNumberAddressQueryUtils;
 import com.weidi.artifact.modle.Event;
 import com.weidi.artifact.modle.Sms;
-import com.weidi.callsystemmethod.ICallSystemMethod;
+//import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.dbutil.SimpleDao;
 import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
@@ -238,7 +238,7 @@ public class CoreService extends Service implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.call: {// 打电话按钮
-                try {
+                /*try {
                     String myNumber = number.getText().toString().trim();
                     if (((MyApplication) mContext.getApplicationContext())
                             .getSystemCall() != null && !TextUtils.isEmpty(myNumber)) {
@@ -253,7 +253,7 @@ public class CoreService extends Service implements
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
+                }*/
                 break;
             }
             case R.id.cancel: {// 打电话取消按钮
@@ -414,7 +414,7 @@ public class CoreService extends Service implements
         fun6_btn.setText("关闭常亮");
         try {
             int enabled = 0;
-            if (((MyApplication) mContext.getApplicationContext())
+            /*if (((MyApplication) mContext.getApplicationContext())
                     .getSystemCall() != null) {
                 try {
                     enabled = ((MyApplication) mContext.getApplicationContext())
@@ -423,7 +423,7 @@ public class CoreService extends Service implements
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
             if (enabled == 3) {
                 fun7_btn.setText("关闭Wi-Fi");
             } else {
@@ -432,13 +432,13 @@ public class CoreService extends Service implements
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (mConnectivityManager != null) {
+        /*if (mConnectivityManager != null) {
             if (mConnectivityManager.getMobileDataEnabled()) {
                 fun8_btn.setText("关闭移动数据");
             } else {
                 fun8_btn.setText("打开移动数据");
             }
-        }
+        }*/
         fun9_btn.setText("二维码");
         fun10_btn.setText("连续拔打电话");
         fun11_btn.setText("Terminal");
@@ -497,7 +497,7 @@ public class CoreService extends Service implements
                 case fun7_btn:
                     try {
                         int enabled = 0;
-                        if (((MyApplication) mContext.getApplicationContext())
+                        /*if (((MyApplication) mContext.getApplicationContext())
                                 .getSystemCall() != null) {
                             try {
                                 enabled = ((MyApplication) mContext.getApplicationContext())
@@ -505,7 +505,7 @@ public class CoreService extends Service implements
                             } catch (RemoteException e) {
                                 e.printStackTrace();
                             }
-                        }
+                        }*/
                         if (enabled == 3) {
                             setWifiDataEnabled(false);
                         } else {
@@ -517,13 +517,13 @@ public class CoreService extends Service implements
                     break;
 
                 case R.id.fun8_btn:
-                    if (mConnectivityManager != null) {
+                    /*if (mConnectivityManager != null) {
                         if (mConnectivityManager.getMobileDataEnabled()) {
                             setMobileDataEnabled(false);
                         } else {
                             setMobileDataEnabled(true);
                         }
-                    }
+                    }*/
                     break;
 
                 case R.id.fun9_btn:
@@ -544,7 +544,7 @@ public class CoreService extends Service implements
                     break;
 
                 case R.id.fun12_btn:
-                    WifiInfo wifiInfo = null;
+                    /*WifiInfo wifiInfo = null;
                     ICallSystemMethod call =
                             ((MyApplication) mContext.getApplicationContext()).getSystemCall();
                     if (call != null) {
@@ -560,7 +560,7 @@ public class CoreService extends Service implements
                                 MyToast.show(hostAddress);
                             }
                         }
-                    }
+                    }*/
                     break;
 
                 default:
@@ -574,7 +574,7 @@ public class CoreService extends Service implements
      * @param enabled
      */
     private void setMobileDataEnabled(final boolean enabled) {
-        if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
+        /*if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
             ThreadPool.getCachedThreadPool().execute(new Runnable() {
                 @Override
                 public void run() {
@@ -586,11 +586,11 @@ public class CoreService extends Service implements
                     }
                 }
             });
-        }
+        }*/
     }
 
     private void setWifiDataEnabled(final boolean enabled) {
-        if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
+        /*if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
             ThreadPool.getCachedThreadPool().execute(new Runnable() {
                 @Override
                 public void run() {
@@ -602,7 +602,7 @@ public class CoreService extends Service implements
                     }
                 }
             });
-        }
+        }*/
     }
 
     private void enableScreenOn() {
@@ -632,25 +632,25 @@ public class CoreService extends Service implements
     }
 
     private void shutdown() {
-        if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
+        /*if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
             try {
                 ((MyApplication) mContext.getApplicationContext())
                         .getSystemCall().shutdown(false, false);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     private void reboot() {
-        if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
+        /*if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
             try {
                 ((MyApplication) mContext.getApplicationContext())
                         .getSystemCall().reboot(false, "reboot", false);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     /**
@@ -941,7 +941,7 @@ public class CoreService extends Service implements
         mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         mInputMethodManager = (InputMethodManager) mContext.getSystemService(
                 Context.INPUT_METHOD_SERVICE);
-        mConnectivityManager = ConnectivityManager.from(this);
+//        mConnectivityManager = ConnectivityManager.from(this);
         mVibretor = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         mSharedPreferences = mContext.getSharedPreferences(
                 Constant.APP_CONFIG, Context.MODE_PRIVATE);
@@ -1017,7 +1017,7 @@ public class CoreService extends Service implements
         if (!MyUtils.isSpecificServiceAlive(this, Constant.REMOTESERVICENAME)) {
             Intent intent = new Intent();
             intent.setClassName(Constant.REMOTEPACKAGENAME, Constant.REMOTESERVICENAME);
-            startServiceAsUser(intent, UserHandle.OWNER);
+//            startServiceAsUser(intent, UserHandle.OWNER);
         }
     }
 
@@ -2003,7 +2003,7 @@ public class CoreService extends Service implements
         //            });
         //        }
 
-        if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
+        /*if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
             ThreadPool.getCachedThreadPool().execute(new Runnable() {
                 @Override
                 public void run() {
@@ -2019,7 +2019,7 @@ public class CoreService extends Service implements
                     }
                 }
             });
-        }
+        }*/
     }
 
     /**
@@ -2030,14 +2030,14 @@ public class CoreService extends Service implements
         //            mContext.startActivity(mGoHomeIntent);
         //        }
 
-        if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
+        /*if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
             try {
                 ((MyApplication) mContext.getApplicationContext())
                         .getSystemCall().input(commandsHome);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     /**
@@ -2053,14 +2053,14 @@ public class CoreService extends Service implements
         //            }
         //        }
 
-        if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
+        /*if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
             try {
                 ((MyApplication) mContext.getApplicationContext())
                         .getSystemCall().input(commandsPower);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     private void protectMyPhone() {
@@ -2089,14 +2089,14 @@ public class CoreService extends Service implements
      * 截屏
      */
     private void takeScreenshot() {
-        if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
+        /*if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
             try {
                 ((MyApplication) mContext.getApplicationContext())
                         .getSystemCall().takeScreenshot();
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     /**
@@ -2110,7 +2110,7 @@ public class CoreService extends Service implements
             String packageName = runningTaskInfoList.get(0).topActivity.getPackageName();
             if (!Constant.LAUNCHER.equals(packageName)
                     && !mContext.getPackageName().equals(packageName)) {
-                if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
+                /*if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
                     try {
                         ((MyApplication) mContext.getApplicationContext())
                                 .getSystemCall().forceStopPackage(packageName);
@@ -2118,7 +2118,7 @@ public class CoreService extends Service implements
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
-                }
+                }*/
             }
             runningTaskInfoList.clear();
             runningTaskInfoList = null;
@@ -2382,7 +2382,7 @@ public class CoreService extends Service implements
             String mode = blacklistInfo.getMode();
             if ("1".equals(mode) || "3".equals(mode)) {
                 inBlackRing = true;
-                if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
+                /*if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
                     try {
                         // 静音
                         ((MyApplication) mContext.getApplicationContext())
@@ -2393,7 +2393,7 @@ public class CoreService extends Service implements
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
-                }
+                }*/
                 String time = mPhoneSimpleDateFormat.format(new Date(callStateRingingTime));
                 address = PhoneNumberAddressQueryUtils.phoneNumberAddressQuery
                         (incomingNumber);
@@ -2467,7 +2467,7 @@ public class CoreService extends Service implements
             }
             if ("android.intent.action.STARTING_A_PHONE_CALL".equals(intent.getAction())) {
                 if (!mIsConnectedForCall && !TextUtils.isEmpty(mPhoneNumberForCall)) {
-                    if (mUiHandler != null) {
+                    /*if (mUiHandler != null) {
                         mUiHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -2483,7 +2483,7 @@ public class CoreService extends Service implements
                                 }
                             }
                         }, 3 * 1000);
-                    }
+                    }*/
                 }
             }
         }

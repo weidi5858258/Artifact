@@ -238,7 +238,7 @@ public class MainActivityController extends BaseActivityController {
                 mContext,
                 Constant.CLASS_CORESERVICE)) {
             Intent intent = new Intent(mMainActivity, CoreService.class);
-            mMainActivity.startServiceAsUser(intent, UserHandle.OWNER);
+//            mMainActivity.startServiceAsUser(intent, UserHandle.OWNER);
         }
 
         if (!MyUtils.isSpecificServiceAlive(
@@ -469,14 +469,14 @@ public class MainActivityController extends BaseActivityController {
     }
 
     private void goHome() {
-        if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
+        /*if (((MyApplication) mContext.getApplicationContext()).getSystemCall() != null) {
             try {
                 ((MyApplication) mContext.getApplicationContext())
                         .getSystemCall().input(CoreService.commandsHome);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
 }

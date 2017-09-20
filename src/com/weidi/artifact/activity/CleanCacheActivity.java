@@ -11,8 +11,8 @@ import com.weidi.utils.MyUtils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.IPackageDataObserver;
-import android.content.pm.IPackageStatsObserver;
+//import android.content.pm.IPackageDataObserver;
+//import android.content.pm.IPackageStatsObserver;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageStats;
 import android.os.Bundle;
@@ -103,7 +103,7 @@ public class CleanCacheActivity extends Activity implements OnClickListener{
 				}else{
 					tv_cleancache_appname.setText("您的系统现在已经很干净了！！！");
 				}
-				deleteApplicationCacheFiles(mContext,cacheList.get(position).getPackageName());
+//				deleteApplicationCacheFiles(mContext,cacheList.get(position).getPackageName());
 				cacheList.remove(position);
 				adapter.notifyDataSetChanged();
 			}
@@ -115,7 +115,7 @@ public class CleanCacheActivity extends Activity implements OnClickListener{
 				for(final AppInfos info : list){
 					count++;
 					SystemClock.sleep(10);
-					getPackageSizeInfo(mContext, info.getPackageName());
+//					getPackageSizeInfo(mContext, info.getPackageName());
 					Message msg = Message.obtain();
 					msg.what = STATUS;
 					msg.obj = info;
@@ -192,7 +192,7 @@ public class CleanCacheActivity extends Activity implements OnClickListener{
 						@Override
 						public void run() {
 							for(AppInfos info : cacheList){
-								deleteApplicationCacheFiles(mContext,info.getPackageName());
+//								deleteApplicationCacheFiles(mContext,info.getPackageName());
 							}
 							cacheList.clear();
 							runOnUiThread(new Runnable() {
@@ -212,7 +212,7 @@ public class CleanCacheActivity extends Activity implements OnClickListener{
 	}
 	
 	//下面两个是连在一起的
-	public void getPackageSizeInfo(Context context,String packageName){//一调用这个方法，就会执行下面类中的回调方法
+	/*public void getPackageSizeInfo(Context context,String packageName){//一调用这个方法，就会执行下面类中的回调方法
     	try {
     		PackageManager pm = ((MyApplication)context.getApplicationContext()).mPackageManager;
 			Class<PackageManager> c = PackageManager.class;
@@ -240,10 +240,10 @@ public class CleanCacheActivity extends Activity implements OnClickListener{
 				}
 			}
 		}
-	}
+	}*/
 	
 	//下面两个是一起的
-	public void deleteApplicationCacheFiles(Context context,String packageName){
+	/*public void deleteApplicationCacheFiles(Context context,String packageName){
 		try {
     		PackageManager pm = ((MyApplication)context.getApplicationContext()).mPackageManager;
 			Class<PackageManager> c = PackageManager.class;
@@ -259,6 +259,6 @@ public class CleanCacheActivity extends Activity implements OnClickListener{
 				throws RemoteException {
 			//这里不用干什么活 succeeded表示是否删除成功，true表示删除成功
 		}
-	}
+	}*/
 	
 }

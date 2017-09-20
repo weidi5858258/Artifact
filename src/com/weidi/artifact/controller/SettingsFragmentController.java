@@ -145,7 +145,7 @@ public class SettingsFragmentController extends BaseFragmentController {
                             mSharedPreferences.getBoolean(Constant.ISINTERCEPTUNINSTALL, true));
                 }
                 editor.commit();
-                mMainActivity.sendBroadcastAsUser(intent, UserHandle.OWNER);
+//                mMainActivity.sendBroadcastAsUser(intent, UserHandle.OWNER);
                 break;
             }
 
@@ -170,7 +170,7 @@ public class SettingsFragmentController extends BaseFragmentController {
                     intent.putExtra(Constant.ISINTERCEPTUNINSTALL, true);
                 }
                 editor.commit();
-                mMainActivity.sendBroadcastAsUser(intent, UserHandle.OWNER);
+//                mMainActivity.sendBroadcastAsUser(intent, UserHandle.OWNER);
                 break;
             }
 
@@ -310,7 +310,7 @@ public class SettingsFragmentController extends BaseFragmentController {
             mSettingsFragment.settings_showuninstallpackage.setTVContent("允许应用卸载已经关闭");
             intent.putExtra(Constant.ISINTERCEPTUNINSTALL, false);
         }
-        mMainActivity.sendBroadcastAsUser(intent, UserHandle.OWNER);
+//        mMainActivity.sendBroadcastAsUser(intent, UserHandle.OWNER);
 
         flag = mSharedPreferences.getBoolean(Constant.USB_DEBUG, true);
         if (flag) {

@@ -12,7 +12,7 @@ import android.content.IntentFilter;
 import android.text.TextUtils;
 
 import com.weidi.artifact.application.MyApplication;
-import com.weidi.callsystemmethod.ICallSystemMethod;
+//import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.log.Log;
 
 import java.lang.reflect.Method;
@@ -28,7 +28,7 @@ public class BTController {
     private volatile static BluetoothAdapter sBluetoothAdapter;
     private static String localBluetoothName = null;
     private static String localBluetoothAdress = null;
-    private ICallSystemMethod mICallSystemMethod;
+//    private ICallSystemMethod mICallSystemMethod;
 
     private Context mContext;
     private IBluetoothAction mIBluetoothAction;
@@ -206,12 +206,12 @@ public class BTController {
      *
      * @return
      */
-    public ICallSystemMethod getICallSystemMethod() {
+    /*public ICallSystemMethod getICallSystemMethod() {
         if (mContext != null && mICallSystemMethod == null) {
             mICallSystemMethod = ((MyApplication) mContext.getApplicationContext()).getSystemCall();
         }
         return mICallSystemMethod;
-    }
+    }*/
 
     public void setIBluetoothAction(IBluetoothAction iBluetoothAction) {
         mIBluetoothAction = iBluetoothAction;

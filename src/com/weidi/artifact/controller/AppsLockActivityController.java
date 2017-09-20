@@ -28,7 +28,7 @@ import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.basecontroller.BaseActivityController;
 import com.weidi.artifact.service.CoreService;
-import com.weidi.callsystemmethod.ICallSystemMethod;
+//import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
 import com.weidi.utils.MyUtils;
@@ -128,7 +128,7 @@ public class AppsLockActivityController extends BaseActivityController {
         boolean isStartedUsbDebug = mSharedPreferences.getBoolean(
                 Constant.USB_DEBUG, true);
         if (!isStartedUsbDebug) {
-            if (((MyApplication) mAppsLockActivity.getApplication()).getSystemCall() != null) {
+            /*if (((MyApplication) mAppsLockActivity.getApplication()).getSystemCall() != null) {
                 try {
                     // 关闭USB调试
                     ((MyApplication) mAppsLockActivity.getApplication())
@@ -136,13 +136,13 @@ public class AppsLockActivityController extends BaseActivityController {
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
         }
 
         boolean hadOpenSdCardAndUsbDisk = mSharedPreferences.getBoolean(
                 Constant.SDCARD_USBDISK, true);
         if (!hadOpenSdCardAndUsbDisk) {
-            if (((MyApplication) mAppsLockActivity.getApplication()).getSystemCall() != null) {
+            /*if (((MyApplication) mAppsLockActivity.getApplication()).getSystemCall() != null) {
                 try {
                     ((MyApplication) mAppsLockActivity.getApplication())
                             .getSystemCall().unmountVolume(Constant.SDCARD1, false, false);
@@ -151,7 +151,7 @@ public class AppsLockActivityController extends BaseActivityController {
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
             sendBroadcastToMountService(mContext, true);
         }
     }
@@ -312,7 +312,7 @@ public class AppsLockActivityController extends BaseActivityController {
         } else {
             intent.putExtra(Constant.ISINTERCEPT, false);
         }
-        context.sendBroadcastAsUser(intent, UserHandle.OWNER);
+//        context.sendBroadcastAsUser(intent, UserHandle.OWNER);
     }
 
     public static void sendBroadcastToMountService(Context context, boolean isIntercept) {
@@ -323,7 +323,7 @@ public class AppsLockActivityController extends BaseActivityController {
         } else {
             intent.putExtra(Constant.ISINTERCEPT, false);
         }
-        context.sendBroadcastAsUser(intent, UserHandle.OWNER);
+//        context.sendBroadcastAsUser(intent, UserHandle.OWNER);
     }
 
     public static void sendBroadcastToPackageManagerService(Context context, boolean isIntercept) {
@@ -338,7 +338,7 @@ public class AppsLockActivityController extends BaseActivityController {
             intent.putExtra(Constant.ISINTERCEPTINSTALL, false);
             intent.putExtra(Constant.ISINTERCEPTUNINSTALL, false);
         }
-        context.sendBroadcastAsUser(intent, UserHandle.OWNER);
+//        context.sendBroadcastAsUser(intent, UserHandle.OWNER);
     }
 
     // com.android.server.power.PowerManagerService
@@ -350,7 +350,7 @@ public class AppsLockActivityController extends BaseActivityController {
         } else {
             intent.putExtra(Constant.ISINTERCEPT, false);
         }
-        context.sendBroadcastAsUser(intent, UserHandle.OWNER);
+//        context.sendBroadcastAsUser(intent, UserHandle.OWNER);
     }
 
     private void startSelf() {
@@ -376,7 +376,7 @@ public class AppsLockActivityController extends BaseActivityController {
         mSharedPreferences.edit().putBoolean(Constant.SDCARD_USBDISK, true).commit();
         mSharedPreferences.edit().putInt(Constant.SAFE_EXIT, 0).commit();
 
-        ICallSystemMethod iCallSystemMethod = ((MyApplication) mAppsLockActivity.getApplication())
+        /*ICallSystemMethod iCallSystemMethod = ((MyApplication) mAppsLockActivity.getApplication())
                 .getSystemCall();
         if (iCallSystemMethod != null) {
             try {
@@ -388,7 +388,7 @@ public class AppsLockActivityController extends BaseActivityController {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
         MyUtils.hideKeyboard(mAppsLockActivity);
 

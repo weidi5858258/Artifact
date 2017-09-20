@@ -12,7 +12,7 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.IPackageStatsObserver;
+//import android.content.pm.IPackageStatsObserver;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageStats;
 import android.graphics.Color;
@@ -45,7 +45,7 @@ import com.weidi.artifact.R;
 import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.db.dao.AppLockDao;
 import com.weidi.artifact.db.bean.AppInfos;
-import com.weidi.callsystemmethod.ICallSystemMethod;
+//import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.log.Log;
 import com.weidi.utils.MyToast;
 import com.weidi.utils.MyUtils;
@@ -330,7 +330,7 @@ public class AppsManagerActivity extends Activity {
                         //                        startActivityForResult(intent, 5858);
                         // 5858为返回码，随便定义一个大于零的整数就好了
 
-                        ICallSystemMethod call = ((MyApplication) getApplicationContext())
+                        /*ICallSystemMethod call = ((MyApplication) getApplicationContext())
                                 .getSystemCall();
                         if (call != null) {
                             try {
@@ -350,7 +350,7 @@ public class AppsManagerActivity extends Activity {
                             } catch (RemoteException e) {
                                 e.printStackTrace();
                             }
-                        }
+                        }*/
                     }
                     break;
                 }
@@ -460,18 +460,18 @@ public class AppsManagerActivity extends Activity {
 
     //下面两个是连在一起的
     public void getPackageSizeInfo(Context context, String packageName) {//一调用这个方法，就会执行下面类中的回调方法
-        try {
+        /*try {
             PackageManager pm = ((MyApplication) context.getApplicationContext()).mPackageManager;
             Class<PackageManager> c = PackageManager.class;
-            Method method = c.getMethod("getPackageSizeInfo", String.class, IPackageStatsObserver
-                    .class);
+            Method method = c.getMethod("getPackageSizeInfo", String.class,
+                    IPackageStatsObserver.class);
             method.invoke(pm, packageName, new MyPackageStatsObserver());
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
-    private class MyPackageStatsObserver extends IPackageStatsObserver.Stub {
+    /*private class MyPackageStatsObserver extends IPackageStatsObserver.Stub {
         @Override
         public void onGetStatsCompleted(PackageStats pStats, boolean succeeded)
                 throws RemoteException {
@@ -485,7 +485,7 @@ public class AppsManagerActivity extends Activity {
                 }
             }
         }
-    }
+    }*/
 
 
 }

@@ -26,7 +26,7 @@ import com.weidi.artifact.modle.Event;
 import com.weidi.artifact.modle.MimeTypes;
 import com.weidi.artifact.modle.RawContacts;
 import com.weidi.artifact.modle.Sms;
-import com.weidi.callsystemmethod.ICallSystemMethod;
+//import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.dbutil.DbUtils;
 import com.weidi.dbutil.SimpleDao;
 import com.weidi.eventbus.EventBus;
@@ -43,7 +43,7 @@ public class MyApplication extends WeidiApplication implements ServiceConnection
 
     private static final String TAG = "WeidiApplication";
     //    private static ICallSystemMethod mICallSystemMethod;
-    private ICallSystemMethod mICallSystemMethod;
+//    private ICallSystemMethod mICallSystemMethod;
     public PackageManager mPackageManager;
     public ActivityManager mActivityManager;
     public AlarmManager mAlarmManager;
@@ -71,19 +71,19 @@ public class MyApplication extends WeidiApplication implements ServiceConnection
         //        MultiDex.install(this);
     }
 
-    public ICallSystemMethod getSystemCall() {
+    /*public ICallSystemMethod getSystemCall() {
         if (mICallSystemMethod == null) {
             bindRemoteService();
         }
         return mICallSystemMethod;
-    }
+    }*/
 
     //*********************************ServiceConnection*********************************//
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-        mICallSystemMethod = ICallSystemMethod.Stub.asInterface(service);
-        Log.d(TAG, "mICallSystemMethod = " + mICallSystemMethod);
+//        mICallSystemMethod = ICallSystemMethod.Stub.asInterface(service);
+//        Log.d(TAG, "mICallSystemMethod = " + mICallSystemMethod);
     }
 
     @Override
@@ -214,7 +214,7 @@ public class MyApplication extends WeidiApplication implements ServiceConnection
      * bindService(mIntent, this, Context.BIND_AUTO_CREATE, UserHandle.getUserId(Process.myUid()));
      */
     private void bindRemoteService() {
-        try {
+        /*try {
             Intent intent = new Intent();
             intent.setClassName(Constant.REMOTE_PACKAGE, Constant.REMOTE_PACKAGE_CLASS);
             if (!MyUtils.isSpecificServiceAlive(
@@ -225,7 +225,7 @@ public class MyApplication extends WeidiApplication implements ServiceConnection
                     Context.BIND_AUTO_CREATE, UserHandle.getUserId(Process.myUid()));
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
 }

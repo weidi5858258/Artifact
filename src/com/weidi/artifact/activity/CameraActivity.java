@@ -1,5 +1,6 @@
 package com.weidi.artifact.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.SurfaceView;
 import android.view.Window;
@@ -66,6 +67,16 @@ public class CameraActivity extends BaseActivity {
         if (DEBUG) Log.d(TAG, "onDestroy()");
         mCameraActivityController.onDestroy();
         super.onDestroy();
+    }
+
+    @Override
+    public String[] getRequiredPermissions() {
+        return new String[0];
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
     }
 
 }

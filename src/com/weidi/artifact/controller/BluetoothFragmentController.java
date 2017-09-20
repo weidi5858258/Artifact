@@ -5,7 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothSocket;
-import android.bluetooth.BluetoothUuid;
+//import android.bluetooth.BluetoothUuid;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,7 +29,7 @@ import com.weidi.artifact.controller.basecontroller.BaseFragmentController;
 import com.weidi.artifact.fragment.BluetoothFragment;
 import com.weidi.artifact.listener.OnResultListener;
 import com.weidi.artifact.modle.BTDevice;
-import com.weidi.callsystemmethod.ICallSystemMethod;
+//import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.customadapter.listener.OnItemClickListener;
 import com.weidi.dbutil.SimpleDao;
 import com.weidi.log.Log;
@@ -58,7 +58,7 @@ public class BluetoothFragmentController extends BaseFragmentController {
     private ArrayList<BluetoothDevice> btList;
     private BluetoothDevice mBluetoothDevice;
     private MHandler mMHandler;
-    private ICallSystemMethod mICallSystemMethod;
+//    private ICallSystemMethod mICallSystemMethod;
 
     private static int canSaveMyMsgType = 0;
     private static int canSaveOtherMsgType = 0;
@@ -66,7 +66,7 @@ public class BluetoothFragmentController extends BaseFragmentController {
     public BluetoothFragmentController(Fragment fragment) {
         super(fragment.getActivity());
         mBluetoothFragment = (BluetoothFragment) fragment;
-        mICallSystemMethod = ((MyApplication) mContext.getApplicationContext()).getSystemCall();
+//        mICallSystemMethod = ((MyApplication) mContext.getApplicationContext()).getSystemCall();
         mMHandler = new MHandler(this, Looper.getMainLooper());
         BTController.getInstance().setContext(mContext);
     }
@@ -358,7 +358,7 @@ public class BluetoothFragmentController extends BaseFragmentController {
 //                            " pan = " + pan +
 //                            " pbap = " + pbap);
                     if(mBluetoothDevice != null){
-                        ParcelUuid[] localUuids = BTController.getInstance().getBluetoothAdapter().getUuids();
+                        /*ParcelUuid[] localUuids = BTController.getInstance().getBluetoothAdapter().getUuids();
                         ParcelUuid[] uuids = mBluetoothDevice.getUuids();
                         String uuid = Arrays.toString(uuids);
                         if ((BluetoothUuid.isUuidPresent(localUuids, BluetoothUuid.HSP_AG) &&
@@ -386,7 +386,7 @@ public class BluetoothFragmentController extends BaseFragmentController {
 
                         if (BluetoothUuid.isUuidPresent(uuids, BluetoothUuid.NAP)){
                             // Pan
-                        }
+                        }*/
 
                     }
 
@@ -406,15 +406,15 @@ public class BluetoothFragmentController extends BaseFragmentController {
             case R.id.test3_btn:
                 if (mBluetoothDevice != null) {
                     try {
-                        boolean result1 = mICallSystemMethod.connectHeadset(mBluetoothDevice);
+                        /*boolean result1 = mICallSystemMethod.connectHeadset(mBluetoothDevice);
                         boolean result2 = mICallSystemMethod.connectA2dp(mBluetoothDevice);
                         int state1 = mICallSystemMethod.getConnectionStateHeadset(mBluetoothDevice);
                         int state2 = mICallSystemMethod.getConnectionStateA2dp(mBluetoothDevice);
                         Log.d(TAG, "result1 = " + result1+
                         " result2 = "+result2+
                         " state1 = "+state1+
-                        " state2 = "+state2);
-                    } catch (RemoteException e) {
+                        " state2 = "+state2);*/
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -422,13 +422,13 @@ public class BluetoothFragmentController extends BaseFragmentController {
 
             case R.id.test4_btn:
                 if (mBluetoothDevice != null) {
-                    try {
+                    /*try {
                         boolean result = mICallSystemMethod.connectA2dp(mBluetoothDevice);
                         int state = mICallSystemMethod.getConnectionStateA2dp(mBluetoothDevice);
                         Log.d(TAG, "resultA2dp = " + result);
                     } catch (RemoteException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                 }
                 break;
 
@@ -756,9 +756,9 @@ public class BluetoothFragmentController extends BaseFragmentController {
                 values.put("remoteDeviceName", device.getName());
                 values.put("remoteDeviceAddress", device.getAddress());
                 // values.put("remoteDeviceType", String.valueOf(device.getType()));
-                if (mICallSystemMethod != null) {
+                /*if (mICallSystemMethod != null) {
                     values.put("remoteDeviceAlias", mICallSystemMethod.getRemoteAlias(device));
-                }
+                }*/
                 values.put("remoteDeviceBondState", String.valueOf(device.getBondState()));
                 values.put("remoteDeviceBluetoothClass", device.getBluetoothClass().toString());
 
@@ -808,13 +808,13 @@ public class BluetoothFragmentController extends BaseFragmentController {
                 values.put("remoteDeviceName", device.getName());
                 values.put("remoteDeviceAddress", device.getAddress());
                 // values.put("remoteDeviceType", String.valueOf(device.getType()));
-                if (mICallSystemMethod != null) {
+                /*if (mICallSystemMethod != null) {
                     try {
                         values.put("remoteDeviceAlias", mICallSystemMethod.getRemoteAlias(device));
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
-                }
+                }*/
                 values.put("remoteDeviceBondState", String.valueOf(device.getBondState()));
                 values.put("remoteDeviceBluetoothClass", device.getBluetoothClass().toString());
                 SimpleDao.getInstance().update(
@@ -833,13 +833,13 @@ public class BluetoothFragmentController extends BaseFragmentController {
                 values.put("remoteDeviceName", device.getName());
                 values.put("remoteDeviceAddress", device.getAddress());
                 // values.put("remoteDeviceType", String.valueOf(device.getType()));
-                if (mICallSystemMethod != null) {
+                /*if (mICallSystemMethod != null) {
                     try {
                         values.put("remoteDeviceAlias", mICallSystemMethod.getRemoteAlias(device));
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
-                }
+                }*/
                 values.put("remoteDeviceBondState", String.valueOf(device.getBondState()));
                 values.put("remoteDeviceBluetoothClass", device.getBluetoothClass().toString());
                 SimpleDao.getInstance().update(

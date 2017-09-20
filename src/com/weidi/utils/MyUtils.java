@@ -9,8 +9,8 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.IPackageDeleteObserver;
-import android.content.pm.IPackageInstallObserver;
+//import android.content.pm.IPackageDeleteObserver;
+//import android.content.pm.IPackageInstallObserver;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -38,7 +38,7 @@ import android.widget.Toast;
 import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.db.bean.AppInfos;
 import com.weidi.artifact.db.bean.ProcessInfos;
-import com.weidi.callsystemmethod.ICallSystemMethod;
+//import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.log.Log;
 
 import java.io.BufferedReader;
@@ -62,6 +62,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.weidi.artifact.R.id.call;
 
 //import org.apache.http.HttpResponse;
 //import org.apache.http.client.HttpClient;
@@ -644,11 +646,11 @@ public class MyUtils {
      * @param context
      */
     public static void serialKiller(Context context) {//杀后台，不杀前台
-        ICallSystemMethod call = ((MyApplication) context.getApplicationContext()).getSystemCall();
+        /*ICallSystemMethod call = ((MyApplication) context.getApplicationContext()).getSystemCall();
         if (call == null) {
             Log.d(TAG, "call == null");
             return;
-        }
+        }*/
 
         List<RunningTaskInfo> mRunningTaskInfoList =
                 ((MyApplication) context.getApplicationContext())
@@ -685,11 +687,11 @@ public class MyUtils {
                             .pkgList.contains(pName)) {
                         try {
                             if (processName.contains(":")) {
-                                call.forceStopPackage(processName.split(":")[0]);
+//                                call.forceStopPackage(processName.split(":")[0]);
                             }
-                            call.forceStopPackage(processName);
+//                            call.forceStopPackage(processName);
                             Log.d(TAG, "被杀的进程名: " + processName);
-                        } catch (RemoteException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         break;
@@ -760,7 +762,7 @@ public class MyUtils {
     //测试通过  下面两个是一起的 pathAndFilename为绝对路径加上文件名 然后packageURI = Uri.parse(pathAndFilename)
     public static void installPackage(Context context, Uri packageURI, String
             installerPackageName, String pathAndFilename) {
-        try {
+        /*try {
             PackageManager pm = ((MyApplication) context.getApplicationContext()).mPackageManager;
             Class c = PackageManager.class;
             Method method = c.getMethod("installPackage", Uri.class, IPackageInstallObserver
@@ -769,10 +771,10 @@ public class MyUtils {
                     0, installerPackageName);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
-    private static class MyPackageInstallObserver extends IPackageInstallObserver.Stub {
+    /*private static class MyPackageInstallObserver extends IPackageInstallObserver.Stub {
         private Context context;
         private String pathAndFilename;
 
@@ -798,10 +800,10 @@ public class MyUtils {
                 }
             }
         }
-    }
+    }*/
 
     //已经能够静默卸载软件了  下面两个是一起的
-    public static void deletePackage(Context context, String packageName) {
+    /*public static void deletePackage(Context context, String packageName) {
         try {
             PackageManager pm = ((MyApplication) context.getApplicationContext()).mPackageManager;
             Class c = PackageManager.class;
@@ -811,15 +813,15 @@ public class MyUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
-    private static class MyPackageDeleteObserver extends IPackageDeleteObserver.Stub {
+    /*private static class MyPackageDeleteObserver extends IPackageDeleteObserver.Stub {
         @Override
         public void packageDeleted(String packageName, int returnCode)
                 throws RemoteException {//returnCode为1时表示卸载成功
 
         }
-    }
+    }*/
 
     /**
      * 得到设备屏幕的宽度

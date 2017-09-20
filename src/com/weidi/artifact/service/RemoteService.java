@@ -15,26 +15,26 @@ import android.support.v4.app.NotificationCompat;
 
 import com.weidi.artifact.R;
 import com.weidi.artifact.activity.MainActivity;
-import com.weidi.daemon.IDaemonServiceAidlInterface;
+//import com.weidi.daemon.IDaemonServiceAidlInterface;
 
 public class RemoteService extends Service {
 
     private static final String TAG = "RemoteService";
     private static final int id = 0x0001;
     private Context mContext;
-    private DaemonService mDaemonService;
+//    private DaemonService mDaemonService;
 
     @Override
     public IBinder onBind(Intent intent) {
-        return mDaemonService;
+        return null;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        if(mDaemonService == null){
+        /*if(mDaemonService == null){
             mDaemonService = new DaemonService();
-        }
+        }*/
         mContext = getApplicationContext();
 
         Intent intent = new Intent(mContext, MainActivity.class);
@@ -47,7 +47,7 @@ public class RemoteService extends Service {
                 .setWhen(System.currentTimeMillis())
                 .setContentIntent(pendingIntent);
 
-        setForeground(true);
+//        setForeground(true);
         Notification notification = builder.build();
         startForeground(id, notification);
     }
@@ -60,18 +60,18 @@ public class RemoteService extends Service {
 
     @Override
     public void onDestroy() {
-        mDaemonService = null;
+//        mDaemonService = null;
         super.onDestroy();
     }
 
-    private class DaemonService extends IDaemonServiceAidlInterface.Stub {
+    /*private class DaemonService extends IDaemonServiceAidlInterface.Stub {
 
         @Override
         public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double
                 aDouble, String aString) throws RemoteException {
 
         }
-    }
+    }*/
 
     private ServiceConnection mLocalServiceConnection = new ServiceConnection() {
 
@@ -82,16 +82,16 @@ public class RemoteService extends Service {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            mDaemonService = null;
+//            mDaemonService = null;
             mLocalServiceConnection = null;
 
             Intent intent = new Intent(mContext, CoreService.class);
             startService(intent);
-            bindService(
+            /*bindService(
                     intent,
                     mLocalServiceConnection,
                     Context.BIND_AUTO_CREATE,
-                    UserHandle.getUserId(Process.myUid()));
+                    UserHandle.getUserId(Process.myUid()));*/
         }
     };
 

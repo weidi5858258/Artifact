@@ -114,6 +114,16 @@ public class AppsLockActivity extends BaseActivity
     }
 
     @Override
+    public String[] getRequiredPermissions() {
+        return new String[0];
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
+    @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (DBG) {

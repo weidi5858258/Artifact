@@ -11,7 +11,7 @@ import android.os.RemoteException;
 
 import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.constant.Constant;
-import com.weidi.callsystemmethod.ICallSystemMethod;
+//import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
 import com.weidi.threadpool.ThreadPool;
@@ -20,6 +20,7 @@ import com.weidi.utils.MyToast;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.weidi.artifact.R.id.call;
 import static com.weidi.utils.MyToast.show;
 
 public class PeriodicalSerialKillerService extends Service implements EventBus.EventListener {
@@ -175,11 +176,11 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
     private void serialKiller(
             ArrayList<String> systemApplicationList,
             ArrayList<ApplicationInfo> userApplicationInfoList) {
-        ICallSystemMethod call = ((MyApplication) getApplicationContext()).getSystemCall();
+        /*ICallSystemMethod call = ((MyApplication) getApplicationContext()).getSystemCall();
         if (call == null) {
             Log.d(TAG, "call == null " + this);
             return;
-        }
+        }*/
 
         List<ActivityManager.RecentTaskInfo> recentTaskInfoList =
                 ((MyApplication) getApplication())
@@ -396,11 +397,11 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
                                 && mCannotBeKilledPackageNameList != null
                                 && !mCannotBeKilledPackageNameList.contains(processNameTemp)) {
                             try {
-                                call.forceStopPackage(processNameTemp);
-                                call.forceStopPackage(runningAppProcessName);
+//                                call.forceStopPackage(processNameTemp);
+//                                call.forceStopPackage(runningAppProcessName);
                                 // Log.d(TAG, "被杀的进程名1: " + processNameTemp);
                                 // Log.d(TAG, "被杀的进程名2: " + runningAppProcessName);
-                            } catch (RemoteException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
@@ -410,9 +411,9 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
                             && mCannotBeKilledPackageNameList != null
                             && !mCannotBeKilledPackageNameList.contains(runningAppProcessName)) {
                         try {
-                            call.forceStopPackage(runningAppProcessName);
+//                            call.forceStopPackage(runningAppProcessName);
                             // Log.d(TAG, "被杀的进程名3: " + runningAppProcessName);
-                        } catch (RemoteException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -427,9 +428,9 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
                     && mCannotBeKilledPackageNameList != null
                     && !mCannotBeKilledPackageNameList.contains(userPackageName)) {
                 try {
-                    call.forceStopPackage(userPackageName);
+//                    call.forceStopPackage(userPackageName);
                     // Log.d(TAG, "被杀的进程名4: " + userPackageName);
-                } catch (RemoteException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -441,103 +442,4 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
         topAppPackageName = null;
         secondAppPackageName = null;*/
     }
-
-    private void serialKiller2(ArrayList<ApplicationInfo> userApplicationInfoList) {
-        ICallSystemMethod call = ((MyApplication) getApplicationContext()).getSystemCall();
-        if (call == null) {
-            Log.d(TAG, "call == null " + this);
-            return;
-        }
-
-        String topAppPackageName = null;
-        String secondAppPackageName = null;
-
-        List<ActivityManager.RunningTaskInfo> runningTaskInfoList =
-                ((MyApplication) getApplicationContext()).mActivityManager.getRunningTasks(100);
-
-        int runningTaskInfoListCount = runningTaskInfoList.size();
-        Log.d(TAG, "runningTaskInfoListCount = " + runningTaskInfoListCount);
-        // 当前正在运行的应用
-        if (runningTaskInfoListCount > 0) {
-            topAppPackageName = runningTaskInfoList.get(0).topActivity.getPackageName();
-            if (!mCannotBeKilledPackageNameList.contains(topAppPackageName)) {
-                mCannotBeKilledPackageNameList.add(topAppPackageName);
-            }
-            if (Constant.LAUNCHER.equals(topAppPackageName)) {
-                if (runningTaskInfoListCount > 1) {
-                    topAppPackageName = runningTaskInfoList.get(1).topActivity.getPackageName();
-                    if (!mCannotBeKilledPackageNameList.contains(topAppPackageName)) {
-                        mCannotBeKilledPackageNameList.add(topAppPackageName);
-                    }
-                }
-                if (runningTaskInfoListCount > 2) {
-                    secondAppPackageName = runningTaskInfoList.get(2).topActivity.getPackageName();
-                    if (!mCannotBeKilledPackageNameList.contains(secondAppPackageName)) {
-                        mCannotBeKilledPackageNameList.add(secondAppPackageName);
-                    }
-                }
-            } else {
-                if (runningTaskInfoListCount > 1) {
-                    secondAppPackageName = runningTaskInfoList.get(1).topActivity.getPackageName();
-                    if (!mCannotBeKilledPackageNameList.contains(secondAppPackageName)) {
-                        mCannotBeKilledPackageNameList.add(secondAppPackageName);
-                    }
-                }
-            }
-        }
-        for (String packageName : mCannotBeKilledPackageNameList) {
-            Log.d(TAG, "packageName = " + packageName);
-        }
-
-        //        Log.d(TAG, "topAppPackageName = " + topAppPackageName);
-        //        Log.d(TAG, "secondAppPackageName = " + secondAppPackageName);
-
-        List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfoList =
-                ((MyApplication) getApplicationContext())
-                        .mActivityManager.getRunningAppProcesses();
-
-        int userApplicationInfoListCount = userApplicationInfoList.size();
-        int runningAppProcessInfoListCount = runningAppProcessInfoList.size();
-
-        for (int i = 0; i < runningAppProcessInfoListCount; i++) {
-            String runningAppProcessName = runningAppProcessInfoList.get(i).processName;
-            //            Log.d(TAG, "活着的进程名: "+runningAppProcessName);
-
-            for (int j = 0; j < userApplicationInfoListCount; j++) {
-                String processName = userApplicationInfoList.get(j).processName;
-                if ((runningAppProcessName.equals(processName)
-                        || runningAppProcessName.contains(processName))) {
-
-                    if (!runningAppProcessName.contains(topAppPackageName)
-                            && !runningAppProcessName.equals(secondAppPackageName)
-                            && !((MyApplication) getApplicationContext()).pkgList.contains
-                            (processName)) {
-
-                        if (runningAppProcessName.contains(":")) {
-                            try {
-                                call.forceStopPackage(runningAppProcessName.split(":")[0]);
-                            } catch (RemoteException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        try {
-                            call.forceStopPackage(runningAppProcessName);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                        // Log.d(TAG, "被杀的进程名: " + runningAppProcessName);
-                        break;
-                    }
-                }
-            }
-        }
-
-        runningTaskInfoList.clear();
-        runningAppProcessInfoList.clear();
-        runningTaskInfoList = null;
-        runningAppProcessInfoList = null;
-        topAppPackageName = null;
-        secondAppPackageName = null;
-    }
-
 }

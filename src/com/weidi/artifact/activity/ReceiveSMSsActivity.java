@@ -249,7 +249,7 @@ public class ReceiveSMSsActivity extends Activity implements OnClickListener{
 		intent.addCategory(Intent.CATEGORY_APP_MESSAGING);
 		PendingIntent pending = PendingIntent.getActivity(mContext, 0, intent, 0);
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
-		notification.setLatestEventInfo(mContext, "您有新的短信", "打开看看吧", pending);
+//		notification.setLatestEventInfo(mContext, "您有新的短信", "打开看看吧", pending);
 		nm.notify(0, notification);
 		finish();
 	}

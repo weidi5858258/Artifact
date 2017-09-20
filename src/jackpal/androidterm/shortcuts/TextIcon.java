@@ -30,7 +30,8 @@ public class TextIcon
 
     float  S=W<H?H:W;
 
-    Bitmap  b=Bitmap.createBitmap((int)FloatMath.ceil(S), (int)FloatMath.ceil(S), Config.ARGB_8888);
+//    Bitmap  b=Bitmap.createBitmap((int)FloatMath.ceil(S), (int)FloatMath.ceil(S), Config.ARGB_8888);
+    Bitmap  b=Bitmap.createBitmap(100, 100, Config.ARGB_8888);
             b.setDensity(Bitmap.DENSITY_NONE);
     Canvas  c=new Canvas(b);
             c.drawText(text, (float)(b.getWidth()/2.0), (float)(b.getHeight()/2.0+H/2.0), p);

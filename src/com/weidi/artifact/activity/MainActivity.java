@@ -83,6 +83,11 @@ public class MainActivity extends BaseActivity implements BaseFragment.BackHandl
     }
 
     @Override
+    public String[] getRequiredPermissions() {
+        return new String[0];
+    }
+
+    @Override
     public void onBackPressed() {
         if (DEBUG) Log.d(TAG, "onBackPressed()");
         mMainActivityController.onBackPressed();
@@ -90,11 +95,11 @@ public class MainActivity extends BaseActivity implements BaseFragment.BackHandl
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (DEBUG) Log.d(TAG, "onActivityResult():requestCode = " + requestCode +
                 " resultCode = " + resultCode +
                 " data = " + data);
-        super.onActivityResult(requestCode, resultCode, data);
+        // super.onActivityResult(requestCode, resultCode, data);
         mMainActivityController.onActivityResult(requestCode, resultCode, data);
     }
 

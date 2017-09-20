@@ -19,7 +19,7 @@ package jackpal.androidterm;
 import com.weidi.artifact.R;
 import com.weidi.activity.base.BaseActivity;
 import com.weidi.artifact.application.MyApplication;
-import com.weidi.callsystemmethod.ICallSystemMethod;
+//import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.utils.MyToast;
 
 import jackpal.androidterm.compat.ActionBarCompat;
@@ -58,7 +58,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.net.NetworkUtils;
+//import android.net.NetworkUtils;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -516,6 +516,11 @@ public class Term extends BaseActivity implements UpdateCallback {
         }
     }
 
+    @Override
+    public String[] getRequiredPermissions() {
+        return new String[0];
+    }
+
     private void restart() {
         startActivity(getIntent());
         enterActivity();
@@ -836,7 +841,7 @@ public class Term extends BaseActivity implements UpdateCallback {
     }
 
     @Override
-    protected void onActivityResult(int request, int result, Intent data) {
+    public void onActivityResult(int request, int result, Intent data) {
         switch (request) {
             case REQUEST_CHOOSE_WINDOW:
                 if (result == RESULT_OK && data != null) {

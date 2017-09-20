@@ -4,7 +4,7 @@ import android.app.ActivityManager;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.IPackageStatsObserver;
+//import android.content.pm.IPackageStatsObserver;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageStats;
 import android.os.Bundle;
@@ -33,7 +33,7 @@ import com.weidi.artifact.db.dao.AppLockDao;
 import com.weidi.artifact.fragment.AppsManagerFragment;
 import com.weidi.artifact.fragment.AppsOperationDialogFragment;
 import com.weidi.artifact.listener.OnResultListener;
-import com.weidi.callsystemmethod.ICallSystemMethod;
+//import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.customadapter.CustomRecyclerViewAdapter;
 import com.weidi.customadapter.CustomViewHolder;
 import com.weidi.customadapter.listener.OnItemClickListener;
@@ -278,7 +278,7 @@ public class AppsManagerFragmentController extends BaseFragmentController {
     // 下面两个是连在一起的
     // 一调用这个方法，就会执行下面类中的回调方法
     public void getPackageSizeInfo(Context context, String packageName) {
-        try {
+        /*try {
             PackageManager pm = ((MyApplication) context.getApplicationContext()).mPackageManager;
             Class<PackageManager> clazz = PackageManager.class;
             Method method = clazz.getMethod(
@@ -288,10 +288,10 @@ public class AppsManagerFragmentController extends BaseFragmentController {
             method.invoke(pm, packageName, new MyPackageStatsObserver());
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
-    private class MyPackageStatsObserver extends IPackageStatsObserver.Stub {
+    /*private class MyPackageStatsObserver extends IPackageStatsObserver.Stub {
 
         @Override
         public void onGetStatsCompleted(PackageStats pStats, boolean succeeded)
@@ -307,7 +307,7 @@ public class AppsManagerFragmentController extends BaseFragmentController {
             }
         }
 
-    }
+    }*/
 
     //点击事件：启动程序、卸载程序、分享程序
     private class AppsInfoOnClick implements View.OnClickListener {
@@ -350,7 +350,7 @@ public class AppsManagerFragmentController extends BaseFragmentController {
                         //                        startActivityForResult(intent, 5858);
                         // 5858为返回码，随便定义一个大于零的整数就好了
 
-                        ICallSystemMethod call = ((MyApplication) mContext.getApplicationContext())
+                        /*ICallSystemMethod call = ((MyApplication) mContext.getApplicationContext())
                                 .getSystemCall();
                         if (call != null) {
                             try {
@@ -369,7 +369,7 @@ public class AppsManagerFragmentController extends BaseFragmentController {
                                 hideLoading();
                                 e.printStackTrace();
                             }
-                        }
+                        }*/
                     }
                     break;
                 }

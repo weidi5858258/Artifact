@@ -9,8 +9,8 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.IPackageDeleteObserver;
-import android.content.pm.IPackageInstallObserver;
+//import android.content.pm.IPackageDeleteObserver;
+//import android.content.pm.IPackageInstallObserver;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -162,7 +162,7 @@ public class WeidiUtils {
     }
 
     //测试通过  下面两个是一起的 pathAndFilename为绝对路径加上文件名 然后packageURI = Uri.parse(pathAndFilename)
-    public static void installPackage(Context context, Uri packageURI, String
+    /*public static void installPackage(Context context, Uri packageURI, String
 			installerPackageName, String pathAndFilename) {
         try {
             PackageManager pm = ((MyApplication) context.getApplicationContext()).mPackageManager;
@@ -174,9 +174,9 @@ public class WeidiUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
-    private static class MyPackageInstallObserver extends IPackageInstallObserver.Stub {
+    /*private static class MyPackageInstallObserver extends IPackageInstallObserver.Stub {
         private Context context;
         private String pathAndFilename;
 
@@ -202,7 +202,7 @@ public class WeidiUtils {
                 }
             }
         }
-    }
+    }*/
 
     //得到ITelephony接口对象，这样就能够实现一些在TelephonyManager类中不能使用的功能
     /*public static ITelephony getITelephony(Context context) throws Exception {
@@ -344,7 +344,7 @@ public class WeidiUtils {
     }
 
     //已经能够静默卸载软件了  下面两个是一起的
-    public static void deletePackage(Context context, String packageName) {
+    /*public static void deletePackage(Context context, String packageName) {
         try {
             PackageManager pm = ((MyApplication) context.getApplicationContext()).mPackageManager;
             Class c = PackageManager.class;
@@ -354,15 +354,15 @@ public class WeidiUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
-    private static class MyPackageDeleteObserver extends IPackageDeleteObserver.Stub {
+    /*private static class MyPackageDeleteObserver extends IPackageDeleteObserver.Stub {
         @Override
         public void packageDeleted(String packageName, int returnCode)
                 throws RemoteException {//returnCode为1时表示卸载成功
 
         }
-    }
+    }*/
 
     /**
      * 把一个字节输入流转换成Byte数组

@@ -23,7 +23,6 @@ import com.weidi.artifact.modle.BTDevice;
 import com.weidi.artifact.modle.Contacts;
 import com.weidi.artifact.modle.Data;
 import com.weidi.artifact.modle.Event;
-import com.weidi.artifact.modle.KeyValue;
 import com.weidi.artifact.modle.MimeTypes;
 import com.weidi.artifact.modle.RawContacts;
 import com.weidi.artifact.modle.Sms;
@@ -57,8 +56,7 @@ public class MyApplication extends WeidiApplication implements ServiceConnection
     private ProcessDao dao;
     private Class[] tableNameClass = new Class[]{
             BTDevice.class, Event.class, Sms.class,
-            Contacts.class, RawContacts.class, Data.class, MimeTypes.class,
-            KeyValue.class
+            Contacts.class, RawContacts.class, Data.class, MimeTypes.class
     };
 
     @Override

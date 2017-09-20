@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.weidi.artifact.constant.Constant;
+import com.weidi.artifact.service.AppsLockService;
 import com.weidi.artifact.service.CoreService;
 import com.weidi.artifact.service.PeriodicalSerialKillerService;
 import com.weidi.log.Log;
@@ -43,12 +44,12 @@ public class CoreServiceBroadcastReceiver extends BroadcastReceiver {
             context.startService(intent);
         }
 
-        /*if (!MyUtils.isSpecificServiceAlive(
+        if (!MyUtils.isSpecificServiceAlive(
                 context,
                 Constant.CLASS_APPSLOCKSERVICE)) {
             intent = new Intent(context, AppsLockService.class);
             context.startService(intent);
-        }*/
+        }
     }
 
 }

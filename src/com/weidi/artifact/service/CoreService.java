@@ -5,19 +5,16 @@ import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ClipboardManager;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
@@ -38,8 +35,6 @@ import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.os.Vibrator;
-import android.os.Process;
-import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
@@ -63,7 +58,6 @@ import com.weidi.activity.ScanCodeActivity;
 import com.weidi.artifact.R;
 import com.weidi.artifact.activity.AppsLockActivity;
 import com.weidi.artifact.activity.CameraActivity;
-import com.weidi.artifact.activity.MainActivity;
 import com.weidi.artifact.activity.ReceiveSMSsActivity;
 import com.weidi.artifact.activity.RecentTaskActivity;
 import com.weidi.artifact.application.MyApplication;
@@ -78,7 +72,6 @@ import com.weidi.artifact.db.dao.PhoneNumberAddressQueryUtils;
 import com.weidi.artifact.modle.Event;
 import com.weidi.artifact.modle.Sms;
 import com.weidi.callsystemmethod.ICallSystemMethod;
-import com.weidi.daemon.IDaemonServiceAidlInterface;
 import com.weidi.dbutil.SimpleDao;
 import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
@@ -87,6 +80,7 @@ import com.weidi.threadpool.ThreadPool;
 import com.weidi.utils.MyToast;
 import com.weidi.utils.MyUtils;
 import com.weidi.utils.Recorder;
+import com.weidi.utils.MyUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -160,12 +154,9 @@ public class CoreService extends Service implements
     private SimpleDateFormat mSimpleDateFormat =
             new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS");
 
-    private static final int id = 0x0000;
-    private DaemonService mDaemonService;
-
     @Override
     public IBinder onBind(Intent intent) {
-        return mDaemonService;
+        return null;
     }
 
     @Override
@@ -189,7 +180,7 @@ public class CoreService extends Service implements
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand():intent = " + intent);
-        return Service.START_STICKY;
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -303,11 +294,9 @@ public class CoreService extends Service implements
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 try {
-                    xDown = (int) event.getRawX();// 相对于屏幕
-                    yDown = (int) event.getRawY();
-                    /*x0 = (int) event.getX(0);// 相对于view
-                    y0 = (int) event.getY(0);*/
-                    Log.d(TAG, "xDown = " + xDown + " yDown = " + yDown);
+                    x0 = (int) event.getX(0);
+                    y0 = (int) event.getY(0);
+                    // Log.d(TAG, "x0 = "+x0+" y0 = "+y0);
                     x1 = (int) event.getX(1);// 不要注释掉
                     y1 = (int) event.getY(1);// 不要注释掉
                     time0 = System.currentTimeMillis();
@@ -316,44 +305,25 @@ public class CoreService extends Service implements
                 break;
             case MotionEvent.ACTION_MOVE:
 
-                /*if (Configuration.ORIENTATION_PORTRAIT == mContext.getResources()
-                        .getConfiguration().orientation) {
-
-                    *//*DX = MyUtils.getScreenWidth(mContext);
-                    DY = MyUtils.getScreenHeight(mContext);*//*
-                    vertical(v, event);
-
-                } else {
-
-                    *//*DX = MyUtils.getScreenWidth(mContext);
-                    DY = MyUtils.getScreenHeight(mContext);
-                    horizontal(v, event);*//*
-
-                }*/
-
-                break;
-            case MotionEvent.ACTION_UP:
-                xUp = (int) event.getRawX();
-                yUp = (int) event.getRawY();
-                Log.d(TAG, "xUp = " + xUp + " yUp = " + yUp);
                 if (Configuration.ORIENTATION_PORTRAIT == mContext.getResources()
                         .getConfiguration().orientation) {
 
-                    /*DX = MyUtils.getScreenWidth(mContext);
-                    DY = MyUtils.getScreenHeight(mContext);*/
+                    dx = MyUtils.getScreenWidth(mContext);
+                    dy = MyUtils.getScreenHeight(mContext);
                     vertical(v, event);
 
                 } else {
 
-                    /*DX = MyUtils.getScreenWidth(mContext);
-                    DY = MyUtils.getScreenHeight(mContext);
-                    horizontal(v, event);*/
+                    dx = MyUtils.getScreenWidth(mContext);
+                    dy = MyUtils.getScreenHeight(mContext);
+                    horizontal(v, event);
 
                 }
-                xDown = 0;
-                yDown = 0;
-                xUp = 0;
-                yUp = 0;
+
+                break;
+            case MotionEvent.ACTION_UP:
+                x0 = 0;
+                y0 = 0;
                 x1 = 0;
                 y1 = 0;
                 time0 = 0;
@@ -472,7 +442,6 @@ public class CoreService extends Service implements
         fun9_btn.setText("二维码");
         fun10_btn.setText("连续拔打电话");
         fun11_btn.setText("Terminal");
-        fun12_btn.setText("连环截屏");
         fun1_btn.setOnClickListener(new FunctionOnClickListener());
         fun2_btn.setOnClickListener(new FunctionOnClickListener());
         fun3_btn.setOnClickListener(new FunctionOnClickListener());
@@ -492,7 +461,7 @@ public class CoreService extends Service implements
         mFunctionAlertDialog.show();
     }
 
-    private class FunctionOnClickListener implements OnClickListener {
+    private class FunctionOnClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {
@@ -575,10 +544,6 @@ public class CoreService extends Service implements
                     break;
 
                 case R.id.fun12_btn:
-                    serialScreenshots();
-                    break;
-
-                case R.id.fun13_btn:
                     WifiInfo wifiInfo = null;
                     ICallSystemMethod call =
                             ((MyApplication) mContext.getApplicationContext()).getSystemCall();
@@ -956,11 +921,9 @@ public class CoreService extends Service implements
     /*************************************************************************/
 
     private WindowManager mWindowManager;
-    private WindowManager.LayoutParams mLayoutParams;
+    private android.view.WindowManager.LayoutParams mLayoutParams;
     private int x0, y0, x1, y1;
-    private int xDown, yDown, xUp, yUp;
-    private static int PY_HALF = 640;
-    private static final int DX = 720, DY = PY_HALF;
+    private int dx, dy;
     private long time0;
     private View viewLeft, viewTop, viewRight, viewBottom;// 透明窗体
     private int PX = 70;
@@ -990,12 +953,6 @@ public class CoreService extends Service implements
 
         mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
-        /*DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
-        DX = displayMetrics.widthPixels;// 720
-        DY = displayMetrics.heightPixels;// 1280
-        Log.d(TAG, "DX = " + DX + " DY = "+DY);
-        PY_HALF = displayMetrics.heightPixels / 2;*/
-
         addGestureView();
 
         //        // 后退到桌面并结束当前Activity
@@ -1023,33 +980,15 @@ public class CoreService extends Service implements
             startService(intent);
         }
 
-        /*if (!MyUtils.isSpecificServiceAlive(
+        if (!MyUtils.isSpecificServiceAlive(
                 this,
                 Constant.CLASS_APPSLOCKSERVICE)) {
             Intent intent = new Intent(this, AppsLockService.class);
             startService(intent);
-        }*/
+        }
 
         mContext.getContentResolver().registerContentObserver(
                 Uri.parse(Constant.SMS_URI), true, mSystemDatabasesChangedContentObserver);
-
-        if(mDaemonService == null){
-            mDaemonService = new DaemonService();
-        }
-
-        Intent intent = new Intent(mContext, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
-        Notification.Builder builder = new Notification.Builder(mContext)
-                .setDefaults(NotificationCompat.DEFAULT_SOUND)
-                .setContentTitle("")
-                .setContentInfo("")
-                .setSmallIcon(R.drawable.app_icon)
-                .setWhen(System.currentTimeMillis())
-                .setContentIntent(pendingIntent);
-
-        setForeground(true);
-        Notification notification = builder.build();
-        startForeground(id, notification);
     }
 
     private void monitoringRemoteService() {
@@ -1061,28 +1000,8 @@ public class CoreService extends Service implements
                     mUiHandler = new Handler() {
                         @Override
                         public void handleMessage(Message msg) {
-                            int what = msg.what;
-                            switch (what) {
-                                case 0:
-                                    startCoreService();
-                                    mUiHandler.sendEmptyMessageDelayed(0, 1 * 1000);
-                                    break;
-
-                                case 1:
-                                    int count = ++mScreenshotsCount;
-                                    Log.d(TAG, "mUiHandler = " +
-                                            (mUiHandler == null ? "null" : "not null") +
-                                            " mTimeInterval = " + mTimeInterval +
-                                            " mScreenshotsCount = " + count);
-                                    if (mTimeInterval > 0) {
-                                        takeScreenshot();
-                                        MyToast.show(String.valueOf(count));
-                                        mUiHandler.sendEmptyMessageDelayed(1, mTimeInterval * 1000);
-                                    }
-                                    break;
-
-                                default:
-                            }
+                            startCoreService();
+                            mUiHandler.sendEmptyMessageDelayed(0, 1 * 1000);
                         }
                     };
 
@@ -1104,14 +1023,10 @@ public class CoreService extends Service implements
 
     private void addGestureView() {
         // 滑动手势
-        if (viewLeft == null) {
-            viewLeft = LayoutInflater.from(mContext).inflate(
-                    R.layout.layout_weidi_left, null);
-        }
-        if (viewBottom == null) {
-            viewBottom = LayoutInflater.from(mContext).inflate(
-                    R.layout.layout_weidi_bottom, null);
-        }
+        viewLeft = LayoutInflater.from(mContext).inflate(
+                R.layout.layout_weidi_left, null);
+        viewBottom = LayoutInflater.from(mContext).inflate(
+                R.layout.layout_weidi_bottom, null);
 
         viewLeft.setOnTouchListener(this);
         viewBottom.setOnTouchListener(this);
@@ -1120,16 +1035,16 @@ public class CoreService extends Service implements
                 viewLeft,
                 setLayoutParams(
                         MyUtils.px2dip(mContext, PX),
-                        PY_HALF,// WindowManager.LayoutParams.MATCH_PARENT
+                        WindowManager.LayoutParams.MATCH_PARENT,
                         Gravity.TOP,
                         Gravity.LEFT));
         mWindowManager.addView(
                 viewBottom,
                 setLayoutParams(
+                        WindowManager.LayoutParams.MATCH_PARENT,
                         MyUtils.px2dip(mContext, PX),
-                        PY_HALF,
-                        Gravity.TOP,
-                        Gravity.RIGHT));
+                        Gravity.BOTTOM,
+                        Gravity.LEFT));
     }
 
     private void removeGestureView() {
@@ -1500,9 +1415,6 @@ public class CoreService extends Service implements
         // mLayoutParams.alpha = 30;
         mLayoutParams.width = _width;
         mLayoutParams.height = _height;
-        /*if(position2 == Gravity.LEFT){
-            mLayoutParams.y = 600;
-        }*/
         mLayoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;// 特别注意在这里设置等级为系统警告
         mLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         // WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
@@ -1511,243 +1423,16 @@ public class CoreService extends Service implements
         return mLayoutParams;
     }
 
-    private static final int TIMEOUT = 800;
-    private static final int SWAP_DISTANCE = 30;
-    private static final int AB_SWAP_DISTANCE = -30;
-
     /**
      * 竖屏
      */
     private void vertical(View v, MotionEvent event) {
-        if (xDown >= 0 && xUp <= PX) {
-            // 手指靠左边缘划动
-            if (yDown >= 0
-                    && yDown < (int) (DY / 3.0f)
-                    && yUp - yDown <= AB_SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "左边缘上---》向上滑动---》");
-
-                vibrate(20);
-                lockScreen();
-                /*if (MyUtils.isSpecificServiceAlive(
-                        mContext,
-                        "com.weidi.artifact.service.PeriodicalSerialKillerService")) {
-                    EventBus.getDefault().post(
-                            Constant.PERIODICALSERIALKILLERSERVICE, null);
-                    MyToast.show("PeriodicalSerialKillerService is Shutdown");
-                }*/
-
-                time0 = System.currentTimeMillis();
-            } else if (yDown >= 0
-                    && yDown < (int) (DY / 3.0f)
-                    && yUp - yDown >= SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "左边缘上---》向下滑动---》");
-
-                vibrate(20);
-                goBack();
-                /*if (!MyUtils.isSpecificServiceAlive(
-                        mContext,
-                        "com.weidi.artifact.service.PeriodicalSerialKillerService")) {
-                    Intent periodicalSerialKillerServiceIntent = new Intent(
-                            mContext,
-                            PeriodicalSerialKillerService.class);
-                    mContext.startService(periodicalSerialKillerServiceIntent);
-                    MyToast.show("PeriodicalSerialKillerService is Start");
-                }*/
-
-                time0 = System.currentTimeMillis();
-            } else if (yDown >= (int) (DY / 3.0f)
-                    && yDown < (int) (DY * 2 / 3.0f)
-                    && yUp - yDown <= AB_SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "左边缘中---》向上滑动---》");
-
-                vibrate(20);
-                lockScreen();
-
-                time0 = System.currentTimeMillis();
-            } else if (yDown >= (int) (DY / 3.0f)
-                    && yDown < (int) (DY * 2 / 3.0f)
-                    && yUp - yDown >= SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "左边缘中---》向下滑动---》");
-
-                vibrate(20);
-                goBack();
-
-                time0 = System.currentTimeMillis();
-            } else if (yDown >= (int) (DY * 2 / 3.0f)
-                    && yDown < DY
-                    && yUp - yDown <= AB_SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "左边缘下---》向上滑动---》");
-
-                vibrate(20);
-                lockScreen();
-
-                time0 = System.currentTimeMillis();
-            } else if (yDown >= (int) (DY * 2 / 3.0f)
-                    && yDown < DY
-                    && yUp - yDown >= SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "左边缘下---》向下滑动---》");
-
-                vibrate(20);
-                goBack();
-
-                time0 = System.currentTimeMillis();
-            }
-            return;
-        } else if (xUp >= 100 && xUp <= 350) {
-            if (yDown >= 0
-                    && yDown < (int) (DY / 3.0f)
-                    && xUp - xDown >= SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "左边缘上");
-
-                vibrate(20);
-                takeScreenshot();
-
-                time0 = System.currentTimeMillis();
-            } else if (yDown >= (int) (DY / 3.0f)
-                    && yDown < (int) (DY * 2 / 3.0f)
-                    && xUp - xDown >= SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "左边缘中");
-
-                vibrate(20);
-                showFunctionDialog();
-
-                time0 = System.currentTimeMillis();
-            } else if (yDown >= (int) (DY * 2 / 3.0f)
-                    && yDown < DY
-                    && xUp - xDown >= SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "左边缘下");
-
-                vibrate(20);
-                changeApp();
-
-                time0 = System.currentTimeMillis();
-            }
-            return;
-
-        } else if (xDown >= 650 && Math.abs(xUp - xDown) <= 50) {
-            // 手指靠右边缘划动
-            if (yDown >= 0
-                    && yDown < (int) (DY / 3.0f)
-                    && yUp - yDown <= AB_SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "右边缘上---》向上滑动---》");
-
-                vibrate(20);
-                killForegroundApp();
-
-                time0 = System.currentTimeMillis();
-            } else if (yDown >= 0
-                    && yDown < (int) (DY / 3.0f)
-                    && yUp - yDown >= SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "右边缘上---》向下滑动---》");
-
-                vibrate(20);
-                goHome();
-
-                time0 = System.currentTimeMillis();
-            } else if (yDown >= (int) (DY / 3.0f)
-                    && yDown < (int) (DY * 2 / 3.0f)
-                    && yUp - yDown <= AB_SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "右边缘中---》向上滑动---》");
-
-                vibrate(20);
-                killForegroundApp();
-
-                time0 = System.currentTimeMillis();
-            } else if (yDown >= (int) (DY / 3.0f)
-                    && yDown < (int) (DY * 2 / 3.0f)
-                    && yUp - yDown >= SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "右边缘中---》向下滑动---》");
-
-                vibrate(20);
-                goHome();
-
-                time0 = System.currentTimeMillis();
-            } else if (yDown >= (int) (DY * 2 / 3.0f)
-                    && yDown < DY
-                    && yUp - yDown <= AB_SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "右边缘下---》向上滑动---》");
-
-                vibrate(20);
-                killForegroundApp();
-
-                time0 = System.currentTimeMillis();
-            } else if (yDown >= (int) (DY * 2 / 3.0f)
-                    && yDown < DY
-                    && yUp - yDown >= SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "右边缘下---》向下滑动---》");
-
-                vibrate(20);
-                goHome();
-
-                time0 = System.currentTimeMillis();
-            }
-            return;
-
-        } else if (xDown >= 700 && Math.abs(xUp - xDown) > 60) {
-            if (yDown >= 0
-                    && yDown < (int) (DY / 3.0f)
-                    && xUp - xDown <= AB_SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "右边缘上");
-
-                vibrate(20);
-                goRecentTaskActivity();
-
-                time0 = System.currentTimeMillis();
-            } else if (yDown >= (int) (DY / 3.0f)
-                    && yDown < (int) (DY * 2 / 3.0f)
-                    && xUp - xDown <= AB_SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "右边缘中");
-
-                vibrate(20);
-                goRecentTaskActivity();
-
-                time0 = System.currentTimeMillis();
-            } else if (yDown >= (int) (DY * 2 / 3.0f)
-                    && yDown < DY
-                    && xUp - xDown <= AB_SWAP_DISTANCE
-                    && System.currentTimeMillis() - time0 >= TIMEOUT) {
-                Log.d(TAG, "右边缘下");
-
-                vibrate(20);
-                goRecentTaskActivity();
-
-                time0 = System.currentTimeMillis();
-            }
-            return;
-
-        }
-    }
-
-    /**
-     * 竖屏
-     */
-    /*private void vertical2(View v, MotionEvent event) {
         try {
 
-            //            if (event.getX() >= 0 && event.getX() <= PX) {
-            if (x0 >= 0 && x0 <= PX) {
+            if (event.getX() >= 0 && event.getX() <= PX) {
                 // 手指靠左边缘划动
-                if (y0 >= 0
-                        && y0 <= (int) (DY / 3.0f)
-                        && y0 - event.getY(0) >= PX
-                        && System.currentTimeMillis() - time0 >= TIMEOUT) {
+                if (y0 >= 0 && y0 <= (int) (dy / 3.0f) && y0 - event.getY(0) >= PX && System
+                        .currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "左边缘上---》向上滑动---》");
 
                     vibrate(20);
@@ -1757,12 +1442,17 @@ public class CoreService extends Service implements
                         EventBus.getDefault().post(
                                 Constant.PERIODICALSERIALKILLERSERVICE, null);
                         MyToast.show("PeriodicalSerialKillerService is Shutdown");
+                        //                        if (periodicalSerialKillerServiceIntent != null) {
+                        //                            mContext.stopService
+                        // (periodicalSerialKillerServiceIntent);
+                        //                            periodicalSerialKillerServiceIntent = null;
+                        //                        }
                     }
 
                     time0 = System.currentTimeMillis();
                     y0 = (int) event.getY(0);
-                } else if (y0 >= 0 && y0 <= (int) (DY / 3.0f) && event.getY(0) - y0 >= PX &&
-                        System.currentTimeMillis() - time0 >= TIMEOUT) {
+                } else if (y0 >= 0 && y0 <= (int) (dy / 3.0f) && event.getY(0) - y0 >= PX &&
+                        System.currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "左边缘上---》向下滑动---》");
 
                     vibrate(20);
@@ -1778,8 +1468,8 @@ public class CoreService extends Service implements
 
                     time0 = System.currentTimeMillis();
                     y0 = (int) event.getY(0);
-                } else if (y0 >= (int) (DY / 3.0f) && y0 <= (int) (2 * DY / 3.0f) && y0 - event
-                        .getY(0) >= PX && System.currentTimeMillis() - time0 >= TIMEOUT) {
+                } else if (y0 >= (int) (dy / 3.0f) && y0 <= (int) (2 * dy / 3.0f) && y0 - event
+                        .getY(0) >= PX && System.currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "左边缘中---》向上滑动---》");
 
                     vibrate(20);
@@ -1787,8 +1477,8 @@ public class CoreService extends Service implements
 
                     time0 = System.currentTimeMillis();
                     y0 = (int) event.getY(0);
-                } else if (y0 >= (int) (DY / 3.0f) && y0 <= (int) (2 * DY / 3.0f) && event.getY
-                        (0) - y0 >= PX && System.currentTimeMillis() - time0 >= TIMEOUT) {
+                } else if (y0 >= (int) (dy / 3.0f) && y0 <= (int) (2 * dy / 3.0f) && event.getY
+                        (0) - y0 >= PX && System.currentTimeMillis() - time0 >= 500) {
                     Log.d(TAG, "左边缘中---》向下滑动---》");
 
                     vibrate(20);
@@ -1796,8 +1486,8 @@ public class CoreService extends Service implements
 
                     time0 = System.currentTimeMillis();
                     y0 = (int) event.getY(0);
-                } else if (y0 >= (int) (2 * DY / 3.0f) && y0 - event.getY(0) >= PX && System
-                        .currentTimeMillis() - time0 >= TIMEOUT) {
+                } else if (y0 >= (int) (2 * dy / 3.0f) && y0 - event.getY(0) >= PX && System
+                        .currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "左边缘下---》向上滑动---》");
 
                     vibrate(20);
@@ -1805,8 +1495,8 @@ public class CoreService extends Service implements
 
                     time0 = System.currentTimeMillis();
                     y0 = (int) event.getY(0);
-                } else if (y0 >= (int) (2 * DY / 3.0f) && event.getY(0) - y0 >= PX && System
-                        .currentTimeMillis() - time0 >= TIMEOUT) {
+                } else if (y0 >= (int) (2 * dy / 3.0f) && event.getY(0) - y0 >= PX && System
+                        .currentTimeMillis() - time0 >= 500) {
                     Log.d(TAG, "左边缘下---》向下滑动---》");
 
                     vibrate(20);
@@ -1816,71 +1506,12 @@ public class CoreService extends Service implements
                     y0 = (int) event.getY(0);
                 }
                 return;
-            } else if (event.getX(0) - x0 >= PX && System.currentTimeMillis() - time0 >= 500) {
-                if (event.getY(0) >= 0 && event.getY(0) < (int) (DY / 3.0f)) {
-                    Log.d(TAG, "左边缘上");
-
-                    vibrate(20);
-                    takeScreenshot();
-
-                    time0 = System.currentTimeMillis();
-                    x0 = (int) event.getX(0);
-                } else if (event.getY(0) >= (int) (DY / 3.0f) && event.getY(0) < (int) (2 * DY /
-                        3.0f)) {
-                    Log.d(TAG, "左边缘中");
-
-                    vibrate(20);
-                    showFunctionDialog();
-
-                    time0 = System.currentTimeMillis();
-                    x0 = (int) event.getX(0);
-                } else if (event.getY(0) >= (int) (2 * DY / 3.0f)) {
-                    Log.d(TAG, "左边缘下");
-
-                    vibrate(20);
-                    changeApp();
-
-                    time0 = System.currentTimeMillis();
-                    x0 = (int) event.getX(0);
-                }
-                return;
-            } else if (x0 >= 650 && x0 <= DX) {
-                // 手指靠右边缘划动
-                Log.d(TAG, "右边缘");
-            } else if (event.getX(0) - x0 >= PX && System.currentTimeMillis() - time0 >= 500) {
-                if (event.getY(0) >= 0 && event.getY(0) < (int) (DY / 3.0f)) {
-                    Log.d(TAG, "右边缘上");
-
-                    vibrate(20);
-                    takeScreenshot();
-
-                    time0 = System.currentTimeMillis();
-                    x0 = (int) event.getX(0);
-                } else if (event.getY(0) >= (int) (DY / 3.0f) && event.getY(0) < (int) (2 * DY /
-                        3.0f)) {
-                    Log.d(TAG, "右边缘中");
-
-                    vibrate(20);
-                    showFunctionDialog();
-
-                    time0 = System.currentTimeMillis();
-                    x0 = (int) event.getX(0);
-                } else if (event.getY(0) >= (int) (2 * DY / 3.0f)) {
-                    Log.d(TAG, "右边缘下");
-
-                    vibrate(20);
-                    changeApp();
-
-                    time0 = System.currentTimeMillis();
-                    x0 = (int) event.getX(0);
-                }
-                return;
-            }*//*else
+            }
 
             if (event.getY(0) >= 0 && event.getY(0) <= PX) {
                 // 手指靠下边缘划动
-                if (x0 >= 0 && x0 <= (int) (DX / 2.0) && event.getX(0) - x0 >= PX && System
-                        .currentTimeMillis() - time0 >= TIMEOUT) {
+                if (x0 >= 0 && x0 <= (int) (dx / 2.0) && event.getX(0) - x0 >= PX && System
+                        .currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "下边缘左---》向右滑动---》");
 
                     vibrate(20);
@@ -1888,8 +1519,8 @@ public class CoreService extends Service implements
 
                     time0 = System.currentTimeMillis();
                     x0 = (int) event.getX(0);
-                } else if (x0 >= 0 && x0 <= (int) (DX / 2.0) && x0 - event.getX(0) >= PX &&
-                        System.currentTimeMillis() - time0 >= TIMEOUT) {
+                } else if (x0 >= 0 && x0 <= (int) (dx / 2.0) && x0 - event.getX(0) >= PX &&
+                        System.currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "下边缘左---》向左滑动---》");
 
                     vibrate(20);
@@ -1897,8 +1528,8 @@ public class CoreService extends Service implements
 
                     time0 = System.currentTimeMillis();
                     x0 = (int) event.getX(0);
-                } else if (x0 >= (int) (DX / 2.0) && x0 <= DX && event.getX(0) - x0 >= PX &&
-                        System.currentTimeMillis() - time0 >= TIMEOUT) {
+                } else if (x0 >= (int) (dx / 2.0) && x0 <= dx && event.getX(0) - x0 >= PX &&
+                        System.currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "下边缘右---》向右滑动---》");
 
                     time0 = System.currentTimeMillis();
@@ -1906,8 +1537,8 @@ public class CoreService extends Service implements
                     killForegroundApp();
 
                     x0 = (int) event.getX(0);
-                } else if (x0 >= (int) (DX / 2.0) && x0 <= DX && x0 - event.getX(0) >= PX &&
-                        System.currentTimeMillis() - time0 >= TIMEOUT) {
+                } else if (x0 >= (int) (dx / 2.0) && x0 <= dx && x0 - event.getX(0) >= PX &&
+                        System.currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "下边缘右---》向左滑动---》");
 
                     vibrate(20);
@@ -1917,49 +1548,79 @@ public class CoreService extends Service implements
                     x0 = (int) event.getX(0);
                 }
                 return;
-            }else
+            }
 
-            if (y0 - event.getY(0) >= PX && System.currentTimeMillis() - time0 >= TIMEOUT) {
+            if (event.getX(0) - x0 >= PX && System.currentTimeMillis() - time0 >= 500) {
+                if (event.getY(0) >= 0 && event.getY(0) < (int) (dy / 3.0f)) {
+                    Log.d(TAG, "上");
+
+                    vibrate(20);
+                    takeScreenshot();
+
+                    time0 = System.currentTimeMillis();
+                    x0 = (int) event.getX(0);
+                } else if (event.getY(0) >= (int) (dy / 3.0f) && event.getY(0) < (int) (2 * dy /
+                        3.0f)) {
+                    Log.d(TAG, "中");
+
+                    vibrate(20);
+                    showFunctionDialog();
+
+                    time0 = System.currentTimeMillis();
+                    x0 = (int) event.getX(0);
+                } else if (event.getY(0) >= (int) (2 * dy / 3.0f)) {
+                    Log.d(TAG, "下");
+
+                    vibrate(20);
+                    changeApp();
+
+                    time0 = System.currentTimeMillis();
+                    x0 = (int) event.getX(0);
+                }
+                return;
+            }
+
+            if (y0 - event.getY(0) >= PX && System.currentTimeMillis() - time0 >= 500) {
                 time0 = System.currentTimeMillis();
                 y0 = (int) event.getY(0);
-                if (event.getX(0) >= 0 && event.getX(0) < (int) (DX / 2.0f)) {
-                    // Log.d(TAG, "下边缘左");
+                if (event.getX(0) >= 0 && event.getX(0) < (int) (dx / 2.0f)) {
+                    // Log.d(TAG, "左");
 
                     vibrate(20);
                     goHome();
 
-                } else if (event.getX(0) >= (int) (DX / 2.0f)) {
-                    // Log.d(TAG, "下边缘右 ");
+                } else if (event.getX(0) >= (int) (dx / 2.0f)) {
+                    // Log.d(TAG, "右 ");
 
                     vibrate(20);
                     goHome();
 
                 }
                 return;
-            }*//*
+            }
 
         } catch (Exception e) {
         }
-    }*/
+    }
 
     /**
      * 横屏
      */
-    /*private void horizontal(View v, MotionEvent event) {
+    private void horizontal(View v, MotionEvent event) {
         try {
 
             if (event.getX() >= 0 && event.getX() <= PX) {
                 // 手指靠左边缘划动
-                if (y0 >= 0 && y0 <= (int) (DY / 2.0f) && y0 - event.getY(0) >= PX && System
-                        .currentTimeMillis() - time0 >= TIMEOUT) {
+                if (y0 >= 0 && y0 <= (int) (dy / 2.0f) && y0 - event.getY(0) >= PX && System
+                        .currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "左边缘上---》向上滑动---》");
 
                     vibrate(20);
 
                     time0 = System.currentTimeMillis();
                     y0 = (int) event.getY(0);
-                } else if (y0 >= 0 && y0 <= (int) (DY / 2.0f) && event.getY(0) - y0 >= PX &&
-                        System.currentTimeMillis() - time0 >= TIMEOUT) {
+                } else if (y0 >= 0 && y0 <= (int) (dy / 2.0f) && event.getY(0) - y0 >= PX &&
+                        System.currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "左边缘上---》向下滑动---》");
 
                     vibrate(20);
@@ -1967,8 +1628,8 @@ public class CoreService extends Service implements
 
                     time0 = System.currentTimeMillis();
                     y0 = (int) event.getY(0);
-                } else if (y0 >= (int) (DY / 2.0f) && y0 <= DY && y0 - event.getY(0) >= PX &&
-                        System.currentTimeMillis() - time0 >= TIMEOUT) {
+                } else if (y0 >= (int) (dy / 2.0f) && y0 <= dy && y0 - event.getY(0) >= PX &&
+                        System.currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "左边缘下---》向上滑动---》");
 
                     vibrate(20);
@@ -1976,7 +1637,7 @@ public class CoreService extends Service implements
 
                     time0 = System.currentTimeMillis();
                     y0 = (int) event.getY(0);
-                } else if (y0 >= (int) (DY / 2.0f) && y0 <= DY && event.getY(0) - y0 >= PX &&
+                } else if (y0 >= (int) (dy / 2.0f) && y0 <= dy && event.getY(0) - y0 >= PX &&
                         System.currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "左边缘下---》向下滑动---》");
 
@@ -1991,8 +1652,8 @@ public class CoreService extends Service implements
 
             if (event.getY(0) >= 0 && event.getY(0) <= PX) {
                 // 手指靠下边缘划动
-                if (x0 >= 0 && x0 <= (int) (DX / 3.0f) && event.getX(0) - x0 >= PX && System
-                        .currentTimeMillis() - time0 >= TIMEOUT) {
+                if (x0 >= 0 && x0 <= (int) (dx / 3.0f) && event.getX(0) - x0 >= PX && System
+                        .currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "下边缘左---》向右滑动---》");
 
                     vibrate(20);
@@ -2000,8 +1661,8 @@ public class CoreService extends Service implements
 
                     time0 = System.currentTimeMillis();
                     x0 = (int) event.getX(0);
-                } else if (x0 >= 0 && x0 <= (int) (DX / 3.0f) && x0 - event.getX(0) >= PX &&
-                        System.currentTimeMillis() - time0 >= TIMEOUT) {
+                } else if (x0 >= 0 && x0 <= (int) (dx / 3.0f) && x0 - event.getX(0) >= PX &&
+                        System.currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "下边缘左---》向左滑动---》");
 
                     vibrate(20);
@@ -2009,32 +1670,32 @@ public class CoreService extends Service implements
 
                     time0 = System.currentTimeMillis();
                     x0 = (int) event.getX(0);
-                } else if (x0 >= (int) (DX / 3.0f) && x0 <= (int) (2 * DX / 3.0f) && event.getX
-                        (0) - x0 >= PX && System.currentTimeMillis() - time0 >= TIMEOUT) {
+                } else if (x0 >= (int) (dx / 3.0f) && x0 <= (int) (2 * dx / 3.0f) && event.getX
+                        (0) - x0 >= PX && System.currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "下边缘中---》向右滑动---》");
 
                     vibrate(20);
 
                     time0 = System.currentTimeMillis();
                     x0 = (int) event.getX(0);
-                } else if (x0 >= (int) (DX / 3.0f) && x0 <= (int) (2 * DX / 3.0f) && x0 - event
-                        .getX(0) >= PX && System.currentTimeMillis() - time0 >= TIMEOUT) {
+                } else if (x0 >= (int) (dx / 3.0f) && x0 <= (int) (2 * dx / 3.0f) && x0 - event
+                        .getX(0) >= PX && System.currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "下边缘中---》向左滑动---》");
 
                     vibrate(20);
 
                     time0 = System.currentTimeMillis();
                     x0 = (int) event.getX(0);
-                } else if (x0 >= (int) (2 * DX / 3.0f) && x0 <= DX && event.getX(0) - x0 >= PX &&
-                        System.currentTimeMillis() - time0 >= TIMEOUT) {
+                } else if (x0 >= (int) (2 * dx / 3.0f) && x0 <= dx && event.getX(0) - x0 >= PX &&
+                        System.currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "下边缘右---》向右滑动---》");
 
                     vibrate(20);
 
                     time0 = System.currentTimeMillis();
                     x0 = (int) event.getX(0);
-                } else if (x0 >= (int) (2 * DX / 3.0f) && x0 <= DX && x0 - event.getX(0) >= PX &&
-                        System.currentTimeMillis() - time0 >= TIMEOUT) {
+                } else if (x0 >= (int) (2 * dx / 3.0f) && x0 <= dx && x0 - event.getX(0) >= PX &&
+                        System.currentTimeMillis() - time0 >= 500) {
                     // Log.d(TAG, "下边缘右---》向左滑动---》");
 
                     vibrate(20);
@@ -2045,10 +1706,10 @@ public class CoreService extends Service implements
                 return;
             }
 
-            if (event.getX(0) - x0 >= PX && System.currentTimeMillis() - time0 >= TIMEOUT) {
+            if (event.getX(0) - x0 >= PX && System.currentTimeMillis() - time0 >= 500) {
                 time0 = System.currentTimeMillis();
                 x0 = (int) event.getX(0);
-                if (event.getY(0) >= 0 && event.getY(0) < (int) (DY / 2.0f)) {
+                if (event.getY(0) >= 0 && event.getY(0) < (int) (dy / 2.0f)) {
                     // Log.d(TAG, "上");
 
                     vibrate(20);
@@ -2062,15 +1723,15 @@ public class CoreService extends Service implements
                 return;
             }
 
-            if (y0 - event.getY(0) >= PX && System.currentTimeMillis() - time0 >= TIMEOUT) {
+            if (y0 - event.getY(0) >= PX && System.currentTimeMillis() - time0 >= 500) {
                 time0 = System.currentTimeMillis();
                 y0 = (int) event.getY(0);
-                if (event.getX(0) >= 0 && event.getX(0) < (int) (DX / 3.0f)) {
+                if (event.getX(0) >= 0 && event.getX(0) < (int) (dx / 3.0f)) {
                     // Log.d(TAG, "左");
 
                     vibrate(20);
 
-                } else if (event.getX(0) >= (int) (DX / 3.0f) && event.getX(0) < (int) (2 * DX /
+                } else if (event.getX(0) >= (int) (dx / 3.0f) && event.getX(0) < (int) (2 * dx /
                         3.0f)) {
                     // Log.d(TAG, "中");
 
@@ -2087,7 +1748,7 @@ public class CoreService extends Service implements
 
         } catch (Exception e) {
         }
-    }*/
+    }
 
     /******************************************************************************************/
 
@@ -2206,7 +1867,7 @@ public class CoreService extends Service implements
             public void run() {
                 Looper.prepare();
                 handler = new Handler() {
-                    public void handleMessage(Message msg) {
+                    public void handleMessage(android.os.Message msg) {
                         if (msg.what == SERIAL_KILLER_PROCESS_COUNT) {
                             // list = MyUtils.getAllRunningProcesses(mContext);
                             mRunningAppProcessInfoList = MyUtils.getRunningAppProcessInfo(mContext);
@@ -2287,11 +1948,11 @@ public class CoreService extends Service implements
         //                        newX =
         //                                (int) event.getRawX();
         //                        newY = (int) event.getRawY();
-        //                        int DX = newX -
+        //                        int dx = newX -
         //                                startX;
-        //                        int DY = newY - startY;
-        //                        params.x += DX;
-        //                        params.y += DY;
+        //                        int dy = newY - startY;
+        //                        params.x += dx;
+        //                        params.y += dy;
         //                        if (params.x < 0) {
         //                            params.x = 0;
         //                        }
@@ -2328,8 +1989,7 @@ public class CoreService extends Service implements
      */
     private void goBack() {
         // 经测试必须要开启线程才能达到后退效果
-        //        if (((WeidiApplication) mContext.getApplicationContext()).getSystemCall() !=
-        // null) {
+        //        if (((WeidiApplication) mContext.getApplicationContext()).getSystemCall() != null) {
         //            ThreadPool.getCachedThreadPool().execute(new Runnable() {
         //                @Override
         //                public void run() {
@@ -2384,8 +2044,7 @@ public class CoreService extends Service implements
      * 锁屏
      */
     private void lockScreen() {
-        //        if (((WeidiApplication) mContext.getApplicationContext()).getSystemCall() !=
-        // null) {
+        //        if (((WeidiApplication) mContext.getApplicationContext()).getSystemCall() != null) {
         //            try {
         //                ((WeidiApplication) mContext.getApplicationContext()).getSystemCall()
         // .lockScreen();
@@ -2511,34 +2170,6 @@ public class CoreService extends Service implements
         mVibretor.vibrate(milliseconds);
     }
 
-    private class DaemonService extends IDaemonServiceAidlInterface.Stub {
-
-        @Override
-        public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double
-                aDouble, String aString) throws RemoteException {
-
-        }
-    }
-
-    private ServiceConnection mRemoteServiceConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            Intent intent = new Intent(mContext, RemoteService.class);
-            startService(intent);
-            bindService(
-                    intent,
-                    mRemoteServiceConnection,
-                    Context.BIND_AUTO_CREATE,
-                    UserHandle.getUserId(Process.myUid()));
-        }
-    };
-
     /*******************************添加电话号码用于打电话*******************************/
 
     private Dialog mAddPhoneNumberForCallAlertDialog;
@@ -2570,7 +2201,7 @@ public class CoreService extends Service implements
         mAddPhoneNumberForCallAlertDialog.show();
     }
 
-    private class AddPhoneNumberForCallClickListener implements OnClickListener {
+    private class AddPhoneNumberForCallClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {
@@ -2600,71 +2231,6 @@ public class CoreService extends Service implements
     }
 
     /*******************************添加电话号码用于打电话*******************************/
-
-    /*******************************连环截屏*******************************/
-
-    private int mTimeInterval;
-    private static int mScreenshotsCount;
-
-    private void serialScreenshots() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        View view = View.inflate(mContext, R.layout.querytools_view, null);
-        // view.findViewById(R.id.tv_querytools_title).setVisibility(View.GONE);
-        view.findViewById(R.id.et_querytools_number).setVisibility(View.GONE);
-        mPhoneNumberEditText = (EditText) view.findViewById(R.id.et_querytools_name);
-        mPhoneNumberEditText.setInputType(InputType.TYPE_CLASS_PHONE);
-
-        Button sureBtn = (Button) view.findViewById(bt_querytools_sure);
-        Button cancelBtn = (Button) view.findViewById(bt_querytools_cancel);
-        sureBtn.setOnClickListener(new SerialScreenshotsClickListener());
-        cancelBtn.setOnClickListener(new SerialScreenshotsClickListener());
-
-        builder.setView(view);
-        mAddPhoneNumberForCallAlertDialog = builder.create();
-        mAddPhoneNumberForCallAlertDialog.getWindow().setType(
-                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        mAddPhoneNumberForCallAlertDialog.show();
-    }
-
-    private class SerialScreenshotsClickListener implements OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.bt_querytools_sure:
-                    mPhoneNumberForCall = mPhoneNumberEditText.getText().toString().trim();
-                    if (TextUtils.isEmpty(mPhoneNumberForCall)) {
-                        MyToast.show("请输入时间间隔");
-                        return;
-                    }
-                    try {
-                        mTimeInterval = Integer.parseInt(mPhoneNumberForCall);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        MyToast.show("请输入有效的时间间隔");
-                        return;
-                    }
-                    Log.d(TAG, "mPhoneNumberForCall = " + mPhoneNumberForCall);
-                    mScreenshotsCount = 0;
-                    mUiHandler.sendEmptyMessageDelayed(1, 5 * 1000);
-                    break;
-
-                case R.id.bt_querytools_cancel:
-                    mTimeInterval = 0;
-                    mUiHandler.removeMessages(1);
-                    break;
-
-                default:
-            }
-            if (mAddPhoneNumberForCallAlertDialog != null) {
-                mAddPhoneNumberForCallAlertDialog.dismiss();
-                mAddPhoneNumberForCallAlertDialog = null;
-            }
-        }
-
-    }
-
-    /*******************************连环截屏*******************************/
 
     /************************************************************************/
 

@@ -17,15 +17,8 @@ import com.weidi.log.Log;
 import com.weidi.threadpool.ThreadPool;
 import com.weidi.utils.MyToast;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.weidi.utils.MyToast.show;
 
@@ -37,7 +30,6 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
     private ArrayList<String> mRecentTaskPackageNameList = new ArrayList<String>();
     private boolean mIsRunning = true;
     private Handler mHandler;
-    private File mCannotBeKilledPackageNameListFile;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -49,21 +41,6 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
         Log.d(TAG, "onCreate(): " + this);
 
         EventBus.getDefault().register(this);
-
-        mCannotBeKilledPackageNameListFile = new File(
-                getFilesDir().toString() + "CannotBeKilledPackageNameFile.txt");
-        if (mCannotBeKilledPackageNameListFile != null
-                && !mCannotBeKilledPackageNameListFile.exists()) {
-            try {
-                mCannotBeKilledPackageNameListFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        restoreData();
-
-        saveMMandQQ();
 
         List<ApplicationInfo> mApplicationInfoList = ((MyApplication) getApplicationContext())
                 .mPackageManager.getInstalledApplications(0);
@@ -125,7 +102,6 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
         mHandler = null;
         if (mCannotBeKilledPackageNameList != null) {
             mCannotBeKilledPackageNameList.clear();
-            saveOrUpdataData();
             mCannotBeKilledPackageNameList = null;
         }
         EventBus.getDefault().unregister(this);
@@ -143,7 +119,6 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
                 if (mCannotBeKilledPackageNameList != null
                         && mCannotBeKilledPackageNameList.contains(packageName)) {
                     mCannotBeKilledPackageNameList.remove(packageName);
-                    saveOrUpdataData();
 
                     for (Intent intent : mRecentTaskIntentList) {
                         String pkgName = intent.getComponent().getPackageName();
@@ -230,7 +205,6 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
                     && !mCannotBeKilledPackageNameList.contains(topAppPackageName)
                     && !systemApplicationList.contains(topAppPackageName)) {
                 mCannotBeKilledPackageNameList.add(topAppPackageName);
-                saveOrUpdataData();
             }
             for (ActivityManager.RecentTaskInfo recentTaskInfo : recentTaskInfoList) {
                 String packageName = recentTaskInfo.baseIntent.getComponent().getPackageName();
@@ -295,7 +269,6 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
                             && !mCannotBeKilledPackageNameList.contains(topAppPackageName)
                             && !systemApplicationList.contains(topAppPackageName)) {
                         mCannotBeKilledPackageNameList.add(topAppPackageName);
-                        saveOrUpdataData();
                     }
                     for (ActivityManager.RecentTaskInfo recentTaskInfo : recentTaskInfoList) {
                         String packageName = recentTaskInfo.baseIntent.getComponent()
@@ -332,7 +305,6 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
                             && !mCannotBeKilledPackageNameList.contains(secondAppPackageName)
                             && !systemApplicationList.contains(secondAppPackageName)) {
                         mCannotBeKilledPackageNameList.add(secondAppPackageName);
-                        saveOrUpdataData();
                     }
                     for (ActivityManager.RecentTaskInfo recentTaskInfo : recentTaskInfoList) {
                         String packageName = recentTaskInfo.baseIntent.getComponent()
@@ -370,7 +342,6 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
                             && !mCannotBeKilledPackageNameList.contains(secondAppPackageName)
                             && !systemApplicationList.contains(secondAppPackageName)) {
                         mCannotBeKilledPackageNameList.add(secondAppPackageName);
-                        saveOrUpdataData();
                     }
                     for (ActivityManager.RecentTaskInfo recentTaskInfo : recentTaskInfoList) {
                         String packageName = recentTaskInfo.baseIntent.getComponent()
@@ -471,80 +442,102 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
         secondAppPackageName = null;*/
     }
 
-    private void saveOrUpdataData() {
-        try {
-            if (mCannotBeKilledPackageNameListFile != null
-                    && mCannotBeKilledPackageNameListFile.exists()) {
-                mCannotBeKilledPackageNameListFile.delete();
-                mCannotBeKilledPackageNameListFile.createNewFile();
-            }
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-                    new FileOutputStream(mCannotBeKilledPackageNameListFile, true));
-            objectOutputStream.writeObject(mCannotBeKilledPackageNameList);
-            objectOutputStream.flush();
-            objectOutputStream.close();
-            for (String pkgName : mCannotBeKilledPackageNameList) {
-                Log.d(TAG, "add pkgName = " + pkgName);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void serialKiller2(ArrayList<ApplicationInfo> userApplicationInfoList) {
+        ICallSystemMethod call = ((MyApplication) getApplicationContext()).getSystemCall();
+        if (call == null) {
+            Log.d(TAG, "call == null " + this);
+            return;
         }
-    }
 
-    private void restoreData() {
-        if (mCannotBeKilledPackageNameListFile == null
-                || !mCannotBeKilledPackageNameListFile.exists()
-                || mCannotBeKilledPackageNameListFile.length() <= 0
-                || mCannotBeKilledPackageNameList == null) {
-            return;
-        }
-        ObjectInputStream objectInputStream = null;
-        try {
-            objectInputStream = new ObjectInputStream(
-                    new FileInputStream(mCannotBeKilledPackageNameListFile));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (objectInputStream == null) {
-            return;
-        }
-        if (!mCannotBeKilledPackageNameList.isEmpty()) {
-            mCannotBeKilledPackageNameList.clear();
-        }
-        try {
-            Object object = objectInputStream.readObject();
-            if (object != null && object instanceof ArrayList) {
-                ArrayList<String> list = (ArrayList<String>) object;
-                mCannotBeKilledPackageNameList = list;
-                for (String pkgName : mCannotBeKilledPackageNameList) {
-                    Log.d(TAG, "restore pkgName = " + pkgName);
+        String topAppPackageName = null;
+        String secondAppPackageName = null;
+
+        List<ActivityManager.RunningTaskInfo> runningTaskInfoList =
+                ((MyApplication) getApplicationContext()).mActivityManager.getRunningTasks(100);
+
+        int runningTaskInfoListCount = runningTaskInfoList.size();
+        Log.d(TAG, "runningTaskInfoListCount = " + runningTaskInfoListCount);
+        // 当前正在运行的应用
+        if (runningTaskInfoListCount > 0) {
+            topAppPackageName = runningTaskInfoList.get(0).topActivity.getPackageName();
+            if (!mCannotBeKilledPackageNameList.contains(topAppPackageName)) {
+                mCannotBeKilledPackageNameList.add(topAppPackageName);
+            }
+            if (Constant.LAUNCHER.equals(topAppPackageName)) {
+                if (runningTaskInfoListCount > 1) {
+                    topAppPackageName = runningTaskInfoList.get(1).topActivity.getPackageName();
+                    if (!mCannotBeKilledPackageNameList.contains(topAppPackageName)) {
+                        mCannotBeKilledPackageNameList.add(topAppPackageName);
+                    }
                 }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void saveMMandQQ() {
-        List<ActivityManager.RecentTaskInfo> recentTaskInfoList =
-                ((MyApplication) getApplication())
-                        .mActivityManager.getRecentTasks(
-                        5858, ActivityManager.RECENT_IGNORE_UNAVAILABLE);
-        for (ActivityManager.RecentTaskInfo recentTaskInfo : recentTaskInfoList) {
-            String packageName = recentTaskInfo.baseIntent.getComponent().getPackageName();
-            if (("com.tencent.mm".equals(packageName) || "com.tencent.mobileqq".equals(packageName))
-                    && (!Constant.LAUNCHER.equals(packageName)
-                    || !getPackageName().equals(packageName))) {
-                Intent intent = recentTaskInfo.baseIntent;
-                if (!mRecentTaskIntentList.contains(intent)
-                        && !mRecentTaskPackageNameList.contains(packageName)) {
-                    mRecentTaskIntentList.add(intent);
-                    mRecentTaskPackageNameList.add(packageName);
+                if (runningTaskInfoListCount > 2) {
+                    secondAppPackageName = runningTaskInfoList.get(2).topActivity.getPackageName();
+                    if (!mCannotBeKilledPackageNameList.contains(secondAppPackageName)) {
+                        mCannotBeKilledPackageNameList.add(secondAppPackageName);
+                    }
+                }
+            } else {
+                if (runningTaskInfoListCount > 1) {
+                    secondAppPackageName = runningTaskInfoList.get(1).topActivity.getPackageName();
+                    if (!mCannotBeKilledPackageNameList.contains(secondAppPackageName)) {
+                        mCannotBeKilledPackageNameList.add(secondAppPackageName);
+                    }
                 }
             }
         }
+        for (String packageName : mCannotBeKilledPackageNameList) {
+            Log.d(TAG, "packageName = " + packageName);
+        }
+
+        //        Log.d(TAG, "topAppPackageName = " + topAppPackageName);
+        //        Log.d(TAG, "secondAppPackageName = " + secondAppPackageName);
+
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfoList =
+                ((MyApplication) getApplicationContext())
+                        .mActivityManager.getRunningAppProcesses();
+
+        int userApplicationInfoListCount = userApplicationInfoList.size();
+        int runningAppProcessInfoListCount = runningAppProcessInfoList.size();
+
+        for (int i = 0; i < runningAppProcessInfoListCount; i++) {
+            String runningAppProcessName = runningAppProcessInfoList.get(i).processName;
+            //            Log.d(TAG, "活着的进程名: "+runningAppProcessName);
+
+            for (int j = 0; j < userApplicationInfoListCount; j++) {
+                String processName = userApplicationInfoList.get(j).processName;
+                if ((runningAppProcessName.equals(processName)
+                        || runningAppProcessName.contains(processName))) {
+
+                    if (!runningAppProcessName.contains(topAppPackageName)
+                            && !runningAppProcessName.equals(secondAppPackageName)
+                            && !((MyApplication) getApplicationContext()).pkgList.contains
+                            (processName)) {
+
+                        if (runningAppProcessName.contains(":")) {
+                            try {
+                                call.forceStopPackage(runningAppProcessName.split(":")[0]);
+                            } catch (RemoteException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        try {
+                            call.forceStopPackage(runningAppProcessName);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                        // Log.d(TAG, "被杀的进程名: " + runningAppProcessName);
+                        break;
+                    }
+                }
+            }
+        }
+
+        runningTaskInfoList.clear();
+        runningAppProcessInfoList.clear();
+        runningTaskInfoList = null;
+        runningAppProcessInfoList = null;
+        topAppPackageName = null;
+        secondAppPackageName = null;
     }
 
 }

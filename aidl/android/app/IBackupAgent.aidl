@@ -76,8 +76,9 @@ oneway interface IBackupAgent {
      * @param callbackBinder Binder on which to indicate operation completion,
      *        passed here as a convenience to the agent.
      */
-    void doRestore(in ParcelFileDescriptor data, int appVersionCode,
-            in ParcelFileDescriptor newState, int token, IBackupManager callbackBinder);
+    void doRestore(in ParcelFileDescriptor data,
+            int appVersionCode, in ParcelFileDescriptor newState,
+            int token, IBackupManager callbackBinder);
 
     /**
      * Perform a "full" backup to the given file descriptor.  The output file is presumed
@@ -99,6 +100,32 @@ oneway interface IBackupAgent {
     void doFullBackup(in ParcelFileDescriptor data, int token, IBackupManager callbackBinder);
 
     /**
+     * Estimate how much data a full backup will deliver
+     */
+    void doMeasureFullBackup(int token, IBackupManager callbackBinder);
+
+    /**
+     * Tells the application agent that the backup data size exceeded current transport quota.
+     * Later calls to {@link #onBackup(ParcelFileDescriptor, BackupDataOutput, ParcelFileDescriptor)}
+     * and {@link #onFullBackup(FullBackupDataOutput)} could use this information
+     * to reduce backup size under the limit.
+     * However, the quota can change, so do not assume that the value passed in here is absolute,
+     * similarly all subsequent backups should not be restricted to this size.
+     * This callback will be invoked before data has been put onto the wire in a preflight check,
+     * so it is relatively inexpensive to hit your quota.
+     * Apps that hit quota repeatedly without dealing with it can be subject to having their backup
+     * schedule reduced.
+     * The {@code quotaBytes} is a loose guideline b/c of metadata added by the backupmanager
+     * so apps should be more aggressive in trimming their backup set.
+     *
+     * @param backupDataBytes Expected or already processed amount of data.
+     *                        Could be less than total backup size if backup process was interrupted
+     *                        before finish of processing all backup data.
+     * @param quotaBytes Current amount of backup data that is allowed for the app.
+     */
+    void doQuotaExceeded(long backupDataBytes, long quotaBytes);
+
+    /**
      * Restore a single "file" to the application.  The file was typically obtained from
      * a full-backup dataset.  The agent reads 'size' bytes of file content
      * from the provided file descriptor.
@@ -112,8 +139,38 @@ oneway interface IBackupAgent {
      * @param path Relative path of the file within its semantic domain.
      * @param mode Access mode of the file system entity, e.g. 0660.
      * @param mtime Last modification time of the file system entity.
+     * @param token Opaque token identifying this transaction.  This must
+     *        be echoed back to the backup service binder once the agent is
+     *        finished restoring the application based on the restore data
+     *        contents.
+     * @param callbackBinder Binder on which to indicate operation completion,
+     *        passed here as a convenience to the agent.
      */
     void doRestoreFile(in ParcelFileDescriptor data, long size,
             int type, String domain, String path, long mode, long mtime,
             int token, IBackupManager callbackBinder);
+
+    /**
+     * Provide the app with a canonical "all data has been delivered" end-of-restore
+     * callback so that it can do any postprocessing of the restored data that might
+     * be appropriate.  This is issued after both key/value and full data restore
+     * operations have completed.
+     *
+     * @param token Opaque token identifying this transaction.  This must
+     *        be echoed back to the backup service binder once the agent is
+     *        finished restoring the application based on the restore data
+     *        contents.
+     * @param callbackBinder Binder on which to indicate operation completion,
+     *        passed here as a convenience to the agent.
+     */
+    void doRestoreFinished(int token, IBackupManager callbackBinder);
+
+    /**
+     * Out of band: instruct the agent to crash within the client process.  This is used
+     * when the backup infrastructure detects a semantic error post-hoc and needs to
+     * pass the problem back to the app.
+     *
+     * @param message The message to be passed to the agent's application in an exception.
+     */
+    void fail(String message);
 }

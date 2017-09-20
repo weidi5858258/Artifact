@@ -31,17 +31,22 @@ interface INetworkPolicyManager {
 
     /** Control UID policies. */
     void setUidPolicy(int uid, int policy);
+    void addUidPolicy(int uid, int policy);
+    void removeUidPolicy(int uid, int policy);
     int getUidPolicy(int uid);
     int[] getUidsWithPolicy(int policy);
 
     boolean isUidForeground(int uid);
+
+    /** Higher priority listener before general event dispatch */
+    void setConnectivityListener(INetworkPolicyListener listener);
 
     void registerListener(INetworkPolicyListener listener);
     void unregisterListener(INetworkPolicyListener listener);
 
     /** Control network policies atomically. */
     void setNetworkPolicies(in NetworkPolicy[] policies);
-    NetworkPolicy[] getNetworkPolicies();
+    NetworkPolicy[] getNetworkPolicies(String callingPackage);
 
     /** Snooze limit on policy matching given template. */
     void snoozeLimit(in NetworkTemplate template);
@@ -50,7 +55,24 @@ interface INetworkPolicyManager {
     void setRestrictBackground(boolean restrictBackground);
     boolean getRestrictBackground();
 
+    /** Callback used to change internal state on tethering */
+    void onTetheringChanged(String iface, boolean tethering);
+
+    /** Control which applications can be exempt from background data restrictions */
+    void addRestrictBackgroundWhitelistedUid(int uid);
+    void removeRestrictBackgroundWhitelistedUid(int uid);
+    int[] getRestrictBackgroundWhitelistedUids();
+    /** Gets the restrict background status based on the caller's UID:
+        1 - disabled
+        2 - whitelisted
+        3 - enabled
+    */
+    int getRestrictBackgroundByCaller();
+
+    void setDeviceIdleMode(boolean enabled);
+
     NetworkQuotaInfo getNetworkQuotaInfo(in NetworkState state);
     boolean isNetworkMetered(in NetworkState state);
 
+    void factoryReset(String subscriber);
 }

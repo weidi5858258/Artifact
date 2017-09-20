@@ -248,12 +248,12 @@ public class MainActivityController extends BaseActivityController {
             mMainActivity.startService(intent);
         }
 
-        /*if (!MyUtils.isSpecificServiceAlive(
+        if (!MyUtils.isSpecificServiceAlive(
                 mContext,
                 Constant.CLASS_APPSLOCKSERVICE)) {
             Intent intent = new Intent(mMainActivity, AppsLockService.class);
             mMainActivity.startService(intent);
-        }*/
+        }
 
         //        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
         //            onRestore(savedInstanceState);

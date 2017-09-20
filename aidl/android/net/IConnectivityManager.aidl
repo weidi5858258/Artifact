@@ -16,17 +16,29 @@
 
 package android.net;
 
+import android.app.PendingIntent;
 import android.net.LinkProperties;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.NetworkMisc;
 import android.net.NetworkQuotaInfo;
+import android.net.NetworkRequest;
 import android.net.NetworkState;
-import android.net.ProxyProperties;
+import android.net.ProxyInfo;
+import android.net.wifi.WifiDevice;
 import android.os.IBinder;
+import android.os.Messenger;
 import android.os.ParcelFileDescriptor;
+import android.os.ResultReceiver;
+import android.net.wifi.WifiDevice;
 
 import com.android.internal.net.LegacyVpnInfo;
 import com.android.internal.net.VpnConfig;
+import com.android.internal.net.VpnInfo;
 import com.android.internal.net.VpnProfile;
+
+import java.util.List;
 
 /**
  * Interface that answers queries about, and allows changing, the
@@ -35,43 +47,31 @@ import com.android.internal.net.VpnProfile;
 /** {@hide} */
 interface IConnectivityManager
 {
-    void setNetworkPreference(int pref);
-
-    int getNetworkPreference();
-
+    Network getActiveNetwork();
+    Network getActiveNetworkForUid(int uid, boolean ignoreBlocked);
     NetworkInfo getActiveNetworkInfo();
-    NetworkInfo getActiveNetworkInfoForUid(int uid);
+    NetworkInfo getActiveNetworkInfoForUid(int uid, boolean ignoreBlocked);
     NetworkInfo getNetworkInfo(int networkType);
+    NetworkInfo getNetworkInfoForUid(in Network network, int uid, boolean ignoreBlocked);
     NetworkInfo[] getAllNetworkInfo();
+    Network getNetworkForType(int networkType);
+    Network[] getAllNetworks();
+    NetworkCapabilities[] getDefaultNetworkCapabilitiesForUser(int userId);
 
     boolean isNetworkSupported(int networkType);
 
     LinkProperties getActiveLinkProperties();
-    LinkProperties getLinkProperties(int networkType);
+    LinkProperties getLinkPropertiesForType(int networkType);
+    LinkProperties getLinkProperties(in Network network);
+
+    NetworkCapabilities getNetworkCapabilities(in Network network);
 
     NetworkState[] getAllNetworkState();
 
     NetworkQuotaInfo getActiveNetworkQuotaInfo();
     boolean isActiveNetworkMetered();
 
-    boolean setRadios(boolean onOff);
-
-    boolean setRadio(int networkType, boolean turnOn);
-
-    int startUsingNetworkFeature(int networkType, in String feature,
-            in IBinder binder);
-
-    int stopUsingNetworkFeature(int networkType, in String feature);
-
-    boolean requestRouteToHost(int networkType, int hostAddress);
-
     boolean requestRouteToHostAddress(int networkType, in byte[] hostAddress);
-
-    boolean getMobileDataEnabled();
-    void setMobileDataEnabled(boolean enabled);
-
-    /** Policy control over specific {@link NetworkStateTracker}. */
-    void setPolicyDataEnable(int networkType, boolean enabled);
 
     int tether(String iface);
 
@@ -81,17 +81,17 @@ interface IConnectivityManager
 
     boolean isTetheringSupported();
 
+    void startTethering(int type, in ResultReceiver receiver, boolean showProvisioningUi);
+
+    void stopTethering(int type);
+
     String[] getTetherableIfaces();
 
     String[] getTetheredIfaces();
 
-    /**
-     * Return list of interface pairs that are actively tethered.  Even indexes are
-     * remote interface, and odd indexes are corresponding local interfaces.
-     */
-    String[] getTetheredIfacePairs();
-
     String[] getTetheringErroredIfaces();
+
+    String[] getTetheredDhcpRanges();
 
     String[] getTetherableUsbRegexs();
 
@@ -101,29 +101,86 @@ interface IConnectivityManager
 
     int setUsbTethering(boolean enable);
 
-    void requestNetworkTransitionWakelock(in String forWhom);
+    List<WifiDevice> getTetherConnectedSta();
 
     void reportInetCondition(int networkType, int percentage);
 
-    ProxyProperties getGlobalProxy();
+    void reportNetworkConnectivity(in Network network, boolean hasConnectivity);
 
-    void setGlobalProxy(in ProxyProperties p);
+    ProxyInfo getGlobalProxy();
 
-    ProxyProperties getProxy();
+    void setGlobalProxy(in ProxyInfo p);
 
-    void setDataDependency(int networkType, boolean met);
+    ProxyInfo getProxyForNetwork(in Network nework);
 
-    boolean protectVpn(in ParcelFileDescriptor socket);
+    boolean prepareVpn(String oldPackage, String newPackage, int userId);
 
-    boolean prepareVpn(String oldPackage, String newPackage);
+    void setVpnPackageAuthorization(String packageName, int userId, boolean authorized);
 
     ParcelFileDescriptor establishVpn(in VpnConfig config);
 
+    VpnConfig getVpnConfig(int userId);
+
     void startLegacyVpn(in VpnProfile profile);
 
-    LegacyVpnInfo getLegacyVpnInfo();
+    LegacyVpnInfo getLegacyVpnInfo(int userId);
+
+    VpnInfo[] getAllVpnInfo();
 
     boolean updateLockdownVpn();
+    boolean setAlwaysOnVpnPackage(int userId, String packageName, boolean lockdown);
+    String getAlwaysOnVpnPackage(int userId);
 
-    void captivePortalCheckComplete(in NetworkInfo info);
+    int checkMobileProvisioning(int suggestedTimeOutMs);
+
+    String getMobileProvisioningUrl();
+
+    void setProvisioningNotificationVisible(boolean visible, int networkType, in String action);
+
+    void setAirplaneMode(boolean enable);
+
+    void registerNetworkFactory(in Messenger messenger, in String name);
+
+    boolean requestBandwidthUpdate(in Network network);
+
+    void unregisterNetworkFactory(in Messenger messenger);
+
+    int registerNetworkAgent(in Messenger messenger, in NetworkInfo ni, in LinkProperties lp,
+            in NetworkCapabilities nc, int score, in NetworkMisc misc);
+
+    NetworkRequest requestNetwork(in NetworkCapabilities networkCapabilities,
+            in Messenger messenger, int timeoutSec, in IBinder binder, int legacy);
+
+    NetworkRequest pendingRequestForNetwork(in NetworkCapabilities networkCapabilities,
+            in PendingIntent operation);
+
+    void releasePendingNetworkRequest(in PendingIntent operation);
+
+    NetworkRequest listenForNetwork(in NetworkCapabilities networkCapabilities,
+            in Messenger messenger, in IBinder binder);
+
+    void pendingListenForNetwork(in NetworkCapabilities networkCapabilities,
+            in PendingIntent operation);
+
+    void requestLinkProperties(in NetworkRequest networkRequest);
+    void requestNetworkCapabilities(in NetworkRequest networkRequest);
+    void releaseNetworkRequest(in NetworkRequest networkRequest);
+
+    void setAcceptUnvalidated(in Network network, boolean accept, boolean always);
+    void setAvoidUnvalidated(in Network network);
+
+    int getRestoreDefaultNetworkDelay(int networkType);
+
+    boolean addVpnAddress(String address, int prefixLength);
+    boolean removeVpnAddress(String address, int prefixLength);
+    boolean setUnderlyingNetworksForVpn(in Network[] networks);
+
+    void factoryReset();
+
+    void startNattKeepalive(in Network network, int intervalSeconds, in Messenger messenger,
+            in IBinder binder, String srcAddr, int srcPort, String dstAddr);
+
+    void stopKeepalive(in Network network, int slot);
+
+    String getCaptivePortalServerUrl();
 }

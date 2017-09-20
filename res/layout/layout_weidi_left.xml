@@ -4,8 +4,7 @@
       android:layout_width="@dimen/line_width"
       android:layout_height="match_parent"
       android:layout_gravity="left"
-      android:background="@color/lavenderblush">
+      android:background="@drawable/none_png">
     <!--android:background="@drawable/none_png"-->
-    <!--android:background="@color/lavenderblush"-->
 
 </View>

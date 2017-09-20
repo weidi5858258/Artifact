@@ -16,6 +16,7 @@
 
 package android.app.backup;
 
+import android.app.backup.IBackupObserver;
 import android.app.backup.IFullBackupRestoreObserver;
 import android.app.backup.IRestoreSession;
 import android.os.ParcelFileDescriptor;
@@ -43,14 +44,14 @@ interface IBackupManager {
     void dataChanged(String packageName);
 
     /**
-     * Erase all backed-up data for the given package from the storage
+     * Erase all backed-up data for the given package from the given storage
      * destination.
      *
      * Any application can invoke this method for its own package, but
      * only callers who hold the android.permission.BACKUP permission
      * may invoke it for arbitrary packages.
      */
-    void clearBackupData(String packageName);
+    void clearBackupData(String transportName, String packageName);
 
     /**
      * Notifies the Backup Manager Service that an agent has become available.  This
@@ -152,6 +153,8 @@ interface IBackupManager {
      * @param fd The file descriptor to which a 'tar' file stream is to be written
      * @param includeApks If <code>true</code>, the resulting tar stream will include the
      *     application .apk files themselves as well as their data.
+     * @param includeObbs If <code>true</code>, the resulting tar stream will include any
+     *     application expansion (OBB) files themselves belonging to each application.
      * @param includeShared If <code>true</code>, the resulting tar stream will include
      *     the contents of the device's shared storage (SD card or equivalent).
      * @param allApps If <code>true</code>, the resulting tar stream will include all
@@ -164,8 +167,17 @@ interface IBackupManager {
      * @param packageNames The package names of the apps whose data (and optionally .apk files)
      *     are to be backed up.  The <code>allApps</code> parameter supersedes this.
      */
-    void fullBackup(in ParcelFileDescriptor fd, boolean includeApks, boolean includeShared,
-            boolean allApps, boolean allIncludesSystem, in String[] packageNames);
+    void fullBackup(in ParcelFileDescriptor fd, boolean includeApks, boolean includeObbs,
+            boolean includeShared, boolean doWidgets, boolean allApps, boolean allIncludesSystem,
+            boolean doCompress, in String[] packageNames);
+
+    /**
+     * Perform a full-dataset backup of the given applications via the currently active
+     * transport.
+     *
+     * @param packageNames The package names of the apps whose data are to be backed up.
+     */
+    void fullTransportBackup(in String[] packageNames);
 
     /**
      * Restore device content from the data stream passed through the given socket.  The
@@ -206,6 +218,14 @@ interface IBackupManager {
     String[] listAllTransports();
 
     /**
+     * Retrieve the list of whitelisted transport components.  Callers do </i>not</i> need
+     * any special permission.
+     *
+     * @return The names of all whitelisted transport components defined by the system.
+     */
+    String[] getTransportWhitelist();
+
+    /**
      * Specify the current backup transport.  Callers must hold the
      * android.permission.BACKUP permission to use this method.
      *
@@ -239,6 +259,18 @@ interface IBackupManager {
     String getDestinationString(String transport);
 
     /**
+     * Get the manage-data UI intent, if any, from the given transport.  Callers must
+     * hold the android.permission.BACKUP permission in order to use this method.
+     */
+    Intent getDataManagementIntent(String transport);
+
+    /**
+     * Get the manage-data menu label, if any, from the given transport.  Callers must
+     * hold the android.permission.BACKUP permission in order to use this method.
+     */
+    String getDataManagementLabel(String transport);
+
+    /**
      * Begin a restore session.  Either or both of packageName and transportID
      * may be null.  If packageName is non-null, then only the given package will be
      * considered for restore.  If transportID is null, then the restore will use
@@ -263,9 +295,69 @@ interface IBackupManager {
      * Notify the backup manager that a BackupAgent has completed the operation
      * corresponding to the given token.
      *
-     * @param token The transaction token passed to a BackupAgent's doBackup() or
-     *        doRestore() method.
+     * @param token The transaction token passed to the BackupAgent method being
+     *        invoked.
+     * @param result In the case of a full backup measure operation, the estimated
+     *        total file size that would result from the operation. Unused in all other
+     *        cases.
      * {@hide}
      */
-    void opComplete(int token);
+    void opComplete(int token, long result);
+
+    /**
+     * Make the device's backup and restore machinery (in)active.  When it is inactive,
+     * the device will not perform any backup operations, nor will it deliver data for
+     * restore, although clients can still safely call BackupManager methods.
+     *
+     * @param whichUser User handle of the defined user whose backup active state
+     *     is to be adjusted.
+     * @param makeActive {@code true} when backup services are to be made active;
+     *     {@code false} otherwise.
+     */
+    void setBackupServiceActive(int whichUser, boolean makeActive);
+
+    /**
+     * Queries the activity status of backup service as set by {@link #setBackupServiceActive}.
+     * @param whichUser User handle of the defined user whose backup active state
+     *     is being queried.
+     */
+    boolean isBackupServiceActive(int whichUser);
+
+    /**
+     * Ask the framework which dataset, if any, the given package's data would be
+     * restored from if we were to install it right now.
+     *
+     * <p>Callers must hold the android.permission.BACKUP permission to use this method.
+     *
+     * @param packageName The name of the package whose most-suitable dataset we
+     *     wish to look up
+     * @return The dataset token from which a restore should be attempted, or zero if
+     *     no suitable data is available.
+     */
+    long getAvailableRestoreToken(String packageName);
+
+    /**
+     * Ask the framework whether this app is eligible for backup.
+     *
+     * <p>Callers must hold the android.permission.BACKUP permission to use this method.
+     *
+     * @param packageName The name of the package.
+     * @return Whether this app is eligible for backup.
+     */
+    boolean isAppEligibleForBackup(String packageName);
+
+    /**
+     * Request an immediate backup, providing an observer to which results of the backup operation
+     * will be published. The Android backup system will decide for each package whether it will
+     * be full app data backup or key/value-pair-based backup.
+     *
+     * <p>If this method returns zero (meaning success), the OS will attempt to backup all provided
+     * packages using the remote transport.
+     *
+     * @param observer The {@link BackupObserver} to receive callbacks during the backup
+     * operation.
+     *
+     * @return Zero on success; nonzero on error.
+     */
+    int requestBackup(in String[] packages, IBackupObserver observer);
 }

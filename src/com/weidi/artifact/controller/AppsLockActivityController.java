@@ -263,15 +263,6 @@ public class AppsLockActivityController extends BaseActivityController {
     }
 
     private void init() {
-        /***
-         需要做的事有：
-         1.应用是否可以被安装
-         2.应用是否可以被卸载
-         3.是否允许USB调试
-         4.外置存储卡是否可用
-         */
-
-        // 全屏
         mAppsLockActivity.getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -307,10 +298,7 @@ public class AppsLockActivityController extends BaseActivityController {
     }
 
     /**
-     * 统一一下，false表示不允许做的事，true表示允许做的事
-     *
      * com.android.server.input.InputManagerService
-     * true表示拦截
      * false表示不拦截
      *
      * @param isIntercept
@@ -327,13 +315,6 @@ public class AppsLockActivityController extends BaseActivityController {
         context.sendBroadcastAsUser(intent, UserHandle.OWNER);
     }
 
-    /**
-     * com.android.server.MountService
-     * true表示拦截
-     * false表示不拦截
-     *
-     * @param isIntercept
-     */
     public static void sendBroadcastToMountService(Context context, boolean isIntercept) {
         Intent intent = new Intent();
         intent.setAction(Constant.MOUNTSERVICE);

@@ -35,9 +35,9 @@ public class MainActivity extends BaseActivity implements BaseFragment.BackHandl
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         if (DEBUG) Log.d(TAG, "onCreate():savedInstanceState = " + savedInstanceState);
         mMainActivityController = new MainActivityController(this);
+        super.onCreate(savedInstanceState);
         mMainActivityController.onCreate(savedInstanceState);
     }
 

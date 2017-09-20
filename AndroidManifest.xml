@@ -95,13 +95,13 @@
         <!-- <uses-library android:name="android.test.runner"/> -->
         <!-- <uses-library android:name="services"/> -->
 
-        <activity android:name="com.weidi.activity.base.BaseActivity">
+        <!--<activity android:name="com.weidi.activity.base.BaseActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
+        </activity>-->
 
         <!-- 主界面 -->
         <activity

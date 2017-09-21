@@ -121,6 +121,11 @@ public class AppsLockActivityController extends BaseActivityController {
     }
 
     @Override
+    public void onRestart() {
+
+    }
+
+    @Override
     public void onResume() {
         if (DBG) Log.d(TAG, "onResume()");
         // 必须要放在这里

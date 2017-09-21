@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.weidi.artifact.R;
-import com.weidi.artifact.controller.SmsFragmentController;
+import com.weidi.artifact.controller.TestImageFragmentController;
 import com.weidi.fragment.base.BaseFragment;
 import com.weidi.inject.InjectOnClick;
 import com.weidi.inject.InjectView;
@@ -18,26 +18,26 @@ import com.weidi.log.Log;
  * Created by root on 17-1-13.
  */
 
-public class SmsFragment extends BaseFragment {
+public class TestImageFragment extends BaseFragment {
 
-    private static final String TAG = "SmsFragment";
+    private static final String TAG = "TestImageFragment";
     private static final boolean DEBUG = true;
 
     @InjectView(R.id.recyclerview)
-    public RecyclerView smslist_recycleview;
+    public RecyclerView imagelist_recycleview;
 
     @InjectView(R.id.loading)
     public View loading;
 
-    private SmsFragmentController mSmsFragmentController;
+    private TestImageFragmentController mTestImageFragmentController;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         if (DEBUG)
             Log.d(TAG, "onAttach(): activity = " + activity);
-        mSmsFragmentController = new SmsFragmentController(this);
-        mSmsFragmentController.beforeInitView();
+        mTestImageFragmentController = new TestImageFragmentController(this);
+        mTestImageFragmentController.beforeInitView();
     }
 
     @Override
@@ -73,21 +73,21 @@ public class SmsFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         if (DEBUG) Log.d(TAG, "onResume()");
-        mSmsFragmentController.onResume();
+        mTestImageFragmentController.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         if (DEBUG) Log.d(TAG, "onPause()");
-        mSmsFragmentController.onPause();
+        mTestImageFragmentController.onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         if (DEBUG) Log.d(TAG, "onStop()");
-        mSmsFragmentController.onStop();
+        mTestImageFragmentController.onStop();
     }
 
     @Override
@@ -99,7 +99,7 @@ public class SmsFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         if (DEBUG) Log.d(TAG, "onDestroy()");
-        mSmsFragmentController.onDestroy();
+        mTestImageFragmentController.onDestroy();
         super.onDestroy();
     }
 
@@ -119,13 +119,13 @@ public class SmsFragment extends BaseFragment {
         return null;
     }
 
-    public SmsFragmentController getSmsFragmentController() {
-        return mSmsFragmentController;
+    public TestImageFragmentController getTestImageFragmentController() {
+        return mTestImageFragmentController;
     }
 
     @InjectOnClick({R.id.data_sms_backup_btn, R.id.data_sms_restore_btn})
     public void onClick(View view) {
-        mSmsFragmentController.onClick(view);
+        mTestImageFragmentController.onClick(view);
     }
 
     @Override
@@ -138,16 +138,16 @@ public class SmsFragment extends BaseFragment {
             LayoutInflater inflater,
             ViewGroup container,
             Bundle savedInstanceState) {
-        mSmsFragmentController.afterInitView(inflater, container, savedInstanceState);
+        mTestImageFragmentController.afterInitView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         if (DEBUG) Log.d(TAG, "onHiddenChanged():hidden = " + hidden);
         if (hidden) {
-            mSmsFragmentController.onPause();
+            mTestImageFragmentController.onPause();
         } else {
-            mSmsFragmentController.onResume();
+            mTestImageFragmentController.onResume();
         }
         super.onHiddenChanged(hidden);
     }

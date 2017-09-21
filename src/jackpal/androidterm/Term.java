@@ -517,6 +517,11 @@ public class Term extends BaseActivity implements UpdateCallback {
     }
 
     @Override
+    public Object onEvent(int what, Object object) {
+        return null;
+    }
+
+    @Override
     public String[] getRequiredPermissions() {
         return new String[0];
     }

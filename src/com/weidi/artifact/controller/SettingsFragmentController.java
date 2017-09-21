@@ -21,6 +21,7 @@ import com.weidi.artifact.activity.MainActivity;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.basecontroller.BaseFragmentController;
 import com.weidi.artifact.fragment.SettingsFragment;
+import com.weidi.artifact.fragment.TestImageFragment;
 import com.weidi.artifact.service.AppsLockService;
 import com.weidi.artifact.service.CoreService;
 import com.weidi.artifact.service.PeriodicalSerialKillerService;
@@ -255,7 +256,10 @@ public class SettingsFragmentController extends BaseFragmentController {
             }
 
             case R.id.settings_applock_password: {
-                setAppsLockPassword();
+                TestImageFragment testImageFragment = new TestImageFragment();
+                mMainActivity.mMainActivityController
+                        .getFragOperManager().enter(testImageFragment, "TestImageFragment");
+                // setAppsLockPassword();
                 break;
             }
 

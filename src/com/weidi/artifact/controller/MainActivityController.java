@@ -65,6 +65,7 @@ public class MainActivityController extends BaseActivityController {
         mFragmentBackTypeSMap.put("DataBackupAndRestoreFragment", Constant.POPBACKSTACK);
         mFragmentBackTypeSMap.put("SmsFragment", Constant.POPBACKSTACK);
         mFragmentBackTypeSMap.put("PhoneFragment", Constant.POPBACKSTACK);
+        mFragmentBackTypeSMap.put("TestImageFragment", Constant.POPBACKSTACK);
 
         mDataBackupAndRestoreMap = new HashMap<String, String>();
         mDataBackupAndRestoreMap.put("Sms", "content://sms");

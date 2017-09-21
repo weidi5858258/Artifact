@@ -63,6 +63,11 @@ public class CameraActivityController extends BaseActivityController {
     }
 
     @Override
+    public void onRestart() {
+
+    }
+
+    @Override
     public void onResume() {
         // 这里得开线程进行拍照，因为Activity还未完全显示的时候，是无法进行拍照的，SurfaceView必须先显示
         ThreadPool.getCachedThreadPool().execute(new Runnable() {
@@ -91,6 +96,11 @@ public class CameraActivityController extends BaseActivityController {
             myCamera.release();
             myCamera = null;
         }
+    }
+
+    @Override
+    public Object onEvent(int what, Object object) {
+        return null;
     }
 
     // 初始化surface

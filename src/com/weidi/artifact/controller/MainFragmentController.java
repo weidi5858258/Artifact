@@ -36,10 +36,10 @@ import com.weidi.artifact.fragment.PhoneFragment;
 import com.weidi.artifact.fragment.QrCodeFragment;
 import com.weidi.artifact.fragment.SettingsFragment;
 import com.weidi.artifact.fragment.SmsFragment;
-import com.weidi.artifact.fragment.base.BaseFragment;
 import com.weidi.customadapter.CustomRecyclerViewAdapter;
 import com.weidi.customadapter.CustomViewHolder;
 import com.weidi.customadapter.listener.OnItemClickListener;
+import com.weidi.fragment.base.BaseFragment;
 import com.weidi.log.Log;
 import com.weidi.utils.MyUtils;
 

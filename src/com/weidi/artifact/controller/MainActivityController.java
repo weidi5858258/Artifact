@@ -21,11 +21,11 @@ import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.basecontroller.BaseActivityController;
 import com.weidi.artifact.fragment.FragOperManager;
 import com.weidi.artifact.fragment.MainFragment;
-import com.weidi.artifact.fragment.base.BaseFragment;
 import com.weidi.artifact.service.AppsLockService;
 import com.weidi.artifact.service.CoreService;
 import com.weidi.artifact.service.PeriodicalSerialKillerService;
 import com.weidi.eventbus.EventBus;
+import com.weidi.fragment.base.BaseFragment;
 import com.weidi.log.Log;
 import com.weidi.utils.MyUtils;
 

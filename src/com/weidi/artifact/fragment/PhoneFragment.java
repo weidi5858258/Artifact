@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.weidi.artifact.R;
 import com.weidi.artifact.controller.PhoneFragmentController;
 import com.weidi.artifact.controller.PhoneFragmentController;
-import com.weidi.artifact.fragment.base.BaseFragment;
+import com.weidi.fragment.base.BaseFragment;
 import com.weidi.inject.InjectOnClick;
 import com.weidi.inject.InjectView;
 import com.weidi.log.Log;

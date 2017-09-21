@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.weidi.artifact.R;
 import com.weidi.activity.base.BaseActivity;
 import com.weidi.artifact.controller.MainActivityController;
-import com.weidi.artifact.fragment.base.BaseFragment;
+import com.weidi.fragment.base.BaseFragment;
 import com.weidi.inject.InjectLayout;
 import com.weidi.inject.InjectView;
 import com.weidi.log.Log;

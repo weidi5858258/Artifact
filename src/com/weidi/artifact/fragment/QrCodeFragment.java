@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.weidi.artifact.R;
 import com.weidi.artifact.controller.ILifeCycle;
 import com.weidi.artifact.controller.QrCodeFragmentController;
-import com.weidi.artifact.fragment.base.BaseFragment;
+import com.weidi.fragment.base.BaseFragment;
 import com.weidi.inject.InjectOnClick;
 import com.weidi.inject.InjectView;
 import com.weidi.log.Log;

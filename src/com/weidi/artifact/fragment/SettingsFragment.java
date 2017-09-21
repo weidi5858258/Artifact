@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.weidi.artifact.R;
 import com.weidi.artifact.controller.SettingsFragmentController;
-import com.weidi.artifact.fragment.base.BaseFragment;
 import com.weidi.artifact.ui.CheckBoxItemAppLock;
 import com.weidi.artifact.ui.CheckBoxItemBlacklist;
 import com.weidi.artifact.ui.CheckBoxItemInstallPackage;
@@ -19,6 +18,7 @@ import com.weidi.artifact.ui.CheckBoxItemShowAttribution;
 import com.weidi.artifact.ui.CheckBoxItemUninstallPackage;
 import com.weidi.artifact.ui.CheckBoxItemUpdate;
 import com.weidi.artifact.ui.CheckBoxItemUsbDebug;
+import com.weidi.fragment.base.BaseFragment;
 import com.weidi.inject.InjectOnClick;
 import com.weidi.inject.InjectView;
 import com.weidi.log.Log;

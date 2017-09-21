@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.weidi.artifact.R;
 import com.weidi.artifact.controller.AppsOperationDialogFragmentController;
-import com.weidi.artifact.fragment.base.BaseDialogFragment;
+import com.weidi.fragment.base.BaseDialogFragment;
 import com.weidi.inject.InjectOnClick;
 import com.weidi.inject.InjectView;
 import com.weidi.log.Log;

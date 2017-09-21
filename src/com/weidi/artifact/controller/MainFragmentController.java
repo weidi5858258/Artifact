@@ -131,6 +131,15 @@ public class MainFragmentController extends BaseFragmentController {
         if (DEBUG) Log.d(TAG, "onDestroy()");
     }
 
+    public Object onEvent(int what, Object object) {
+        Object result = null;
+        switch (what){
+
+            default:
+        }
+        return result;
+    }
+
     private void init() {
         mSharedPreferences = mContext.getSharedPreferences(
                 Constant.APP_CONFIG, Context.MODE_PRIVATE);

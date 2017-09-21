@@ -27,6 +27,7 @@ import com.weidi.artifact.activity.CameraActivity;
 import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.basecontroller.BaseActivityController;
+import com.weidi.artifact.service.AppsLockService;
 import com.weidi.artifact.service.CoreService;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.eventbus.EventBus;
@@ -247,7 +248,7 @@ public class AppsLockActivityController extends BaseActivityController {
         }
     }
 
-    public void onEvent(int what, Object object) {
+    public Object onEvent(int what, Object object) {
         switch (what) {
             case Constant.SCREEN_OFF:
                 if (DBG) Log.d(TAG, "SCREEN_OFF");
@@ -260,6 +261,7 @@ public class AppsLockActivityController extends BaseActivityController {
 
             default:
         }
+        return what;
     }
 
     private void init() {
@@ -293,8 +295,8 @@ public class AppsLockActivityController extends BaseActivityController {
         mAppsLockActivity.backdoor_rlayout.setOnTouchListener(mOnTouchListener);
         mAppsLockActivity.password_layout.setOnTouchListener(mOnTouchListener);
 
-        EventBus.getDefault().post(Constant.HIDEGESTUREVIEW, null);
-        EventBus.getDefault().post(Constant.ILLEGALUNLOCK_ENTER, null);
+        EventBus.getDefault().postAsync(CoreService.class,Constant.HIDEGESTUREVIEW, null);
+        EventBus.getDefault().postAsync(CoreService.class,Constant.ILLEGALUNLOCK_ENTER, null);
     }
 
     /**
@@ -395,11 +397,11 @@ public class AppsLockActivityController extends BaseActivityController {
         setScreenOffTime(120 * 1000);
 
         // 密码正确通知一下AppsLockService
-        EventBus.getDefault().post(Constant.PASSWORD_CORRECT, mPackageName);
+        EventBus.getDefault().postAsync(AppsLockService.class, Constant.PASSWORD_CORRECT, mPackageName);
 
-        EventBus.getDefault().post(Constant.SHOWGESTUREVIEW, null);
+        EventBus.getDefault().postAsync(AppsLockService.class, Constant.SHOWGESTUREVIEW, null);
 
-        EventBus.getDefault().post(Constant.ILLEGALUNLOCK_EXIT, null);
+        EventBus.getDefault().postAsync(AppsLockService.class, Constant.ILLEGALUNLOCK_EXIT, null);
 
         mAppsLockActivity.finish();
         mAppsLockActivity.exitActivity();

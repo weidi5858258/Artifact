@@ -7,23 +7,22 @@ import android.content.pm.ApplicationInfo;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.os.RemoteException;
 
 import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.constant.Constant;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
+import com.weidi.service.BaseService;
 import com.weidi.threadpool.ThreadPool;
 import com.weidi.utils.MyToast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.weidi.artifact.R.id.call;
 import static com.weidi.utils.MyToast.show;
 
-public class PeriodicalSerialKillerService extends Service implements EventBus.EventListener {
+public class PeriodicalSerialKillerService extends BaseService {
 
     private static final String TAG = "PeriodicalSerialKillerService";
     private ArrayList<String> mCannotBeKilledPackageNameList = new ArrayList<String>();
@@ -109,7 +108,7 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
     }
 
     @Override
-    public void onEvent(int what, Object object) {
+    public Object onEvent(int what, Object object) {
         switch (what) {
             case Constant.PERIODICALSERIALKILLERSERVICE:
                 stopSelf();
@@ -169,6 +168,7 @@ public class PeriodicalSerialKillerService extends Service implements EventBus.E
 
             default:
         }
+        return what;
     }
 
 

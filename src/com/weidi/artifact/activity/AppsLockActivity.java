@@ -23,7 +23,7 @@ import com.weidi.log.Log;
 
 @InjectLayout(R.layout.activity_appslock)
 public class AppsLockActivity extends BaseActivity
-        implements OnClickListener, EventBus.EventListener {
+        implements OnClickListener {
 
     private static final String TAG = "AppsLockActivity";
     private static final boolean DBG = true;
@@ -152,9 +152,8 @@ public class AppsLockActivity extends BaseActivity
         mAppsLockActivityController.onClick(view);
     }
 
-    @Override
-    public void onEvent(int what, Object object) {
-        mAppsLockActivityController.onEvent(what, object);
+    public Object onEvent(int what, Object object) {
+        return mAppsLockActivityController.onEvent(what, object);
     }
 
 }

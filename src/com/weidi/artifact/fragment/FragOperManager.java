@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.text.TextUtils;
 
+import com.weidi.artifact.R;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.eventbus.EventBus;
 
@@ -64,13 +65,14 @@ import java.util.List;
  * 只能在v4包中才能使用
  * fTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out);
  */
-public class FragOperManager implements Serializable, EventBus.EventListener {
+public class FragOperManager implements Serializable {
 
     private static final String TAG = "FragOperManager";
+
     /**
      * FragmentActivity 实例
      */
-    // private Activity activity;
+    private Activity activity;
 
     /**
      * BaseFragment 管理器
@@ -98,7 +100,7 @@ public class FragOperManager implements Serializable, EventBus.EventListener {
         if (containerId <= 0) {
             throw new IllegalArgumentException("FragOperManager's containerId is Invalid.");
         }
-        // this.activity = activity;
+        this.activity = activity;
         this.containerId = containerId;
         this.fManager = activity.getFragmentManager();
         this.fragmentsList = new ArrayList<Fragment>();
@@ -116,16 +118,14 @@ public class FragOperManager implements Serializable, EventBus.EventListener {
         EventBus.getDefault().unregister(this);
     }
 
-    /**
-     * 退出Fragment时打算隐藏那么就传HIDE;
+    /***
+     * 如果退出Fragment时打算隐藏那么就传HIDE;
      * 如果退出Fragment时弹出后退栈那么就传POPBACKSTACK.
-     * 如果退出时是隐藏的,那么在进入这个Fragment时它的对象不能每次都new,只能new一次
-     *
-     * @param what
+     * 如果退出时是隐藏的,那么在进入这个Fragment时它的对象不能再次new,只能new一次
+     *  @param what
      * @param object
      */
-    @Override
-    public void onEvent(int what, Object object) {
+    public Object onEvent(int what, Object object) {
         switch (what) {
             case Constant.HIDE:
                 // 隐藏某个Fragment,而不是弹出.
@@ -144,6 +144,7 @@ public class FragOperManager implements Serializable, EventBus.EventListener {
 
             default:
         }
+        return what;
     }
 
     /**
@@ -178,7 +179,7 @@ public class FragOperManager implements Serializable, EventBus.EventListener {
         }
 
         // fragment显示时的动画
-        // fTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out);
+        fTransaction.setCustomAnimations(R.animator.push_left_in, R.animator.push_left_out);
         fTransaction.show(fragment);
         // 旋转屏幕,然后去添加一个Fragment,出现异常
         // 旋转屏幕后
@@ -216,35 +217,8 @@ public class FragOperManager implements Serializable, EventBus.EventListener {
             return;
         }
         FragmentTransaction fTransaction = fManager.beginTransaction();
-        // 这里有个前提条件,就是进入MainActivity时首先需要加载一个MainFragment,
-        // 并且这个MainFragment一直存在着.这样执行下面的代码就没有问题.
-        switch (exitType) {
-            case Constant.HIDE:
-                fTransaction.hide(fragment);
-                fragmentsList.remove(fragment);
-                Fragment showFragment = fragmentsList.get(fragmentsList.size() - 1);
-                fTransaction.show(showFragment);
-                fragmentsList.add(0, fragment);
-                break;
-
-            case Constant.POPBACKSTACK:
-                fManager.popBackStack();
-                fragmentsList.remove(fragment);
-                int count = fragmentsList.size();
-                for (int i = 0; i < count; i++) {
-                    Fragment hideFragment = fragmentsList.get(i);
-                    fTransaction.hide(hideFragment);
-                }
-                showFragment = fragmentsList.get(count - 1);
-                fTransaction.show(showFragment);
-                break;
-
-            default:
-        }
-        fTransaction.commit();
         // 不需要先加载一个Fragment
-
-        /*switch (exitType) {
+        switch (exitType) {
             case Constant.HIDE:
                 fTransaction.hide(fragment);
                 int count = fragmentsList.size();
@@ -272,7 +246,38 @@ public class FragOperManager implements Serializable, EventBus.EventListener {
                 fTransaction.show(showFragment);
                 break;
             default:
-        }*/
+        }
+        fTransaction.commit();
+
+        // 这段代码不要删除
+        // 这里有个前提条件,就是进入MainActivity时首先需要加载一个MainFragment,
+        // 并且这个MainFragment一直存在着.这样执行下面的代码就没有问题.
+        /***
+         switch (exitType) {
+         case Constant.HIDE:
+         fTransaction.hide(fragment);
+         fragmentsList.remove(fragment);
+         Fragment showFragment = fragmentsList.get(fragmentsList.size() - 1);
+         fTransaction.show(showFragment);
+         fragmentsList.add(0, fragment);
+         break;
+
+         case Constant.POPBACKSTACK:
+         fManager.popBackStack();
+         fragmentsList.remove(fragment);
+         int count = fragmentsList.size();
+         for (int i = 0; i < count; i++) {
+         Fragment hideFragment = fragmentsList.get(i);
+         fTransaction.hide(hideFragment);
+         }
+         showFragment = fragmentsList.get(count - 1);
+         fTransaction.show(showFragment);
+         break;
+
+         default:
+         }
+         fTransaction.commit();
+         */
     }
 
     private void popBackStackAll() {

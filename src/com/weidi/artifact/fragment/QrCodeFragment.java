@@ -131,6 +131,11 @@ public class QrCodeFragment extends BaseFragment implements ILifeCycle {
     }
 
     @Override
+    public Object onEvent(int what, Object object) {
+        return null;
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         mQrCodeFragmentController.onActivityResult(requestCode, resultCode, data);
     }

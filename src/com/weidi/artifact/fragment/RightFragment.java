@@ -105,6 +105,11 @@ public class RightFragment extends BaseFragment {
         return false;
     }
 
+    @Override
+    public Object onEvent(int what, Object object) {
+        return null;
+    }
+
     /*@InjectOnClick({R.id.settings_update, R.id.settings_showattribution,
             R.id.settings_showinstallpackage,R.id.settings_showuninstallpackage,
             R.id.settings_showusbdebug, R.id.settings_showsdcardandusbdisk,

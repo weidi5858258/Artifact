@@ -68,6 +68,11 @@ public class ProcessManagerFragment extends BaseFragment {
         return false;
     }
 
+    @Override
+    public Object onEvent(int what, Object object) {
+        return null;
+    }
+
     public ProcessManagerFragmentController getProcessManagerFragmentController(){
         return mProcessManagerFragmentController;
     }

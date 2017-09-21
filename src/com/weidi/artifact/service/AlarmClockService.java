@@ -8,18 +8,19 @@ import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.weidi.artifact.constant.Constant;
+import com.weidi.artifact.controller.AlarmClockFragmentController;
 import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
+import com.weidi.service.BaseService;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
 import com.weidi.utils.MyToast;
 
 import java.util.ArrayList;
 
-public class AlarmClockService extends Service implements EventBus.EventListener {
+public class AlarmClockService extends BaseService {
 
     private static final String TAG = "AlarmClockService";
     private AlarmManager mAlarmManager;
@@ -123,7 +124,7 @@ public class AlarmClockService extends Service implements EventBus.EventListener
     }
 
     @Override
-    public void onEvent(int what, Object object) {
+    public Object onEvent(int what, Object object) {
         switch (what) {
             case Constant.STOP_ALARMCLOCKSERVICE:
                 onDestroy_();
@@ -131,10 +132,12 @@ public class AlarmClockService extends Service implements EventBus.EventListener
 
             default:
         }
+        return what;
     }
 
     private void onDestroy_() {
-        EventBus.getDefault().post(Constant.ALARMCLOCKSERVICE_IS_STOPPED, null);
+        EventBus.getDefault().postSync(
+                AlarmClockFragmentController.class, Constant.ALARMCLOCKSERVICE_IS_STOPPED, null);
         stopSelf();
     }
 
@@ -262,7 +265,8 @@ public class AlarmClockService extends Service implements EventBus.EventListener
         @Override
         public void onTick(long millisUntilFinished) {
             long remainingTime = millisUntilFinished / 1000;
-            EventBus.getDefault().post(
+            EventBus.getDefault().postSync(
+                    AlarmClockFragmentController.class,
                     Constant.TRANSPORT_TIME,
                     "倒计时: " + remainingTime + " 秒");
         }

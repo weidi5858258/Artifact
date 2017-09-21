@@ -24,7 +24,6 @@ import android.graphics.PixelFormat;
 import android.net.ConnectivityManager;
 //import android.net.NetworkUtils;
 import android.net.Uri;
-import android.net.wifi.WifiInfo;
 import android.os.Environment;
 import android.os.FileObserver;
 import android.os.Handler;
@@ -32,8 +31,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
-import android.os.RemoteException;
-import android.os.UserHandle;
 import android.os.Vibrator;
 import android.telephony.PhoneStateListener;
 import android.telephony.SmsMessage;
@@ -75,12 +72,12 @@ import com.weidi.artifact.modle.Sms;
 import com.weidi.dbutil.SimpleDao;
 import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
+import com.weidi.service.BaseService;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
 import com.weidi.utils.MyToast;
 import com.weidi.utils.MyUtils;
 import com.weidi.utils.Recorder;
-import com.weidi.utils.MyUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -99,8 +96,7 @@ import static com.weidi.artifact.R.id.bt_querytools_sure;
 import static com.weidi.artifact.R.id.fun7_btn;
 
 //SIMIsChangedReceiver在这个广播中启动 还有StartActivity
-public class CoreService extends Service implements
-        EventBus.EventListener,
+public class CoreService extends BaseService implements
         OnClickListener,
         View.OnLongClickListener,
         OnTouchListener {
@@ -364,12 +360,11 @@ public class CoreService extends Service implements
 
     /**
      * EventListener
-     *
-     * @param what
+     *  @param what
      * @param object
      */
     @Override
-    public void onEvent(int what, final Object object) {
+    public Object onEvent(int what, final Object object) {
         // Log.d(TAG, "onEvent():what = " + what);
         switch (what) {
             case Constant.CORESERVICE:
@@ -386,6 +381,7 @@ public class CoreService extends Service implements
 
             default:
         }
+        return what;
     }
 
     private Dialog mFunctionAlertDialog;
@@ -765,7 +761,7 @@ public class CoreService extends Service implements
                     Log.d(TAG, "NEW_OUTGOING_CALL---outNumber = " + outNumber);
                     MyToast.show("NEW_OUTGOING_CALL");
                 } else if ("android.intent.action.SCREEN_OFF".equals(intent.getAction())) {
-                    EventBus.getDefault().post(Constant.SCREEN_OFF, null);
+                    EventBus.getDefault().postAsync(CoreService.class, Constant.SCREEN_OFF, null);
                     String currentTime = mPhoneSimpleDateFormat.format(new Date());
                     Event event = new Event();
                     event.time = currentTime;
@@ -773,7 +769,7 @@ public class CoreService extends Service implements
                     SimpleDao.getInstance().add(Event.class, event);
                     isScreenOnOrOff = false;
                 } else if ("android.intent.action.SCREEN_ON".equals(intent.getAction())) {
-                    EventBus.getDefault().post(Constant.SCREEN_ON, null);
+                    EventBus.getDefault().postAsync(CoreService.class, Constant.SCREEN_ON, null);
                     String currentTime = mPhoneSimpleDateFormat.format(new Date());
                     Event event = new Event();
                     event.time = currentTime;
@@ -1254,12 +1250,14 @@ public class CoreService extends Service implements
             return;
 
         } else if (Constant.UNLOCK_MY_PHONE.equalsIgnoreCase(bodyContent)) {
-            EventBus.getDefault().post(Constant.UNLOCK_MY_PHONE_TAG, null);
+            EventBus.getDefault().postAsync(
+                    AppsLockActivityController.class,Constant.UNLOCK_MY_PHONE_TAG, null);
             return;
 
         } else if (Constant.UNLOCK_MY_PHONE_COMPLETE.equalsIgnoreCase(bodyContent)) {
-            EventBus.getDefault().post(Constant.APPSLOCKSERVICE, null);
-            EventBus.getDefault().post(Constant.UNLOCK_MY_PHONE_TAG, null);
+            EventBus.getDefault().postAsync(AppsLockService.class, Constant.APPSLOCKSERVICE, null);
+            EventBus.getDefault().postAsync(
+                    AppsLockActivityController.class,Constant.UNLOCK_MY_PHONE_TAG, null);
             return;
 
         } else if (Constant.SHUTDOWN.equalsIgnoreCase(bodyContent)) {
@@ -1439,7 +1437,8 @@ public class CoreService extends Service implements
                     if (MyUtils.isSpecificServiceAlive(
                             mContext,
                             "com.weidi.artifact.service.PeriodicalSerialKillerService")) {
-                        EventBus.getDefault().post(
+                        EventBus.getDefault().postAsync(
+                                PeriodicalSerialKillerService.class,
                                 Constant.PERIODICALSERIALKILLERSERVICE, null);
                         MyToast.show("PeriodicalSerialKillerService is Shutdown");
                         //                        if (periodicalSerialKillerServiceIntent != null) {
@@ -1981,7 +1980,8 @@ public class CoreService extends Service implements
     }
 
     private void changeApp() {
-        EventBus.getDefault().post(Constant.CHANGEAPP, null);
+        EventBus.getDefault().postAsync(
+                PeriodicalSerialKillerService.class, Constant.CHANGEAPP, null);
     }
 
     /**
@@ -2130,7 +2130,8 @@ public class CoreService extends Service implements
         if (MyUtils.isSpecificServiceAlive(
                 mContext,
                 "com.weidi.artifact.service.PeriodicalSerialKillerService")) {
-            EventBus.getDefault().post(Constant.PERIODICALSERIALKILLERSERVICE, null);
+            EventBus.getDefault().postAsync(
+                    PeriodicalSerialKillerService.class,Constant.PERIODICALSERIALKILLERSERVICE, null);
             MyToast.show("PeriodicalSerialKillerService is Shutdown");
         } else {
             Intent periodicalSerialKillerServiceIntent = new Intent(

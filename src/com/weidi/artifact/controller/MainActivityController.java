@@ -80,6 +80,7 @@ public class MainActivityController extends BaseActivityController {
         if (DEBUG) Log.d(TAG, "onCreate():savedInstanceState = " + savedInstanceState);
 
         mMainActivity.mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+
             @Override
             public void onDrawerStateChanged(int newState) {
 
@@ -136,6 +137,7 @@ public class MainActivityController extends BaseActivityController {
         });
 
         mMainActivity.mMainActivityLayout.setOnTouchListener(new View.OnTouchListener() {
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 int action = event.getAction();
@@ -182,6 +184,7 @@ public class MainActivityController extends BaseActivityController {
             //            onRestore(savedInstanceState);
             this.savedInstanceState = savedInstanceState;
         } else {
+            // 加载MainFragment
             mMainFragment = new MainFragment();
             getFragOperManager().enter(mMainFragment, null);
         }
@@ -193,13 +196,18 @@ public class MainActivityController extends BaseActivityController {
     }
 
     @Override
+    public void onRestart() {
+        if (DEBUG) Log.d(TAG, "onRestart()");
+    }
+
+    @Override
     public void onResume() {
         if (DEBUG) Log.d(TAG, "onResume()");
         mMainActivity.title.setText("功能列表");
 
-        /**
+        /***
          做这个事的原因:
-         如果有多个Fragment开启着,并且相互之间是显示和隐藏,不是弹出,
+         如果有多个Fragment开启着,并且相互之间是显示和隐藏,而不是弹出,
          (如果后退时Fragment是弹出的话,不需要这样的代码的;
          如果这些Fragment是像QQ那样实现的底部导航栏形式的,
          在任何一个页面都可以退出,那么也不需要实现这样的代码的)
@@ -290,6 +298,11 @@ public class MainActivityController extends BaseActivityController {
         //        }
     }
 
+    @Override
+    public Object onEvent(int what, Object object) {
+        return null;
+    }
+
     public void setILifeCycle(ILifeCycle iLifeCycle) {
         mILifeCycle = iLifeCycle;
     }
@@ -301,7 +314,7 @@ public class MainActivityController extends BaseActivityController {
         return mFragOperManager;
     }
 
-    /**
+    /***
      * 如果多个Fragment以底部Tab方式呈现的话,
      * 那么这些Fragment中的onBackPressed()方法最好返回true.
      * 这样就不需要在MainActivityController中处理onResume()方法了.
@@ -320,7 +333,7 @@ public class MainActivityController extends BaseActivityController {
         for (String key : mFragmentBackTypeSMap.keySet()) {
             if (key.equals(fragmentName)) {
                 int type = mFragmentBackTypeSMap.get(key);
-                EventBus.getDefault().post(type, mBaseFragment);
+                EventBus.getDefault().postAsync(FragOperManager.class, type, mBaseFragment);
                 break;
             }
         }
@@ -329,9 +342,9 @@ public class MainActivityController extends BaseActivityController {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (DEBUG) Log.d(TAG, "onActivityResult():requestCode = " + requestCode
                 + " resultCode = " + resultCode + " intent = " + data);
-        if (mILifeCycle != null) {
+        /*if (mILifeCycle != null) {
             mILifeCycle.onActivityResult(requestCode, resultCode, data);
-        }
+        }*/
     }
 
     /**
@@ -369,18 +382,18 @@ public class MainActivityController extends BaseActivityController {
         if (DEBUG)
             Log.d(TAG, "onRestoreInstanceState():savedInstanceState = " + savedInstanceState);
 
-        if (mILifeCycle != null) {
+        /*if (mILifeCycle != null) {
             mILifeCycle.onRestoreInstanceState(savedInstanceState);
-        }
+        }*/
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
         if (DEBUG)
             Log.d(TAG, "onConfigurationChanged():newConfig = " + newConfig);
 
-        if (mILifeCycle != null) {
+        /*if (mILifeCycle != null) {
             mILifeCycle.onConfigurationChanged(newConfig);
-        }
+        }*/
     }
 
     public void openLeftFragment() {
@@ -437,9 +450,9 @@ public class MainActivityController extends BaseActivityController {
                 }
             }
             mapList.add(map);
-            //            getFragOperManager().add(mapList);
+            // getFragOperManager().add(mapList);
             if (!TextUtils.isEmpty(tag) && topFragment != null) {
-                //                getFragOperManager().enterFragment(topFragment, tag);
+                // getFragOperManager().enterFragment(topFragment, tag);
             }
         }
     }

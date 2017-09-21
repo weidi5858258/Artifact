@@ -35,6 +35,8 @@ public abstract class BaseActivityController {
 
     public abstract void onStart();
 
+    public abstract void onRestart();
+
     public abstract void onResume();
 
     public abstract void onPause();
@@ -42,5 +44,7 @@ public abstract class BaseActivityController {
     public abstract void onStop();
 
     public abstract void onDestroy();
+
+    public abstract Object onEvent(int what, Object object);
 
 }

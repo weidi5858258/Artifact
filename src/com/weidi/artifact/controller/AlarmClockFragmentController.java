@@ -24,6 +24,7 @@ import com.weidi.utils.MyUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by root on 17-1-13.
@@ -102,7 +103,8 @@ public class AlarmClockFragmentController extends BaseFragmentController {
             case R.id.start_stop_btn:
                 if (MyUtils.isSpecificServiceAlive(
                         mContext, "com.weidi.artifact.service.AlarmClockService")) {
-                    EventBus.getDefault().post(Constant.STOP_ALARMCLOCKSERVICE, null);
+                    EventBus.getDefault().postSync(
+                            AlarmClockService.class, Constant.STOP_ALARMCLOCKSERVICE, null);
                     if (!MyUtils.isSpecificServiceAlive(
                             mContext, "com.weidi.artifact.service.AlarmClockService")) {
                         mAlarmClockFragment.start_stop_btn.setText("开\t\t\t\t\t\t始");
@@ -138,7 +140,7 @@ public class AlarmClockFragmentController extends BaseFragmentController {
         mDifferTime = millseconds;
     }
 
-    public void onEvent(int what, Object object) {
+    public Object onEvent(int what, Object object) {
         switch (what) {
             case Constant.ALARMCLOCKSERVICE_IS_STOPPED:
                 hideAlarmTime();
@@ -157,6 +159,7 @@ public class AlarmClockFragmentController extends BaseFragmentController {
 
             default:
         }
+        return null;
     }
 
     //初始化

@@ -27,11 +27,11 @@ import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.basecontroller.BaseFragmentController;
 import com.weidi.artifact.fragment.BluetoothFragment;
-import com.weidi.artifact.listener.OnResultListener;
 import com.weidi.artifact.modle.BTDevice;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.customadapter.listener.OnItemClickListener;
 import com.weidi.dbutil.SimpleDao;
+import com.weidi.listener.OnResultListener;
 import com.weidi.log.Log;
 import com.weidi.threadpool.ThreadPool;
 

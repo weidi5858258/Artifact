@@ -39,8 +39,7 @@ import java.util.List;
 /**
  * Created by ex-wangliwei on 2015/12/23.
  */
-public class RobMoneyAccessibilityService extends AccessibilityService
-        implements EventBus.EventListener {
+public class RobMoneyAccessibilityService extends AccessibilityService {
 
     private static final String TAG = "RobMoneyAccessibilityService";
     private SimpleDateFormat mSimpleDateFormat =
@@ -168,8 +167,7 @@ public class RobMoneyAccessibilityService extends AccessibilityService
         return super.onUnbind(intent);
     }
 
-    @Override
-    public void onEvent(int what, Object object) {
+    public Object onEvent(int what, Object object) {
         switch (what) {
             case Constant.SCREEN_ON:
                 mIsScreenOn = true;
@@ -181,6 +179,7 @@ public class RobMoneyAccessibilityService extends AccessibilityService
 
             default:
         }
+        return what;
     }
 
     private void init() {

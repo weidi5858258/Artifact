@@ -25,8 +25,7 @@ import com.weidi.timepicker.listener.OnDateSetListener;
 public class AlarmClockFragment extends BaseFragment
         implements
         View.OnClickListener,
-        OnDateSetListener,
-        EventBus.EventListener{
+        OnDateSetListener {
 
     private static final String TAG = "AlarmClockFragment";
     private static final boolean DEBUG = true;
@@ -156,8 +155,8 @@ public class AlarmClockFragment extends BaseFragment
     }
 
     @Override
-    public void onEvent(int what, Object object) {
-        mAlarmClockFragmentController.onEvent(what, object);
+    public Object onEvent(int what, Object object) {
+        return mAlarmClockFragmentController.onEvent(what, object);
     }
 
     @Override

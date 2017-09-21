@@ -15,6 +15,7 @@ import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.db.dao.AppLockDao;
 import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
+import com.weidi.service.BaseService;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
 
@@ -23,7 +24,7 @@ import java.util.List;
 
 import static com.weidi.artifact.constant.Constant.FIXEDTHREADPOOLCOUNT;
 
-public class AppsLockService extends Service implements EventBus.EventListener {
+public class AppsLockService extends BaseService {
 
     private static final String TAG = "AppsLockService";
     private List<String> mAppsLockList;
@@ -136,7 +137,7 @@ public class AppsLockService extends Service implements EventBus.EventListener {
     }
 
     @Override
-    public void onEvent(int what, Object object) {
+    public Object onEvent(int what, Object object) {
         switch (what) {
             case Constant.SCREEN_OFF:
                 mPackageNameList.clear();//锁屏后全部清空
@@ -169,6 +170,7 @@ public class AppsLockService extends Service implements EventBus.EventListener {
 
             default:
         }
+        return what;
     }
 
     private void protectApps(ActivityManager activityManager) {

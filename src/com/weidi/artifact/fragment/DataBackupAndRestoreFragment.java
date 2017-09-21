@@ -123,6 +123,11 @@ public class DataBackupAndRestoreFragment extends BaseFragment {
         return false;
     }
 
+    @Override
+    public Object onEvent(int what, Object object) {
+        return null;
+    }
+
     public DataBackupAndRestoreFragmentController getDataBackupAndRestoreFragmentController() {
         return mDataBackupAndRestoreFragmentController;
     }

@@ -138,4 +138,9 @@ public class MainFragment extends BaseFragment {
         super.onHiddenChanged(hidden);
     }
 
+    @Override
+    public Object onEvent(int what, Object object) {
+        return mMainFragmentController.onEvent(what, object);
+    }
+
 }

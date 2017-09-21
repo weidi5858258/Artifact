@@ -28,8 +28,8 @@ public class MainActivity extends BaseActivity implements BaseFragment.BackHandl
     public LinearLayout mMainActivityLayout;
     @InjectView(R.id.title)
     public TextView title;
-    @InjectView(R.id.container)
-    public View fragment_container;
+    /*@InjectView(R.id.container)
+    public View fragment_container;*/
 
     public MainActivityController mMainActivityController;
 
@@ -52,6 +52,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BackHandl
     protected void onRestart() {
         super.onRestart();
         if (DEBUG) Log.d(TAG, "onRestart()");
+        mMainActivityController.onRestart();
     }
 
     @Override
@@ -83,29 +84,35 @@ public class MainActivity extends BaseActivity implements BaseFragment.BackHandl
     }
 
     @Override
+    public void onBackPressed() {
+        if (DEBUG) Log.d(TAG, "onBackPressed()");
+        mMainActivityController.onBackPressed();
+        // super.onBackPressed();
+    }
+
+    public Object onEvent(int what, Object object) {
+        return mMainActivityController.onEvent(what, object);
+    }
+
+    @Override
     public String[] getRequiredPermissions() {
         return new String[0];
     }
 
     @Override
-    public void onBackPressed() {
-        if (DEBUG) Log.d(TAG, "onBackPressed()");
-        mMainActivityController.onBackPressed();
-        //        super.onBackPressed();
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (DEBUG) Log.d(TAG, "onActivityResult():requestCode = " + requestCode +
-                " resultCode = " + resultCode +
-                " data = " + data);
+        if (DEBUG)
+            Log.d(TAG, "onActivityResult():requestCode = " + requestCode +
+                    " resultCode = " + resultCode +
+                    " data = " + data);
         // super.onActivityResult(requestCode, resultCode, data);
         mMainActivityController.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        if (DEBUG) Log.d(TAG, "onSaveInstanceState():outState = " + outState);
+        if (DEBUG)
+            Log.d(TAG, "onSaveInstanceState():outState = " + outState);
         mMainActivityController.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }
@@ -118,12 +125,14 @@ public class MainActivity extends BaseActivity implements BaseFragment.BackHandl
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-    /**
-     * 当配置发生变化时，不会重新启动Activity。但是会回调此方法，用户自行进行对屏幕旋转后进行处理
+    /***
+     * 当配置发生变化时，不会重新启动Activity
+     * 但是会回调此方法，用户自行进行对屏幕旋转后进行处理
      */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        if (DEBUG) Log.d(TAG, "onConfigurationChanged():newConfig = " + newConfig);
+        if (DEBUG)
+            Log.d(TAG, "onConfigurationChanged():newConfig = " + newConfig);
         mMainActivityController.onConfigurationChanged(newConfig);
         super.onConfigurationChanged(newConfig);
     }

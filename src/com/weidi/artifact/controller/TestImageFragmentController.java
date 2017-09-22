@@ -374,22 +374,20 @@ public class TestImageFragmentController extends BaseFragmentController {
             "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1506065214715&di" +
                     "=5f73853fbf29bb89e3fa58d47be3b526&imgtype=0&src=http%3A%2F%2Fpic.58pic" +
                     ".com%2F01%2F35%2F65%2F51bOOOPICb0.jpg",
-            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1506065214715&di" +
-                    "=e6262fcf7d4777ba5752620f437511c1&imgtype=0&src=http%3A%2F%2Fwww.taopic" +
-                    ".com%2Fuploads%2Fallimg%2F110624%2F6445-1106241S54729.jpg",
-            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1506065214714&di" +
-                    "=0322f88f8d583f44d51401d594059388&imgtype=0&src=http%3A%2F%2Fimg.daimg" +
-                    ".com%2Fuploads%2Fallimg%2F120425%2F3-1204251F4403Q.jpg",
+            // 53
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1506079409745&di" +
+                    "=1743d85bf4e9dc25fed73cbde152a98f&imgtype=0&src=http%3A%2F%2Ffile03.16sucai" +
+                    ".com%2F2017%2F1100%2F16sucai_p20161103161_5aa.JPG",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1506069346&di" +
+                    "=c2c6c0c1d955bab28eb6bfd67d0ec018&src=http://pic68.nipic" +
+                    ".com/file/20150527/21123713_011955651000_2.jpg",
             // 55
-            "https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1506057834&di" +
-                    "=9b67c4589d9fd87e2b3c997bd635b53d&src=http://pic72.nipic" +
-                    ".com/file/20150716/8572479_150637066000_2.jpg",
-            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1506065214706&di" +
-                    "=89afe403c68eec07e45c400479e3b76c&imgtype=0&src=http%3A%2F%2Fwww.taopic" +
-                    ".com%2Fuploads%2Fallimg%2F110325%2F551-11032512091171.jpghttps://timgsa" +
-                    ".baidu.com/timg?image&quality=80&size=b9999_10000&sec=1506065214705&di" +
-                    "=47889eaab04a18e0361944bd5761973d&imgtype=0&src=http%3A%2F%2Fpic.58pic" +
-                    ".com%2F58pic%2F13%2F09%2F48%2F87358PICT5I_1024.jpg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1506069359&di" +
+                    "=8aca0d1f003bb1edc10665c61ab5d7fd&src=http://img05.tooopen" +
+                    ".com/images/20140809/sy_68519175519.jpg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1506079471074&di" +
+                    "=8680b42ac7c7eb9df77b0d19292a6c3a&imgtype=0&src=http%3A%2F%2Ft1.niutuku" +
+                    ".com%2F960%2F41%2F41-369866.jpg",
             "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1506065214705&di" +
                     "=47889eaab04a18e0361944bd5761973d&imgtype=0&src=http%3A%2F%2Fpic.58pic" +
                     ".com%2F58pic%2F13%2F09%2F48%2F87358PICT5I_1024.jpg",

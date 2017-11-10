@@ -1,6 +1,7 @@
 buildscript {
     System.properties['com.android.build.gradle.overrideVersionCheck'] = 'true'
     repositories {
+        google()
         jcenter()
     }
     dependencies {
@@ -10,6 +11,7 @@ buildscript {
 
 allprojects {
     repositories {
+        google()
         jcenter()
     }
     gradle.projectsEvaluated {
@@ -34,12 +36,12 @@ android {
         }
     }
     // 
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.weidi.artifact"
         minSdkVersion 23
-        targetSdkVersion 25
+        targetSdkVersion 26
         signingConfig signingConfigs.debug
 //        multiDexEnabled true
 

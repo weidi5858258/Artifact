@@ -113,14 +113,16 @@ android {
 }// android
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'lib')
-    compile project(':weidi_library')
-    compile files('libs/xUtils-2.6.14.jar')
+    implementation fileTree(include: ['*.jar'], dir: 'lib')
+    implementation project(':weidi_library')
+    implementation files('libs/xUtils-2.6.14.jar')
     provided files('libs/services.jar')
     // compile 'com.android.support:appcompat-v7:21.0.3'
     // compile 'com.android.support:recyclerview-v7:25.1.0'
     // compile 'com.android.support:multidex:1.0.0'
     // compile 'cn.jiguang:jpush:2.1.8'
+
+    implementation 'com.android.support:support-core-ui:26.1.0'
 }
 
 android {

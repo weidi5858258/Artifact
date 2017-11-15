@@ -73,7 +73,7 @@ public class BootCompleteBroadcastReceiver extends BroadcastReceiver {
         }
 
         // 开启核心服务
-        if (!MyUtils.isSpecificServiceAlive(
+        /*if (!MyUtils.isSpecificServiceAlive(
                 context,
                 Constant.CLASS_CORESERVICE)) {
             intent = new Intent(context, CoreService.class);
@@ -92,7 +92,7 @@ public class BootCompleteBroadcastReceiver extends BroadcastReceiver {
                 Constant.CLASS_APPSLOCKSERVICE)) {
             intent = new Intent(context, AppsLockService.class);
             context.startService(intent);
-        }
+        }*/
 
         int safe_exit = sharedPreferences.getInt(Constant.SAFE_EXIT, 0);
         if (safe_exit != 0) {

@@ -969,7 +969,7 @@ public class CoreService extends BaseService implements
 
         monitoringRemoteService();
 
-        if (!MyUtils.isSpecificServiceAlive(
+        /*if (!MyUtils.isSpecificServiceAlive(
                 this,
                 Constant.CLASS_PERIODICALSERIALKILLERSERVICE)) {
             Intent intent = new Intent(this, PeriodicalSerialKillerService.class);
@@ -981,7 +981,7 @@ public class CoreService extends BaseService implements
                 Constant.CLASS_APPSLOCKSERVICE)) {
             Intent intent = new Intent(this, AppsLockService.class);
             startService(intent);
-        }
+        }*/
 
         mContext.getContentResolver().registerContentObserver(
                 Uri.parse(Constant.SMS_URI), true, mSystemDatabasesChangedContentObserver);

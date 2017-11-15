@@ -4,12 +4,11 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.weidi.artifact.R;
 import com.weidi.activity.base.BaseActivity;
+import com.weidi.artifact.R;
 import com.weidi.artifact.controller.MainActivityController;
 import com.weidi.fragment.base.BaseFragment;
 import com.weidi.inject.InjectLayout;

@@ -243,11 +243,11 @@ public class MainActivityController extends BaseActivityController {
         }
 
         // 开启核心服务
-        if (!MyUtils.isSpecificServiceAlive(
+        /*if (!MyUtils.isSpecificServiceAlive(
                 mContext,
                 Constant.CLASS_CORESERVICE)) {
             Intent intent = new Intent(mMainActivity, CoreService.class);
-//            mMainActivity.startServiceAsUser(intent, UserHandle.OWNER);
+            mMainActivity.startServiceAsUser(intent, UserHandle.OWNER);
         }
 
         if (!MyUtils.isSpecificServiceAlive(
@@ -262,7 +262,7 @@ public class MainActivityController extends BaseActivityController {
                 Constant.CLASS_APPSLOCKSERVICE)) {
             Intent intent = new Intent(mMainActivity, AppsLockService.class);
             mMainActivity.startService(intent);
-        }
+        }*/
 
         //        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
         //            onRestore(savedInstanceState);

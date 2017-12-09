@@ -123,7 +123,6 @@ public class DataBackupAndRestoreFragment extends BaseFragment {
         return false;
     }
 
-    @Override
     public Object onEvent(int what, Object object) {
         return null;
     }

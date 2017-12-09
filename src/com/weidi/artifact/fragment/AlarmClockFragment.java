@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.weidi.artifact.R;
 import com.weidi.artifact.controller.AlarmClockFragmentController;
-import com.weidi.eventbus.EventBus;
 import com.weidi.fragment.base.BaseFragment;
 import com.weidi.inject.InjectOnClick;
 import com.weidi.inject.InjectView;
@@ -152,11 +151,6 @@ public class AlarmClockFragment extends BaseFragment
     @Override
     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
         mAlarmClockFragmentController.onDateSet(timePickerView, millseconds);
-    }
-
-    @Override
-    public Object onEvent(int what, Object object) {
-        return mAlarmClockFragmentController.onEvent(what, object);
     }
 
     @Override

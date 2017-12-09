@@ -117,10 +117,6 @@ public class AppsManagerFragment extends BaseFragment {
         return false;
     }
 
-    @Override
-    public Object onEvent(int what, Object object) {
-        return null;
-    }
 
     public AppsManagerFragmentController getAppsManagerFragmentController() {
         return mAppsManagerFragmentController;

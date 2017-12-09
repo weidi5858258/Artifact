@@ -2,7 +2,6 @@ package com.weidi.artifact.service;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
-import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -13,11 +12,11 @@ import android.os.Looper;
 import com.weidi.artifact.activity.AppsLockActivity;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.db.dao.AppLockDao;
-import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
 import com.weidi.service.BaseService;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
+import com.weidi.utils.EventBusUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,7 @@ public class AppsLockService extends BaseService {
         mAppsLockList = mAppLockDao.query();
         mPackageNameList = new ArrayList<String>();
 
-        EventBus.getDefault().register(this);
+        EventBusUtils.register(this);
 
         final CustomRunnable mCustomRunnable = new CustomRunnable();
         mCustomRunnable.setCallBack(
@@ -133,10 +132,9 @@ public class AppsLockService extends BaseService {
         isRunning = false;
         mHandler.removeMessages(0);
         mHandler = null;
-        EventBus.getDefault().unregister(this);
+        EventBusUtils.unregister(this);
     }
 
-    @Override
     public Object onEvent(int what, Object object) {
         switch (what) {
             case Constant.SCREEN_OFF:

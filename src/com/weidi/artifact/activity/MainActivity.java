@@ -94,11 +94,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.BackHandl
     }
 
     @Override
-    public String[] getRequiredPermissions() {
-        return new String[0];
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (DEBUG)
             Log.d(TAG, "onActivityResult():requestCode = " + requestCode +

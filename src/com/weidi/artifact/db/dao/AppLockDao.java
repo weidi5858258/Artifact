@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.db.MyInfosSQLiteOpenHelper;
 import com.weidi.artifact.service.AppsLockService;
-import com.weidi.eventbus.EventBus;
+import com.weidi.utils.EventBusUtils;
 
 public class AppLockDao {
     private MyInfosSQLiteOpenHelper help;
@@ -33,7 +33,7 @@ public class AppLockDao {
         //		intent = new Intent();
         //		intent.setAction("com.aowin.mobilesafe.update");
         //		context.sendBroadcast(intent);
-        EventBus.getDefault().postAsync(AppsLockService.class,Constant.UPDATEAPPSLOCKLIST, null);
+        EventBusUtils.postAsync(AppsLockService.class,Constant.UPDATEAPPSLOCKLIST, null);
     }
 
     public void delete(String packageName) {
@@ -44,7 +44,7 @@ public class AppLockDao {
         //		intent = new Intent();
         //		intent.setAction("com.aowin.mobilesafe.update");
         //		context.sendBroadcast(intent);
-        EventBus.getDefault().postAsync(AppsLockService.class,Constant.UPDATEAPPSLOCKLIST, null);
+        EventBusUtils.postAsync(AppsLockService.class,Constant.UPDATEAPPSLOCKLIST, null);
     }
 
     public boolean query(String packageName) {

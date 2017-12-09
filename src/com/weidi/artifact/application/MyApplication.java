@@ -2,7 +2,6 @@ package com.weidi.artifact.application;
 
 import android.app.ActivityManager;
 import android.app.AlarmManager;
-import android.app.Application;
 import android.app.Instrumentation;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -12,8 +11,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.IBinder;
-import android.os.Process;
-import android.os.UserHandle;
 
 import com.weidi.application.WeidiApplication;
 import com.weidi.artifact.constant.Constant;
@@ -28,12 +25,9 @@ import com.weidi.artifact.modle.RawContacts;
 import com.weidi.artifact.modle.Sms;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.dbutil.DbUtils;
-import com.weidi.dbutil.SimpleDao;
-import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
-import com.weidi.utils.MyToast;
 import com.weidi.utils.MyUtils;
 
 import java.util.ArrayList;

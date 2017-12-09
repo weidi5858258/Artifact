@@ -114,10 +114,6 @@ public class TestImageFragment extends BaseFragment {
         return false;
     }
 
-    @Override
-    public Object onEvent(int what, Object object) {
-        return null;
-    }
 
     public TestImageFragmentController getTestImageFragmentController() {
         return mTestImageFragmentController;

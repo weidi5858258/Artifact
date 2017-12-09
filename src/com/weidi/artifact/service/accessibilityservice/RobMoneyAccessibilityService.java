@@ -26,9 +26,9 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.modle.Event;
 import com.weidi.dbutil.SimpleDao;
-import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
 import com.weidi.threadpool.ThreadPool;
+import com.weidi.utils.EventBusUtils;
 import com.weidi.utils.MyToast;
 
 import java.text.SimpleDateFormat;
@@ -163,7 +163,7 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        EventBus.getDefault().unregister(this);
+        EventBusUtils.unregister(this);
         return super.onUnbind(intent);
     }
 
@@ -204,7 +204,7 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
             }
         }, sensor, SensorManager.SENSOR_DELAY_NORMAL);
 
-        EventBus.getDefault().register(this);
+        EventBusUtils.register(this);
 
         Log.d(TAG, "成功连接上AccessibilityService服务");
     }

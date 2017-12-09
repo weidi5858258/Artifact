@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.UserHandle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +25,8 @@ import com.weidi.artifact.service.AppsLockService;
 import com.weidi.artifact.service.CoreService;
 import com.weidi.artifact.service.PeriodicalSerialKillerService;
 import com.weidi.artifact.service.ShowAttributionService;
-import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
+import com.weidi.utils.EventBusUtils;
 import com.weidi.utils.MyToast;
 import com.weidi.utils.MyUtils;
 
@@ -209,7 +208,7 @@ public class SettingsFragmentController extends BaseFragmentController {
                     mSettingsFragment.settings_blacklist.setChecked(false);
                     mSettingsFragment.settings_blacklist.setTVContent("核心服务已经关闭");
                     // stopService
-                    EventBus.getDefault().postAsync(CoreService.class, Constant.CORESERVICE, null);
+                    EventBusUtils.postAsync(CoreService.class, Constant.CORESERVICE, null);
                 } else {
                     mSettingsFragment.settings_blacklist.setChecked(true);
                     mSettingsFragment.settings_blacklist.setTVContent("核心服务已经开启");
@@ -224,7 +223,7 @@ public class SettingsFragmentController extends BaseFragmentController {
                 if (mSettingsFragment.settings_periodicalserialkiller.isChecked()) {
                     mSettingsFragment.settings_periodicalserialkiller.setChecked(false);
                     mSettingsFragment.settings_periodicalserialkiller.setTVContent("连环杀进程已经关闭");
-                    EventBus.getDefault().postAsync(
+                    EventBusUtils.postAsync(
                             PeriodicalSerialKillerService.class, Constant.PERIODICALSERIALKILLERSERVICE, null);
                 } else {
                     mSettingsFragment.settings_periodicalserialkiller.setChecked(true);
@@ -242,7 +241,7 @@ public class SettingsFragmentController extends BaseFragmentController {
                     if (mSettingsFragment.settings_applock.isChecked()) {
                         mSettingsFragment.settings_applock.setChecked(false);
                         mSettingsFragment.settings_applock.setTVContent("程序锁已经关闭");
-                        EventBus.getDefault().postAsync(AppsLockService.class, Constant.APPSLOCKSERVICE, null);
+                        EventBusUtils.postAsync(AppsLockService.class, Constant.APPSLOCKSERVICE, null);
                     } else {
                         mSettingsFragment.settings_applock.setChecked(true);
                         mSettingsFragment.settings_applock.setTVContent("程序锁已经开启");

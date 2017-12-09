@@ -2,7 +2,6 @@ package com.weidi.artifact.service;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
@@ -11,11 +10,11 @@ import android.text.TextUtils;
 
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.AlarmClockFragmentController;
-import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
 import com.weidi.service.BaseService;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
+import com.weidi.utils.EventBusUtils;
 import com.weidi.utils.MyToast;
 
 import java.util.ArrayList;
@@ -52,7 +51,7 @@ public class AlarmClockService extends BaseService {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate()");
-        EventBus.getDefault().register(this);
+        EventBusUtils.register(this);
         mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), AlarmClockService.class);
         intent.putExtra(Constant.STARTALARMCLOCK, Constant.STARTALARMCLOCK);
@@ -119,11 +118,10 @@ public class AlarmClockService extends BaseService {
             mPendingIntent.cancel();
             mPendingIntent = null;
         }
-        EventBus.getDefault().unregister(this);
+        EventBusUtils.unregister(this);
         super.onDestroy();
     }
 
-    @Override
     public Object onEvent(int what, Object object) {
         switch (what) {
             case Constant.STOP_ALARMCLOCKSERVICE:
@@ -136,7 +134,7 @@ public class AlarmClockService extends BaseService {
     }
 
     private void onDestroy_() {
-        EventBus.getDefault().postSync(
+        EventBusUtils.postSync(
                 AlarmClockFragmentController.class, Constant.ALARMCLOCKSERVICE_IS_STOPPED, null);
         stopSelf();
     }
@@ -190,7 +188,7 @@ public class AlarmClockService extends BaseService {
 
     private void startPlayback() {
         Log.d(TAG, "startPlayback():音乐响起");
-        // EventBus.getDefault().post(Constant.TRANSPORT_TIME_COMPLETE, null);
+        // EventBusUtils.post(Constant.TRANSPORT_TIME_COMPLETE, null);
         MyToast.show("音乐响起");
 
         final CustomRunnable mCustomRunnable = new CustomRunnable();
@@ -265,10 +263,10 @@ public class AlarmClockService extends BaseService {
         @Override
         public void onTick(long millisUntilFinished) {
             long remainingTime = millisUntilFinished / 1000;
-            EventBus.getDefault().postSync(
+            EventBusUtils.postSync(
                     AlarmClockFragmentController.class,
                     Constant.TRANSPORT_TIME,
-                    "倒计时: " + remainingTime + " 秒");
+                    new Object[]{"倒计时: " + remainingTime + " 秒"});
         }
     }
 

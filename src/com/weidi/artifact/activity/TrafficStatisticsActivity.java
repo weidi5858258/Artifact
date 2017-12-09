@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -12,10 +13,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +30,7 @@ import com.weidi.artifact.db.dao.PhoneNumberAddressQueryUtils;
 import com.weidi.artifact.ui.InputDialog;
 import com.weidi.utils.MyToast;
 
-public class TrafficStatisticsActivity extends Activity implements OnClickListener{
+public class TrafficStatisticsActivity extends Activity implements OnClickListener {
 	private Context mContext;
 	private AlarmManager am;
 	private Intent intent;
@@ -53,21 +56,21 @@ public class TrafficStatisticsActivity extends Activity implements OnClickListen
 	private Button bt_trafficstatistics_stopalarm;
 	private InputDialog dialog;
 	private int send;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_trafficstatistics);
 		mContext = TrafficStatisticsActivity.this;
 		am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-		
+
 		//专门用于存移动数据类的东西 在这里第一次使用
 		sp = mContext.getSharedPreferences("data", Context.MODE_PRIVATE);
 		calendar = Calendar.getInstance();
-		
+
 		tv_trafficstatistics_time = (TextView) this.findViewById(R.id.tv_trafficstatistics_time);
-		tv_trafficstatistics_time.setText(calendar.get(Calendar.YEAR)+"年"+(calendar.get(Calendar.MONTH)+1)+"月1日至"+calendar.get(Calendar.YEAR)+"年"+(calendar.get(Calendar.MONTH)+1)+"月"+calendar.get(Calendar.DAY_OF_MONTH)+"日          距月底还有"+(calendar.getActualMaximum(Calendar.DAY_OF_MONTH) - calendar.get(Calendar.DAY_OF_MONTH))+"天");
-		
+		tv_trafficstatistics_time.setText(calendar.get(Calendar.YEAR) + "年" + (calendar.get(Calendar.MONTH) + 1) + "月1日至" + calendar.get(Calendar.YEAR) + "年" + (calendar.get(Calendar.MONTH) + 1) + "月" + calendar.get(Calendar.DAY_OF_MONTH) + "日          距月底还有" + (calendar.getActualMaximum(Calendar.DAY_OF_MONTH) - calendar.get(Calendar.DAY_OF_MONTH)) + "天");
+
 		tv_trafficstatistics_today_g3 = (TextView) this.findViewById(R.id.tv_trafficstatistics_today_g3);
 		tv_trafficstatistics_today_wifi = (TextView) this.findViewById(R.id.tv_trafficstatistics_today_wifi);
 		tv_trafficstatistics_week_g3 = (TextView) this.findViewById(R.id.tv_trafficstatistics_week_g3);
@@ -76,82 +79,82 @@ public class TrafficStatisticsActivity extends Activity implements OnClickListen
 		tv_trafficstatistics_month_wifi = (TextView) this.findViewById(R.id.tv_trafficstatistics_month_wifi);
 		tv_trafficstatistics_lastmonth_g3 = (TextView) this.findViewById(R.id.tv_trafficstatistics_lastmonth_g3);
 		tv_trafficstatistics_lastmonth_wifi = (TextView) this.findViewById(R.id.tv_trafficstatistics_lastmonth_wifi);
-		
+
 		tv_trafficstatistics_conninfo = (TextView) this.findViewById(R.id.bt_trafficstatistics_conninfo);
 		tv_trafficstatistics_smsinfo = (TextView) this.findViewById(R.id.bt_trafficstatistics_smsinfo);
 		tv_trafficstatistics_phoneinfo = (TextView) this.findViewById(R.id.bt_trafficstatistics_phoneinfo);
-		tv_trafficstatistics_conninfo.setText("当月免费流量"+sp.getInt("traffic", 0)+"MB，剩余"+surplusTraffic()+"MB");
-		tv_trafficstatistics_smsinfo.setText("当月免费短信"+sp.getInt("Sms", 0)+"条，剩余"+surplusSms()+"条");
-		tv_trafficstatistics_phoneinfo.setText("当月免费通话时间"+sp.getInt("air_time", 0)+"分钟，剩余"+surplusAirtime()+"分钟");
-		
+		tv_trafficstatistics_conninfo.setText("当月免费流量" + sp.getInt("traffic", 0) + "MB，剩余" + surplusTraffic() + "MB");
+		tv_trafficstatistics_smsinfo.setText("当月免费短信" + sp.getInt("Sms", 0) + "条，剩余" + surplusSms() + "条");
+		tv_trafficstatistics_phoneinfo.setText("当月免费通话时间" + sp.getInt("air_time", 0) + "分钟，剩余" + surplusAirtime() + "分钟");
+
 		bt_trafficstatistics_conn = (Button) this.findViewById(R.id.bt_trafficstatistics_conn);
 		bt_trafficstatistics_sms = (Button) this.findViewById(R.id.bt_trafficstatistics_sms);
 		bt_trafficstatistics_phone = (Button) this.findViewById(R.id.bt_trafficstatistics_phone);
 		bt_trafficstatistics_net = (Button) this.findViewById(R.id.bt_trafficstatistics_net);
 		bt_trafficstatistics_stopalarm = (Button) this.findViewById(R.id.bt_trafficstatistics_stopalarm);
-		
+
 		bt_trafficstatistics_conn.setOnClickListener(this);//设置
 		bt_trafficstatistics_sms.setOnClickListener(this);//设置
 		bt_trafficstatistics_phone.setOnClickListener(this);//设置
-		
+
 		bt_trafficstatistics_net.setOnClickListener(this);//联网设置
 		bt_trafficstatistics_stopalarm.setOnClickListener(this);
 //		saveAllData();
 		fromTheEndOfTheMonth();
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		
+
 	}
-	
+
 	@Override
 	public void onClick(View v) {
-		switch(v.getId()){
-			case R.id.bt_trafficstatistics_conn:{//设置
+		switch (v.getId()) {
+			case R.id.bt_trafficstatistics_conn: {//设置
 				int traffic = sp.getInt("traffic", 0);
 				dialog = new InputDialog(mContext, traffic, new android.os.Handler.Callback() {
 					@Override
 					public boolean handleMessage(Message msg) {
-						doMessage("traffic",msg);
+						doMessage("traffic", msg);
 						return false;
 					}
 				});
 				dialog.show();
 				break;
 			}
-			case R.id.bt_trafficstatistics_sms:{//设置
+			case R.id.bt_trafficstatistics_sms: {//设置
 				int sms = sp.getInt("Sms", 0);
 				dialog = new InputDialog(mContext, sms, new android.os.Handler.Callback() {
 					@Override
 					public boolean handleMessage(Message msg) {
-						doMessage("Sms",msg);
+						doMessage("Sms", msg);
 						return false;
 					}
 				});
 				dialog.show();
 				break;
 			}
-			case R.id.bt_trafficstatistics_phone:{//设置
+			case R.id.bt_trafficstatistics_phone: {//设置
 				int air_time = sp.getInt("air_time", 0);
-				dialog = new InputDialog(mContext, air_time,new android.os.Handler.Callback() {
+				dialog = new InputDialog(mContext, air_time, new android.os.Handler.Callback() {
 					@Override
 					public boolean handleMessage(Message msg) {
-						doMessage("air_time",msg);
+						doMessage("air_time", msg);
 						return false;
 					}
 				});
 				dialog.show();
 				break;
 			}
-			case R.id.bt_trafficstatistics_net:{//联网设置
-				intent = new Intent(mContext,NetworkSettingsActivity.class);
+			case R.id.bt_trafficstatistics_net: {//联网设置
+				intent = new Intent(mContext, NetworkSettingsActivity.class);
 				startActivity(intent);
 				break;
 			}
-			case R.id.bt_trafficstatistics_stopalarm:{
-				if(pi != null){
+			case R.id.bt_trafficstatistics_stopalarm: {
+				if (pi != null) {
 					am.cancel(pi);
 					pi = null;
 					MyToast.show("闹钟已停止");
@@ -159,12 +162,12 @@ public class TrafficStatisticsActivity extends Activity implements OnClickListen
 				break;
 			}
 		}
-		
+
 	}
-	
-	private void doMessage(String name,Message msg){//按“确定”后的操作
-		if(msg.obj != null){//air_time 通话时间
-			String airtime = (String)msg.obj;
+
+	private void doMessage(String name, Message msg) {//按“确定”后的操作
+		if (msg.obj != null) {//air_time 通话时间
+			String airtime = (String) msg.obj;
 			//除了数字，其他内容都不能输入，所以不用再判断了
 //			boolean flag = true;
 //			char[] ch = airtime.toCharArray();
@@ -175,23 +178,23 @@ public class TrafficStatisticsActivity extends Activity implements OnClickListen
 //					break;
 //				}
 //			}
-			if(dialog != null){
+			if (dialog != null) {
 				dialog.dismiss();
 			}
 			Editor editor = sp.edit();
 			editor.putInt(name, Integer.parseInt(airtime));
 			editor.commit();
-			if("traffic".equals(name)){
-				tv_trafficstatistics_conninfo.setText("当月免费流量"+sp.getInt("traffic", 0)+"MB，剩余"+surplusTraffic()+"MB");
-			}else if("Sms".equals(name)){
-				tv_trafficstatistics_smsinfo.setText("当月免费短信"+sp.getInt("Sms", 0)+"条，剩余"+surplusSms()+"条");
-			}else if("air_time".equals(name)){
-				tv_trafficstatistics_phoneinfo.setText("当月免费通话时间"+sp.getInt("air_time", 0)+"分钟，剩余"+surplusAirtime()+"分钟");
+			if ("traffic".equals(name)) {
+				tv_trafficstatistics_conninfo.setText("当月免费流量" + sp.getInt("traffic", 0) + "MB，剩余" + surplusTraffic() + "MB");
+			} else if ("Sms".equals(name)) {
+				tv_trafficstatistics_smsinfo.setText("当月免费短信" + sp.getInt("Sms", 0) + "条，剩余" + surplusSms() + "条");
+			} else if ("air_time".equals(name)) {
+				tv_trafficstatistics_phoneinfo.setText("当月免费通话时间" + sp.getInt("air_time", 0) + "分钟，剩余" + surplusAirtime() + "分钟");
 			}
 		}
 	}
-	
-	public void saveAllData(){
+
+	public void saveAllData() {
 		//在23：59：50之前记录一下数据流量，把它们保存进文件中（所有应用所用的流量---上传下载）
 		//能计算出所有应用当日所用的流量
 		//SystemClock.elapsedRealtime();手机重启后到现在的间隔时间(ms)
@@ -199,28 +202,39 @@ public class TrafficStatisticsActivity extends Activity implements OnClickListen
 //		pi = PendingIntent.getBroadcast(mContext, 0, intent, 0);
 //		pi = PendingIntent.getActivity(mContext, 0, intent, 0);
 		//设置闹钟从当前时间开始，每隔5s执行一次PendingIntent对象pi，注意第一个参数与第二个参数的关系  
-		intent = new Intent("com.aowin.mobilesafe.traffic");  
-		pi = PendingIntent.getService(this,0,intent,0);    
-		long intervalTime = 23 * 3600 * 1000 + 59 * 60 * 1000 + 50 * 1000; 
+		intent = new Intent("com.aowin.mobilesafe.traffic");
+		pi = PendingIntent.getService(this, 0, intent, 0);
+		long intervalTime = 23 * 3600 * 1000 + 59 * 60 * 1000 + 50 * 1000;
 //		am.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),5*1000,pi); 
 		am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pi);
 	}
-	
+
 	//剩余流量
-	public String surplusTraffic(){//surplus:adj. 剩余的
+	public String surplusTraffic() {//surplus:adj. 剩余的
 		int traffic = sp.getInt("traffic", 0);
 		return "";
 	}
+
 	//剩余短信
-	public String surplusSms(){//对手机卡进行判断，如果是移动的，那么发给10086是免费的，不用计算在其中
+	public String surplusSms() {//对手机卡进行判断，如果是移动的，那么发给10086是免费的，不用计算在其中
 		String result = null;
 		int sms = sp.getInt("Sms", 0);
-		if(sms == 0){
+		if (sms == 0) {
 			result = "0";
-		}else{
+		} else {
 			Uri uri = Uri.parse("content://Sms");
 			ContentResolver cr = mContext.getContentResolver();
 			TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+			if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+				// TODO: Consider calling
+				//    ActivityCompat#requestPermissions
+				// here to request the missing permissions, and then overriding
+				//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+				//                                          int[] grantResults)
+				// to handle the case where the user grants the permission. See the documentation
+				// for ActivityCompat#requestPermissions for more details.
+				return null;
+			}
 			String number = tm.getLine1Number();
 			int count = 0;
 			if(number != null){

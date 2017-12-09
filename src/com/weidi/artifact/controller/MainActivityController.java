@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.UserHandle;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -16,18 +15,13 @@ import android.view.View;
 import com.nineoldandroids.view.ViewHelper;
 import com.weidi.artifact.R;
 import com.weidi.artifact.activity.MainActivity;
-import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.basecontroller.BaseActivityController;
 import com.weidi.artifact.fragment.FragOperManager;
 import com.weidi.artifact.fragment.MainFragment;
-import com.weidi.artifact.service.AppsLockService;
-import com.weidi.artifact.service.CoreService;
-import com.weidi.artifact.service.PeriodicalSerialKillerService;
-import com.weidi.eventbus.EventBus;
 import com.weidi.fragment.base.BaseFragment;
 import com.weidi.log.Log;
-import com.weidi.utils.MyUtils;
+import com.weidi.utils.EventBusUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -299,8 +293,7 @@ public class MainActivityController extends BaseActivityController {
         //        }
     }
 
-    @Override
-    public Object onEvent(int what, Object object) {
+    public Object onEvent(int what, Object[] object) {
         return null;
     }
 
@@ -334,7 +327,7 @@ public class MainActivityController extends BaseActivityController {
         for (String key : mFragmentBackTypeSMap.keySet()) {
             if (key.equals(fragmentName)) {
                 int type = mFragmentBackTypeSMap.get(key);
-                EventBus.getDefault().postAsync(FragOperManager.class, type, mBaseFragment);
+                EventBusUtils.postAsync(FragOperManager.class, type, new Object[]{mBaseFragment});
                 break;
             }
         }

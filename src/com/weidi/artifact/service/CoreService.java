@@ -70,11 +70,11 @@ import com.weidi.artifact.modle.Event;
 import com.weidi.artifact.modle.Sms;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.dbutil.SimpleDao;
-import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
 import com.weidi.service.BaseService;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
+import com.weidi.utils.EventBusUtils;
 import com.weidi.utils.MyToast;
 import com.weidi.utils.MyUtils;
 import com.weidi.utils.Recorder;
@@ -225,7 +225,7 @@ public class CoreService extends BaseService implements
             mRecorder = null;
         }*/
 
-        EventBus.getDefault().unregister(this);
+        EventBusUtils.unregister(this);
     }
 
     /*
@@ -363,7 +363,6 @@ public class CoreService extends BaseService implements
      *  @param what
      * @param object
      */
-    @Override
     public Object onEvent(int what, final Object object) {
         // Log.d(TAG, "onEvent():what = " + what);
         switch (what) {
@@ -761,7 +760,7 @@ public class CoreService extends BaseService implements
                     Log.d(TAG, "NEW_OUTGOING_CALL---outNumber = " + outNumber);
                     MyToast.show("NEW_OUTGOING_CALL");
                 } else if ("android.intent.action.SCREEN_OFF".equals(intent.getAction())) {
-                    EventBus.getDefault().postAsync(CoreService.class, Constant.SCREEN_OFF, null);
+                    EventBusUtils.postAsync(CoreService.class, Constant.SCREEN_OFF, null);
                     String currentTime = mPhoneSimpleDateFormat.format(new Date());
                     Event event = new Event();
                     event.time = currentTime;
@@ -769,7 +768,7 @@ public class CoreService extends BaseService implements
                     SimpleDao.getInstance().add(Event.class, event);
                     isScreenOnOrOff = false;
                 } else if ("android.intent.action.SCREEN_ON".equals(intent.getAction())) {
-                    EventBus.getDefault().postAsync(CoreService.class, Constant.SCREEN_ON, null);
+                    EventBusUtils.postAsync(CoreService.class, Constant.SCREEN_ON, null);
                     String currentTime = mPhoneSimpleDateFormat.format(new Date());
                     Event event = new Event();
                     event.time = currentTime;
@@ -929,7 +928,7 @@ public class CoreService extends BaseService implements
      * 初始化
      */
     private void init() {
-        EventBus.getDefault().register(this);
+        EventBusUtils.register(this);
         mContext = getApplicationContext();
         mWindowManager = (WindowManager) mContext.getSystemService(WINDOW_SERVICE);
         mCallWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
@@ -1250,13 +1249,13 @@ public class CoreService extends BaseService implements
             return;
 
         } else if (Constant.UNLOCK_MY_PHONE.equalsIgnoreCase(bodyContent)) {
-            EventBus.getDefault().postAsync(
+            EventBusUtils.postAsync(
                     AppsLockActivityController.class,Constant.UNLOCK_MY_PHONE_TAG, null);
             return;
 
         } else if (Constant.UNLOCK_MY_PHONE_COMPLETE.equalsIgnoreCase(bodyContent)) {
-            EventBus.getDefault().postAsync(AppsLockService.class, Constant.APPSLOCKSERVICE, null);
-            EventBus.getDefault().postAsync(
+            EventBusUtils.postAsync(AppsLockService.class, Constant.APPSLOCKSERVICE, null);
+            EventBusUtils.postAsync(
                     AppsLockActivityController.class,Constant.UNLOCK_MY_PHONE_TAG, null);
             return;
 
@@ -1437,7 +1436,7 @@ public class CoreService extends BaseService implements
                     if (MyUtils.isSpecificServiceAlive(
                             mContext,
                             "com.weidi.artifact.service.PeriodicalSerialKillerService")) {
-                        EventBus.getDefault().postAsync(
+                        EventBusUtils.postAsync(
                                 PeriodicalSerialKillerService.class,
                                 Constant.PERIODICALSERIALKILLERSERVICE, null);
                         MyToast.show("PeriodicalSerialKillerService is Shutdown");
@@ -1980,7 +1979,7 @@ public class CoreService extends BaseService implements
     }
 
     private void changeApp() {
-        EventBus.getDefault().postAsync(
+        EventBusUtils.postAsync(
                 PeriodicalSerialKillerService.class, Constant.CHANGEAPP, null);
     }
 
@@ -2114,7 +2113,7 @@ public class CoreService extends BaseService implements
                     try {
                         ((MyApplication) mContext.getApplicationContext())
                                 .getSystemCall().forceStopPackage(packageName);
-                        EventBus.getDefault().post(Constant.BEKILLEDPROCESSNAME, packageName);
+                        EventBusUtils.post(Constant.BEKILLEDPROCESSNAME, packageName);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -2130,7 +2129,7 @@ public class CoreService extends BaseService implements
         if (MyUtils.isSpecificServiceAlive(
                 mContext,
                 "com.weidi.artifact.service.PeriodicalSerialKillerService")) {
-            EventBus.getDefault().postAsync(
+            EventBusUtils.postAsync(
                     PeriodicalSerialKillerService.class,Constant.PERIODICALSERIALKILLERSERVICE, null);
             MyToast.show("PeriodicalSerialKillerService is Shutdown");
         } else {

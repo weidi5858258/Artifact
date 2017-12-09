@@ -10,9 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.RemoteException;
 import android.os.SystemClock;
-import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -24,14 +22,13 @@ import android.view.inputmethod.InputMethodManager;
 import com.weidi.artifact.R;
 import com.weidi.artifact.activity.AppsLockActivity;
 import com.weidi.artifact.activity.CameraActivity;
-import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.basecontroller.BaseActivityController;
 import com.weidi.artifact.service.AppsLockService;
 import com.weidi.artifact.service.CoreService;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
-import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
+import com.weidi.utils.EventBusUtils;
 import com.weidi.utils.MyUtils;
 
 import java.security.NoSuchAlgorithmException;
@@ -175,7 +172,7 @@ public class AppsLockActivityController extends BaseActivityController {
     @Override
     public void onDestroy() {
         if (DBG) Log.d(TAG, "onDestroy()");
-        EventBus.getDefault().unregister(mAppsLockActivity);
+        EventBusUtils.unregister(mAppsLockActivity);
         // 开启核心服务
         if (!MyUtils.isSpecificServiceAlive(
                 mContext,
@@ -274,7 +271,7 @@ public class AppsLockActivityController extends BaseActivityController {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        EventBus.getDefault().register(mAppsLockActivity);
+        EventBusUtils.register(mAppsLockActivity);
 
         mPackageManager = mContext.getPackageManager();
         mInputMethodManager = (InputMethodManager) mContext.getSystemService(
@@ -300,8 +297,8 @@ public class AppsLockActivityController extends BaseActivityController {
         mAppsLockActivity.backdoor_rlayout.setOnTouchListener(mOnTouchListener);
         mAppsLockActivity.password_layout.setOnTouchListener(mOnTouchListener);
 
-        EventBus.getDefault().postAsync(CoreService.class,Constant.HIDEGESTUREVIEW, null);
-        EventBus.getDefault().postAsync(CoreService.class,Constant.ILLEGALUNLOCK_ENTER, null);
+        EventBusUtils.postAsync(CoreService.class,Constant.HIDEGESTUREVIEW, null);
+        EventBusUtils.postAsync(CoreService.class,Constant.ILLEGALUNLOCK_ENTER, null);
     }
 
     /**
@@ -402,11 +399,11 @@ public class AppsLockActivityController extends BaseActivityController {
         setScreenOffTime(120 * 1000);
 
         // 密码正确通知一下AppsLockService
-        EventBus.getDefault().postAsync(AppsLockService.class, Constant.PASSWORD_CORRECT, mPackageName);
+        EventBusUtils.postAsync(AppsLockService.class, Constant.PASSWORD_CORRECT, new String[]{mPackageName});
 
-        EventBus.getDefault().postAsync(AppsLockService.class, Constant.SHOWGESTUREVIEW, null);
+        EventBusUtils.postAsync(AppsLockService.class, Constant.SHOWGESTUREVIEW, null);
 
-        EventBus.getDefault().postAsync(AppsLockService.class, Constant.ILLEGALUNLOCK_EXIT, null);
+        EventBusUtils.postAsync(AppsLockService.class, Constant.ILLEGALUNLOCK_EXIT, null);
 
         mAppsLockActivity.finish();
         mAppsLockActivity.exitActivity();

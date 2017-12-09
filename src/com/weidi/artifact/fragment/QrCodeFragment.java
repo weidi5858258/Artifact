@@ -130,10 +130,6 @@ public class QrCodeFragment extends BaseFragment implements ILifeCycle {
         return false;
     }
 
-    @Override
-    public Object onEvent(int what, Object object) {
-        return null;
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

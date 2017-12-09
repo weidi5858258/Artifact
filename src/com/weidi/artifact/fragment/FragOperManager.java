@@ -8,7 +8,7 @@ import android.text.TextUtils;
 
 import com.weidi.artifact.R;
 import com.weidi.artifact.constant.Constant;
-import com.weidi.eventbus.EventBus;
+import com.weidi.utils.EventBusUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,19 +48,25 @@ import java.util.List;
  * 综上这些因素导致了多个Fragment重叠在一起。
  * <p>
  * 在onSaveInstance()里面去remove()所有非空的Fragment，然后在onRestoreInstanceState()
- * 中去再次按照问题一的方式创建Activity。当我处于打开“不保留活动”的时候，效果非常令人满意，然而当我关闭“不保留活动”的时候，问题却出现了。当转跳到其他Activity
+ * 中去再次按照问题一的方式创建Activity。当我处于打开“不保留活动”的时候，效果非常令人满意，
+ * 然而当我关闭“不保留活动”的时候，问题却出现了。当转跳到其他Activity
  * 、打开多任务窗口、使用Home回到主屏幕再返回时，发现根本没有Fragment了，一篇空白。
  * <p>
  * 于是跟踪下去，我调查了onSaveInstanceState()与onRestoreInstanceState()
  * 这两个方法。原本以为只有在系统因为内存回收Activity时才会调用的onSaveInstanceState()
- * ，居然在转跳到其他Activity、打开多任务窗口、使用Home回到主屏幕这些操作中也被调用，然而onRestoreInstanceState()
- * 并没有在再次回到Activity时被调用。而且我在onResume()发现之前的Fragment只是被移除，并不是空，所以就算你在onResume()
+ * ，居然在转跳到其他Activity、打开多任务窗口、使用Home回到主屏幕这些操作中也被调用，
+ * 然而onRestoreInstanceState()
+ * 并没有在再次回到Activity时被调用。而且我在onResume()发现之前的Fragment只是被移除，
+ * 并不是空，所以就算你在onResume()
  * 中执行问题一中创建的Fragment的方法，同样无济于事。所以通过remove()宣告失败。
  * <p>
- * 接着通过调查资料发现Activity中的onSaveInstanceState()里面有一句super.onRestoreInstanceState(savedInstanceState)
+ * 接着通过调查资料发现Activity中的onSaveInstanceState()里面有一句
+ * super.onRestoreInstanceState(savedInstanceState)
  * ，Google对于这句话的解释是“Always call the superclass so it can save the view hierarchy
- * state”，大概意思是“总是执行这句代码来调用父类去保存视图层的状态”。其实到这里大家也就明白了，就是因为这句话导致了重影的出现，于是我删除了这句话，然后onCreate()
- * 与onRestoreInstanceState()中同时使用问题一中的创建Fragment方法，然后再通过保存切换的状态，发现结果非常完美。
+ * state”，大概意思是“总是执行这句代码来调用父类去保存视图层的状态”。
+ * 其实到这里大家也就明白了，就是因为这句话导致了重影的出现，于是我删除了这句话，然后onCreate()
+ * 与onRestoreInstanceState()中同时使用问题一中的创建Fragment方法，
+ * 然后再通过保存切换的状态，发现结果非常完美。
  * <p>
  * 只能在v4包中才能使用
  * fTransaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out);
@@ -104,7 +110,7 @@ public class FragOperManager implements Serializable {
         this.containerId = containerId;
         this.fManager = activity.getFragmentManager();
         this.fragmentsList = new ArrayList<Fragment>();
-        EventBus.getDefault().register(this);
+        EventBusUtils.register(this);
     }
 
     public List<Fragment> getFragmentsList() {
@@ -115,7 +121,7 @@ public class FragOperManager implements Serializable {
      * 不需要调用
      */
     public void onDestroy() {
-        EventBus.getDefault().unregister(this);
+        EventBusUtils.unregister(this);
     }
 
     /***
@@ -125,16 +131,16 @@ public class FragOperManager implements Serializable {
      *  @param what
      * @param object
      */
-    public Object onEvent(int what, Object object) {
+    public Object onEvent(int what, Object[] object) {
         switch (what) {
             case Constant.HIDE:
                 // 隐藏某个Fragment,而不是弹出.
-                exit((Fragment) object, Constant.HIDE);
+                exit((Fragment) object[0], Constant.HIDE);
                 break;
 
             case Constant.POPBACKSTACK:
                 // 弹出某个Fragment,而不是隐藏.
-                exit((Fragment) object, Constant.POPBACKSTACK);
+                exit((Fragment) object[0], Constant.POPBACKSTACK);
                 break;
 
             case Constant.POPBACKSTACKALL:

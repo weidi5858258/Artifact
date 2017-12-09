@@ -164,10 +164,6 @@ public class BluetoothFragment extends BaseFragment {
         return false;
     }
 
-    @Override
-    public Object onEvent(int what, Object object) {
-        return null;
-    }
 
     @InjectOnClick({R.id.as_service_btn, R.id.search_device_btn, R.id.be_searched_btn,
             R.id.cancel_search_btn, R.id.reset_btn, R.id.disconnect_btn,

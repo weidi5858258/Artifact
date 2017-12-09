@@ -1,7 +1,6 @@
 package com.weidi.artifact.service;
 
 import android.app.ActivityManager;
-import android.app.Service;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Handler;
@@ -11,10 +10,10 @@ import android.os.Looper;
 import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.constant.Constant;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
-import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
 import com.weidi.service.BaseService;
 import com.weidi.threadpool.ThreadPool;
+import com.weidi.utils.EventBusUtils;
 import com.weidi.utils.MyToast;
 
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public class PeriodicalSerialKillerService extends BaseService {
     public void onCreate() {
         Log.d(TAG, "onCreate(): " + this);
 
-        EventBus.getDefault().register(this);
+        EventBusUtils.register(this);
 
         List<ApplicationInfo> mApplicationInfoList = ((MyApplication) getApplicationContext())
                 .mPackageManager.getInstalledApplications(0);
@@ -104,10 +103,9 @@ public class PeriodicalSerialKillerService extends BaseService {
             mCannotBeKilledPackageNameList.clear();
             mCannotBeKilledPackageNameList = null;
         }
-        EventBus.getDefault().unregister(this);
+        EventBusUtils.unregister(this);
     }
 
-    @Override
     public Object onEvent(int what, Object object) {
         switch (what) {
             case Constant.PERIODICALSERIALKILLERSERVICE:

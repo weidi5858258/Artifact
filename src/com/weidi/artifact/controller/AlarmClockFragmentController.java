@@ -15,16 +15,15 @@ import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.basecontroller.BaseFragmentController;
 import com.weidi.artifact.fragment.AlarmClockFragment;
 import com.weidi.artifact.service.AlarmClockService;
-import com.weidi.eventbus.EventBus;
 import com.weidi.log.Log;
 import com.weidi.timepicker.TimePickerDialog;
 import com.weidi.timepicker.data.Type;
+import com.weidi.utils.EventBusUtils;
 import com.weidi.utils.MyToast;
 import com.weidi.utils.MyUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * Created by root on 17-1-13.
@@ -91,7 +90,7 @@ public class AlarmClockFragmentController extends BaseFragmentController {
     @Override
     public void onDestroy() {
         if (DEBUG) Log.d(TAG, "onDestroy()");
-        EventBus.getDefault().unregister(mAlarmClockFragment);
+        EventBusUtils.unregister(mAlarmClockFragment);
     }
 
     public void onClick(View view) {
@@ -103,7 +102,7 @@ public class AlarmClockFragmentController extends BaseFragmentController {
             case R.id.start_stop_btn:
                 if (MyUtils.isSpecificServiceAlive(
                         mContext, "com.weidi.artifact.service.AlarmClockService")) {
-                    EventBus.getDefault().postSync(
+                    EventBusUtils.postSync(
                             AlarmClockService.class, Constant.STOP_ALARMCLOCKSERVICE, null);
                     if (!MyUtils.isSpecificServiceAlive(
                             mContext, "com.weidi.artifact.service.AlarmClockService")) {
@@ -164,7 +163,7 @@ public class AlarmClockFragmentController extends BaseFragmentController {
 
     //初始化
     private void init() {
-        EventBus.getDefault().register(mAlarmClockFragment);
+        EventBusUtils.register(mAlarmClockFragment);
         long tenYears = 10L * 365 * 1000 * 60 * 60 * 24L;
         mTimePickerDialog = new TimePickerDialog.Builder()
                 .setCallBack(mAlarmClockFragment)

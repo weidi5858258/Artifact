@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.weidi.artifact.R;
 import com.weidi.activity.base.BaseActivity;
 import com.weidi.artifact.controller.AppsLockActivityController;
-import com.weidi.eventbus.EventBus;
 import com.weidi.inject.InjectLayout;
 import com.weidi.inject.InjectOnClick;
 import com.weidi.inject.InjectView;
@@ -111,11 +110,6 @@ public class AppsLockActivity extends BaseActivity
         }
         mAppsLockActivityController.onDestroy();
         super.onDestroy();
-    }
-
-    @Override
-    public String[] getRequiredPermissions() {
-        return new String[0];
     }
 
     @Override

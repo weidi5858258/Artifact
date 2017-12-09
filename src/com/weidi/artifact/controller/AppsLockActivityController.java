@@ -250,7 +250,7 @@ public class AppsLockActivityController extends BaseActivityController {
         }
     }
 
-    public Object onEvent(int what, Object object) {
+    public Object onEvent(int what, Object[] object) {
         switch (what) {
             case Constant.SCREEN_OFF:
                 if (DBG) Log.d(TAG, "SCREEN_OFF");

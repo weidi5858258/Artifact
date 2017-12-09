@@ -84,7 +84,7 @@
     <string-array name="entries_backaction_preference">
         <item>Closes all terminal windows</item>
         <item>Closes this terminal window only</item>
-        <item>Closes activity, leaving sessions running</item>
+        <item>Closes mActivity, leaving sessions running</item>
         <item>Sends ESC to terminal</item>
         <item>Sends TAB to terminal</item>
     </string-array>

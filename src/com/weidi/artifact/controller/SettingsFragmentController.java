@@ -256,8 +256,9 @@ public class SettingsFragmentController extends BaseFragmentController {
 
             case R.id.settings_applock_password: {
                 TestImageFragment testImageFragment = new TestImageFragment();
-                mMainActivity.mMainActivityController
-                        .getFragOperManager().enter(testImageFragment, "TestImageFragment");
+                /*mMainActivity.mMainActivityController
+                        .getFragOperManager().enter(testImageFragment, "TestImageFragment");*/
+                mMainActivity.getFragOperManager().enter(testImageFragment, "TestImageFragment");
                 // setAppsLockPassword();
                 break;
             }

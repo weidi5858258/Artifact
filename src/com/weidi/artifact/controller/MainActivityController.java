@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -22,6 +21,7 @@ import com.weidi.artifact.fragment.MainFragment;
 import com.weidi.fragment.base.BaseFragment;
 import com.weidi.log.Log;
 import com.weidi.utils.EventBusUtils;
+import com.weidi.utils.HandlerUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,17 +37,16 @@ public class MainActivityController extends BaseActivityController {
     private static final String TAG = "MainActivityController";
     private static final boolean DEBUG = false;
     private MainActivity mMainActivity;
-    public FragOperManager mFragOperManager;
+//    public FragOperManager mFragOperManager;
     private BaseFragment mMainFragment;
     private ILifeCycle mILifeCycle;
-    private Bundle savedInstanceState;
-    private BaseFragment mBaseFragment;
-    private String mFragmentTag;
+//    private Bundle mSavedInstanceState;
+//    private BaseFragment mBaseFragment;
+//    private String mFragmentTag;
     private String drawerViewTag;
 
-    private static HashMap<String, Integer> mFragmentBackTypeSMap;
+    /*private static HashMap<String, Integer> mFragmentBackTypeSMap;
     public static HashMap<String, String> mDataBackupAndRestoreMap;
-
     static {
         // MainFragment不要加入Map中
         mFragmentBackTypeSMap = new HashMap<String, Integer>();
@@ -63,7 +62,7 @@ public class MainActivityController extends BaseActivityController {
 
         mDataBackupAndRestoreMap = new HashMap<String, String>();
         mDataBackupAndRestoreMap.put("Sms", "content://sms");
-    }
+    }*/
 
     public MainActivityController(Activity activity) {
         super(activity);
@@ -72,7 +71,7 @@ public class MainActivityController extends BaseActivityController {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (DEBUG) Log.d(TAG, "onCreate():savedInstanceState = " + savedInstanceState);
+        if (DEBUG) Log.d(TAG, "onCreate():mSavedInstanceState = " + savedInstanceState);
 
         mMainActivity.mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
 
@@ -176,12 +175,13 @@ public class MainActivityController extends BaseActivityController {
         });
 
         if (savedInstanceState != null) {
-            //            onRestore(savedInstanceState);
-            this.savedInstanceState = savedInstanceState;
+            //            onRestore(mSavedInstanceState);
+//            this.mSavedInstanceState = savedInstanceState;
         } else {
+            mMainActivity.setContainerId(R.id.container);
             // 加载MainFragment
             mMainFragment = new MainFragment();
-            getFragOperManager().enter(mMainFragment, null);
+            mMainActivity.getFragOperManager().enter(mMainFragment, null);
         }
     }
 
@@ -205,27 +205,29 @@ public class MainActivityController extends BaseActivityController {
          如果有多个Fragment开启着,并且相互之间是显示和隐藏,而不是弹出,
          (如果后退时Fragment是弹出的话,不需要这样的代码的;
          如果这些Fragment是像QQ那样实现的底部导航栏形式的,
-         在任何一个页面都可以退出,那么也不需要实现这样的代码的)
+         在任何一个页面都可以退出,那么也不需要实现这样的代码的);
          那么页面在MainFragment时关闭屏幕,然后在点亮屏幕后,
          MainFragment的onResume()方法比其他Fragment的onResume()方法要先执行,
          最后执行的Fragment就得到了后退的"焦点",
          这样的话要后退时导致在MainFragment页面时就退不出去了.
          */
-        if (savedInstanceState != null) {
-            final String fragmentTag = savedInstanceState.getString("FragmentTag");
-            List<Fragment> fragmentsList = getFragOperManager().getFragmentsList();
+        /*if (mSavedInstanceState != null) {
+            final String fragmentTag = mSavedInstanceState.getString("FragmentTag");
+            List<Fragment> fragmentsList = getFragOperManager().getmFragmentsList();
             int count = fragmentsList.size();
             for (int i = 0; i < count; i++) {
                 final Fragment fragment = fragmentsList.get(i);
                 if (fragment != null && fragment.getClass().getSimpleName().equals(fragmentTag)) {
                     if (fragment instanceof BaseFragment) {
-                        new Handler().postDelayed(new Runnable() {
+                        HandlerUtils.postDelayed(new Runnable() {
+
                             @Override
                             public void run() {
                                 if (((BaseFragment) fragment).getBackHandlerInterface() != null) {
                                     ((BaseFragment) fragment).getBackHandlerInterface()
                                             .setSelectedFragment(
-                                                    (BaseFragment) fragment, fragmentTag);
+                                                    (BaseFragment) fragment,
+                                                    fragmentTag);
                                 }
                             }
                         }, 500);
@@ -233,8 +235,8 @@ public class MainActivityController extends BaseActivityController {
                     break;
                 }
             }
-            savedInstanceState = null;
-        }
+            mSavedInstanceState = null;
+        }*/
 
         // 开启核心服务
         /*if (!MyUtils.isSpecificServiceAlive(
@@ -258,9 +260,9 @@ public class MainActivityController extends BaseActivityController {
             mMainActivity.startService(intent);
         }*/
 
-        //        if (savedInstanceState != null && !savedInstanceState.isEmpty()) {
-        //            onRestore(savedInstanceState);
-        //            savedInstanceState = null;
+        //        if (mSavedInstanceState != null && !mSavedInstanceState.isEmpty()) {
+        //            onRestore(mSavedInstanceState);
+        //            mSavedInstanceState = null;
         //        }
         //        if (mILifeCycle != null) {
         //            mILifeCycle.onResume();
@@ -287,7 +289,7 @@ public class MainActivityController extends BaseActivityController {
     public void onDestroy() {
         if (DEBUG) Log.d(TAG, "onDestroy()");
         //        mFragOperManager = null;
-        savedInstanceState = null;
+//        mSavedInstanceState = null;
         //        if (mILifeCycle != null) {
         //            mILifeCycle.onDestroy();
         //        }
@@ -301,12 +303,12 @@ public class MainActivityController extends BaseActivityController {
         mILifeCycle = iLifeCycle;
     }
 
-    public FragOperManager getFragOperManager() {
+    /*public FragOperManager getFragOperManager() {
         if (mFragOperManager == null) {
             mFragOperManager = new FragOperManager(mMainActivity, R.id.container);
         }
         return mFragOperManager;
-    }
+    }*/
 
     /***
      * 如果多个Fragment以底部Tab方式呈现的话,
@@ -316,7 +318,7 @@ public class MainActivityController extends BaseActivityController {
      * 然后需要在MainActivityController中处理onResume()方法了.
      */
     public void onBackPressed() {
-        if (DEBUG) Log.d(TAG, "onBackPressed()");
+        /*if (DEBUG) Log.d(TAG, "onBackPressed()");
         if (mBaseFragment == null || mBaseFragment.onBackPressed()) {
             exit();
             return;
@@ -330,7 +332,7 @@ public class MainActivityController extends BaseActivityController {
                 EventBusUtils.postAsync(FragOperManager.class, type, new Object[]{mBaseFragment});
                 break;
             }
-        }
+        }*/
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -348,8 +350,9 @@ public class MainActivityController extends BaseActivityController {
      */
     public void onSaveInstanceState(Bundle outState) {
         if (DEBUG) Log.d(TAG, "onSaveInstanceState():outState = " + outState);
-        outState.putString("FragmentTag", mFragmentTag);
-        this.savedInstanceState = outState;
+//        outState.putString("FragmentTag", mFragmentTag);
+//        this.mSavedInstanceState = outState;
+
         //        if (outState != null && !outState.isEmpty()) {
         //        if (outState != null) {
         //            if (mILifeCycle != null) {
@@ -364,7 +367,7 @@ public class MainActivityController extends BaseActivityController {
         //                    newList.add(tag);
         //                }
         //                outState.putStringArrayList("TAG", newList);
-        //                savedInstanceState = outState;
+        //                mSavedInstanceState = outState;
         //                // 放到onDestroy()方法中去就有异常
         //                getFragOperManager().release();
         //                //            mFragOperManager = null;
@@ -374,10 +377,10 @@ public class MainActivityController extends BaseActivityController {
 
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         if (DEBUG)
-            Log.d(TAG, "onRestoreInstanceState():savedInstanceState = " + savedInstanceState);
+            Log.d(TAG, "onRestoreInstanceState():mSavedInstanceState = " + savedInstanceState);
 
         /*if (mILifeCycle != null) {
-            mILifeCycle.onRestoreInstanceState(savedInstanceState);
+            mILifeCycle.onRestoreInstanceState(mSavedInstanceState);
         }*/
     }
 
@@ -411,9 +414,9 @@ public class MainActivityController extends BaseActivityController {
     }
 
     public void setSelectedFragment(BaseFragment selectedFragment, String fragmentTag) {
-        mBaseFragment = selectedFragment;
-        mFragmentTag = fragmentTag;
-    }
+//        mBaseFragment = selectedFragment;
+//        mFragmentTag = fragmentTag;
+}
 
     private void onRestore(Bundle savedInstanceState) {
         List<Map<String, BaseFragment>> mapList = new ArrayList<Map<String, BaseFragment>>();

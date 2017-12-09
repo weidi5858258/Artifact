@@ -35,14 +35,14 @@ public class CameraActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         if (DEBUG) Log.d(TAG, "onStart()");
         mCameraActivityController.onStart();
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         if (DEBUG) Log.d(TAG, "onResume()");
         mCameraActivityController.onResume();

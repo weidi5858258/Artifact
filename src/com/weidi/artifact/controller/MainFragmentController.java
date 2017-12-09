@@ -403,18 +403,22 @@ public class MainFragmentController extends BaseFragmentController {
 
     private void run2() {
         BaseFragment mAppsManagerFragment = new AppsManagerFragment();
-        mMainActivity.mMainActivityController.getFragOperManager().enter(mAppsManagerFragment,
+        /*mMainActivity.mMainActivityController.getFragOperManager().enter(mAppsManagerFragment,
+                null);*/
+        mMainActivity.getFragOperManager().enter(mAppsManagerFragment,
                 null);
     }
 
     private void run3() {
         BaseFragment phoneFragment = new PhoneFragment();
-        mMainActivity.mMainActivityController.getFragOperManager().enter(phoneFragment, null);
+//        mMainActivity.mMainActivityController.getFragOperManager().enter(phoneFragment, null);
+        mMainActivity.getFragOperManager().enter(phoneFragment, null);
     }
 
     private void run4() {
         BaseFragment smsFragment = new SmsFragment();
-        mMainActivity.mMainActivityController.getFragOperManager().enter(smsFragment, null);
+//        mMainActivity.mMainActivityController.getFragOperManager().enter(smsFragment, null);
+        mMainActivity.getFragOperManager().enter(smsFragment, null);
     }
 
     private void run5() {
@@ -442,7 +446,8 @@ public class MainFragmentController extends BaseFragmentController {
 
     private void run8() {
         BaseFragment settingsFragment = new SettingsFragment();
-        mMainActivity.mMainActivityController.getFragOperManager().enter(settingsFragment, null);
+//        mMainActivity.mMainActivityController.getFragOperManager().enter(settingsFragment, null);
+        mMainActivity.getFragOperManager().enter(settingsFragment, null);
     }
 
     private void run9() {
@@ -452,12 +457,14 @@ public class MainFragmentController extends BaseFragmentController {
 
     private void run10() {
         BaseFragment bluetoothFragment = new BluetoothFragment();
-        mMainActivity.mMainActivityController.getFragOperManager().enter(bluetoothFragment, null);
+//        mMainActivity.mMainActivityController.getFragOperManager().enter(bluetoothFragment, null);
+        mMainActivity.getFragOperManager().enter(bluetoothFragment, null);
     }
 
     private void run11() {
         AlarmClockFragment alarmClockFragment = new AlarmClockFragment();
-        mMainActivity.mMainActivityController.getFragOperManager().enter(alarmClockFragment, null);
+//        mMainActivity.mMainActivityController.getFragOperManager().enter(alarmClockFragment, null);
+        mMainActivity.getFragOperManager().enter(alarmClockFragment, null);
     }
 
     private void run12() {
@@ -472,7 +479,8 @@ public class MainFragmentController extends BaseFragmentController {
 
     private void run13() {
         QrCodeFragment qrCodeFragment = new QrCodeFragment();
-        mMainActivity.mMainActivityController.getFragOperManager().enter(qrCodeFragment, null);
+//        mMainActivity.mMainActivityController.getFragOperManager().enter(qrCodeFragment, null);
+        mMainActivity.getFragOperManager().enter(qrCodeFragment, null);
     }
 
     private void run14() {
@@ -480,7 +488,9 @@ public class MainFragmentController extends BaseFragmentController {
         mMainActivity.startActivity(intent);*/
         DataBackupAndRestoreFragment dataBackupAndRestoreFragment =
                 new DataBackupAndRestoreFragment();
-        mMainActivity.mMainActivityController.getFragOperManager().enter(
+        /*mMainActivity.mMainActivityController.getFragOperManager().enter(
+                dataBackupAndRestoreFragment, null);*/
+        mMainActivity.getFragOperManager().enter(
                 dataBackupAndRestoreFragment, null);
     }
 

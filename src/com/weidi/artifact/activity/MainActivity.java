@@ -16,7 +16,9 @@ import com.weidi.inject.InjectView;
 import com.weidi.log.Log;
 
 @InjectLayout(R.layout.activity_main)
-public class MainActivity extends BaseActivity implements BaseFragment.BackHandlerInterface {
+public class MainActivity extends BaseActivity
+//        implements BaseFragment.BackHandlerInterface
+{
 
     private static final String TAG = "MainActivity";
     private static final boolean DEBUG = true;
@@ -84,12 +86,13 @@ public class MainActivity extends BaseActivity implements BaseFragment.BackHandl
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         if (DEBUG) Log.d(TAG, "onBackPressed()");
         mMainActivityController.onBackPressed();
         // super.onBackPressed();
     }
 
-    public Object onEvent(int what, Object object) {
+    public Object onEvent(int what, Object[] object) {
         return mMainActivityController.onEvent(what, object);
     }
 
@@ -104,7 +107,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BackHandl
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         if (DEBUG)
             Log.d(TAG, "onSaveInstanceState():outState = " + outState);
         mMainActivityController.onSaveInstanceState(outState);
@@ -112,7 +115,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BackHandl
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
         if (DEBUG)
             Log.d(TAG, "onRestoreInstanceState():savedInstanceState = " + savedInstanceState);
         mMainActivityController.onRestoreInstanceState(savedInstanceState);
@@ -131,10 +134,10 @@ public class MainActivity extends BaseActivity implements BaseFragment.BackHandl
         super.onConfigurationChanged(newConfig);
     }
 
-    @Override
+    /*@Override
     public void setSelectedFragment(BaseFragment selectedFragment, String fragmentTag) {
         mMainActivityController.setSelectedFragment(selectedFragment, fragmentTag);
-    }
+    }*/
 
     public MainActivityController getMainActivityController() {
         return mMainActivityController;

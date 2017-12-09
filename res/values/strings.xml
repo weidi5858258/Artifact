@@ -182,7 +182,7 @@
 
     <string name="email_transcript_subject">Transcript from Terminal Emulator for Android</string>
     <string name="email_transcript_chooser_title">Mail transcript using:</string>
-    <string name="email_transcript_no_email_activity_found">Could not choose an email activity to send transcript.</string>
+    <string name="email_transcript_no_email_activity_found">Could not choose an email mActivity to send transcript.</string>
 
     <string name="alt_sends_esc">Alt key sends ESC</string>
     <string name="alt_sends_esc_summary_on">Alt key sends ESC.</string>

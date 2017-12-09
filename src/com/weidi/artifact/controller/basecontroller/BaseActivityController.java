@@ -45,6 +45,6 @@ public abstract class BaseActivityController {
 
     public abstract void onDestroy();
 
-    public abstract Object onEvent(int what, Object object);
+    public abstract Object onEvent(int what, Object[] object);
 
 }

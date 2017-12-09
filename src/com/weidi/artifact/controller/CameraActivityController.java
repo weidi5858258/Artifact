@@ -99,7 +99,7 @@ public class CameraActivityController extends BaseActivityController {
     }
 
     @Override
-    public Object onEvent(int what, Object object) {
+    public Object onEvent(int what, Object[] object) {
         return null;
     }
 

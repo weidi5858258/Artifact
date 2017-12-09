@@ -146,7 +146,7 @@ public class AppsLockActivity extends BaseActivity
         mAppsLockActivityController.onClick(view);
     }
 
-    public Object onEvent(int what, Object object) {
+    public Object onEvent(int what, Object[] object) {
         return mAppsLockActivityController.onEvent(what, object);
     }
 

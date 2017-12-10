@@ -2,14 +2,12 @@ package com.weidi.artifact.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.weidi.artifact.R;
-import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.basecontroller.BaseFragmentController;
 import com.weidi.artifact.db.dao.AppLockDao;
@@ -18,9 +16,6 @@ import com.weidi.artifact.fragment.AppsOperationDialogFragment;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.fragment.base.BaseDialogFragment;
 import com.weidi.listener.OnResultListener;
-import com.weidi.log.Log;
-import com.weidi.threadpool.CustomRunnable;
-import com.weidi.threadpool.ThreadPool;
 import com.weidi.utils.MyToast;
 
 /**
@@ -118,10 +113,10 @@ public class AppsOperationDialogFragmentController extends BaseFragmentControlle
         switch (view.getId()) {
             case R.id.app_start_btn:
                 if (!TextUtils.isEmpty(packageName)) {
-                    Intent intent = mMainActivity.getPackageManager()
+                    Intent intent = mBaseActivity.getPackageManager()
                             .getLaunchIntentForPackage(packageName);
                     if (intent != null && !mContext.getPackageName().equals(packageName)) {
-                        mMainActivity.startActivity(intent);
+                        mBaseActivity.startActivity(intent);
                     } else if (mContext.getPackageName().equals(packageName)) {
                         return;
                     } else {
@@ -197,7 +192,7 @@ public class AppsOperationDialogFragmentController extends BaseFragmentControlle
                     intent.setType("text/plain");
                     intent.putExtra(Intent.EXTRA_TEXT,
                             "分享一款软件：" + mBundle.getString(Constant.APP_NAME));
-                    mMainActivity.startActivity(intent);
+                    mBaseActivity.startActivity(intent);
                 }
                 break;
             case R.id.app_lock_btn:

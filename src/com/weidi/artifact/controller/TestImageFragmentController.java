@@ -2,9 +2,7 @@ package com.weidi.artifact.controller;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,24 +16,17 @@ import com.weidi.artifact.activity.MainActivity;
 import com.weidi.artifact.controller.basecontroller.BaseFragmentController;
 import com.weidi.artifact.fragment.TestImageFragment;
 import com.weidi.artifact.modle.Image;
-import com.weidi.artifact.modle.Sms;
 import com.weidi.customadapter.CustomRecyclerViewAdapter;
 import com.weidi.customadapter.CustomViewHolder;
 import com.weidi.customadapter.listener.OnItemClickListener;
-import com.weidi.dbutil.SimpleDao;
-import com.weidi.imageload.ImageLoader;
 import com.weidi.log.Log;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
-import com.weidi.volley.ICustomerCallback;
 import com.weidi.volley.image.ImageVolley;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import static com.weidi.artifact.R.drawable.sms;
 
 /**
  * Created by root on 17-1-13.
@@ -109,7 +100,7 @@ public class TestImageFragmentController extends BaseFragmentController {
                         for (int i = 0; i < count; ++i) {
                             Image image = new Image();
                             image.number = String.valueOf(i);
-                            File fileSavePath = mMainActivity.getCacheDir();
+                            File fileSavePath = mBaseActivity.getCacheDir();
                             image.path = fileSavePath.getAbsolutePath() + "/pictures";
                             image.url = urls[i];
                             mImageList.add(image);

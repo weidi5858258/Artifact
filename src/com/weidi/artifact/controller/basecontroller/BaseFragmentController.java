@@ -6,9 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.weidi.activity.base.BaseActivity;
 import com.weidi.artifact.activity.MainActivity;
-import com.weidi.artifact.controller.ILifeCycle;
-import com.weidi.log.Log;
 
 /**
  * Created by root on 16-12-13.
@@ -17,7 +16,7 @@ import com.weidi.log.Log;
 public abstract class BaseFragmentController { // implements ILifeCycle
 
     //    protected Activity mActivity;
-    protected MainActivity mMainActivity;
+    protected BaseActivity mBaseActivity;
     protected Context mContext;
 
     public BaseFragmentController(Activity activity) {
@@ -25,10 +24,10 @@ public abstract class BaseFragmentController { // implements ILifeCycle
             throw new NullPointerException("BaseActivityController's activity is null.");
         }
         //        mActivity = activity;
-        if (activity instanceof MainActivity) {
-            mMainActivity = (MainActivity) activity;
-            if (mMainActivity == null) {
-                throw new NullPointerException("BaseFragmentController's mMainActivity is null.");
+        if (activity instanceof BaseActivity) {
+            mBaseActivity = (BaseActivity) activity;
+            if (mBaseActivity == null) {
+                throw new NullPointerException("BaseFragmentController's mBaseActivity is null.");
             }
         }
         mContext = activity.getApplicationContext();

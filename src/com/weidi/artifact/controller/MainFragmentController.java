@@ -39,6 +39,7 @@ import com.weidi.artifact.fragment.SmsFragment;
 import com.weidi.customadapter.CustomRecyclerViewAdapter;
 import com.weidi.customadapter.CustomViewHolder;
 import com.weidi.customadapter.listener.OnItemClickListener;
+import com.weidi.fragment.FragOperManager;
 import com.weidi.fragment.base.BaseFragment;
 import com.weidi.log.Log;
 import com.weidi.utils.MyUtils;
@@ -55,9 +56,9 @@ import jackpal.androidterm.Term;
 
 /**
  * 屏幕常亮
- * mMainActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+ * mBaseActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
  * 取消屏幕常亮
- * mMainActivity.getWindow().clearFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+ * mBaseActivity.getWindow().clearFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
  */
 public class MainFragmentController extends BaseFragmentController {
 
@@ -189,10 +190,10 @@ public class MainFragmentController extends BaseFragmentController {
             }
 
             case 2: {// 软件管理
-                //                 mMainActivity.fragment_container.setVisibility(View.VISIBLE);
+                //                 mBaseActivity.fragment_container.setVisibility(View.VISIBLE);
                 //                 ProcessManagerFragment mProcessManagerFragment = new
                 //  ProcessManagerFragment();
-                //                 FragmentManager fm = mMainActivity.getFragmentManager();
+                //                 FragmentManager fm = mBaseActivity.getFragmentManager();
                 //                 FragmentTransaction transaction = fm.beginTransaction();
                 //                 transaction.add(R.id.container, mProcessManagerFragment);
                 //                 transaction.commit();
@@ -273,7 +274,7 @@ public class MainFragmentController extends BaseFragmentController {
 
             default:
         }
-        mMainActivity.enterActivity();
+        mBaseActivity.enterActivity();
     }
 
     private TextView tv = null;
@@ -290,7 +291,7 @@ public class MainFragmentController extends BaseFragmentController {
         // 那么接下来就要设置密码。如果不是空字符串，则表明已经设置过密码了，接下去就是输入密码登陆。
         final String password = mSharedPreferences.getString("security_password", "");
         View v = View.inflate(mContext, R.layout.activity_password, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(mMainActivity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mBaseActivity);
         tv = (TextView) v.findViewById(R.id.title);
         et_one = (EditText) v.findViewById(R.id.passwordone);
         et_two = (EditText) v.findViewById(R.id.passwordtwo);
@@ -316,12 +317,12 @@ public class MainFragmentController extends BaseFragmentController {
                             if (security_setup) {// true为已设置
                                 dialog.dismiss();
                                 intent.setClass(mContext, SecurityPhoneActivity.class);
-                                mMainActivity.startActivity(intent);
+                                mBaseActivity.startActivity(intent);
                             } else {
                                 dialog.dismiss();
                                 intent.setClass(mContext, SecurityPhoneSetup1Activity
                                         .class);
-                                mMainActivity.startActivity(intent);
+                                mBaseActivity.startActivity(intent);
                             }
                         } else {
                             Toast.makeText(mContext,
@@ -369,7 +370,7 @@ public class MainFragmentController extends BaseFragmentController {
                                 // 要设置密码，肯定是没有经过防盗页面设置过的
                                 intent.setClass(mContext, SecurityPhoneSetup1Activity
                                         .class);
-                                mMainActivity.startActivity(intent);
+                                mBaseActivity.startActivity(intent);
                             } else {
                                 Toast.makeText(mContext,
                                         "两次密码输入不相同，请重新输入！", Toast.LENGTH_SHORT)
@@ -398,42 +399,42 @@ public class MainFragmentController extends BaseFragmentController {
 
     private void run1() {
         intent.setClass(mContext, CommunicationGuardActivity.class);
-        mMainActivity.startActivity(intent);
+        mBaseActivity.startActivity(intent);
     }
 
     private void run2() {
         BaseFragment mAppsManagerFragment = new AppsManagerFragment();
-        /*mMainActivity.mMainActivityController.getFragOperManager().enter(mAppsManagerFragment,
+        /*mBaseActivity.mMainActivityController.getFragOperManager().enter(mAppsManagerFragment,
                 null);*/
-        mMainActivity.getFragOperManager().enter(mAppsManagerFragment,
+        FragOperManager.getInstance().enter(mBaseActivity,mAppsManagerFragment,
                 null);
     }
 
     private void run3() {
         BaseFragment phoneFragment = new PhoneFragment();
-//        mMainActivity.mMainActivityController.getFragOperManager().enter(phoneFragment, null);
-        mMainActivity.getFragOperManager().enter(phoneFragment, null);
+//        mBaseActivity.mMainActivityController.getFragOperManager().enter(phoneFragment, null);
+        FragOperManager.getInstance().enter(mBaseActivity,phoneFragment, null);
     }
 
     private void run4() {
         BaseFragment smsFragment = new SmsFragment();
-//        mMainActivity.mMainActivityController.getFragOperManager().enter(smsFragment, null);
-        mMainActivity.getFragOperManager().enter(smsFragment, null);
+//        mBaseActivity.mMainActivityController.getFragOperManager().enter(smsFragment, null);
+        FragOperManager.getInstance().enter(mBaseActivity,smsFragment, null);
     }
 
     private void run5() {
         intent.setClass(mContext, KillerVirusActivity.class);
-        mMainActivity.startActivity(intent);
+        mBaseActivity.startActivity(intent);
     }
 
     private void run6() {
         intent.setClass(mContext, CleanCacheActivity.class);
-        mMainActivity.startActivity(intent);
+        mBaseActivity.startActivity(intent);
     }
 
     private void run7() {
         intent.setClass(mContext, AdvancedToolsActivity.class);
-        mMainActivity.startActivity(intent);
+        mBaseActivity.startActivity(intent);
 
         //         Intent intent = new Intent();
         //         intent.setClass(mContext, ReceiveSMSsActivity.class);
@@ -441,37 +442,37 @@ public class MainFragmentController extends BaseFragmentController {
         //         intent.putExtra("address", "address");
         //         intent.putExtra("body", "body");
         //         intent.putExtra("time", "time");
-        //         mMainActivity.startActivity(intent);
+        //         mBaseActivity.startActivity(intent);
     }
 
     private void run8() {
         BaseFragment settingsFragment = new SettingsFragment();
-//        mMainActivity.mMainActivityController.getFragOperManager().enter(settingsFragment, null);
-        mMainActivity.getFragOperManager().enter(settingsFragment, null);
+//        mBaseActivity.mMainActivityController.getFragOperManager().enter(settingsFragment, null);
+        FragOperManager.getInstance().enter(mBaseActivity,settingsFragment, null);
     }
 
     private void run9() {
         intent.setClass(mContext, Term.class);
-        mMainActivity.startActivity(intent);
+        mBaseActivity.startActivity(intent);
     }
 
     private void run10() {
         BaseFragment bluetoothFragment = new BluetoothFragment();
-//        mMainActivity.mMainActivityController.getFragOperManager().enter(bluetoothFragment, null);
-        mMainActivity.getFragOperManager().enter(bluetoothFragment, null);
+//        mBaseActivity.mMainActivityController.getFragOperManager().enter(bluetoothFragment, null);
+        FragOperManager.getInstance().enter(mBaseActivity, bluetoothFragment, null);
     }
 
     private void run11() {
         AlarmClockFragment alarmClockFragment = new AlarmClockFragment();
-//        mMainActivity.mMainActivityController.getFragOperManager().enter(alarmClockFragment, null);
-        mMainActivity.getFragOperManager().enter(alarmClockFragment, null);
+//        mBaseActivity.mMainActivityController.getFragOperManager().enter(alarmClockFragment, null);
+        FragOperManager.getInstance().enter(mBaseActivity, alarmClockFragment, null);
     }
 
     private void run12() {
         try {
             Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            mMainActivity.startActivity(intent);
-            mMainActivity.enterActivity();
+            mBaseActivity.startActivity(intent);
+            mBaseActivity.enterActivity();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -479,29 +480,29 @@ public class MainFragmentController extends BaseFragmentController {
 
     private void run13() {
         QrCodeFragment qrCodeFragment = new QrCodeFragment();
-//        mMainActivity.mMainActivityController.getFragOperManager().enter(qrCodeFragment, null);
-        mMainActivity.getFragOperManager().enter(qrCodeFragment, null);
+//        mBaseActivity.mMainActivityController.getFragOperManager().enter(qrCodeFragment, null);
+        FragOperManager.getInstance().enter(mBaseActivity, qrCodeFragment, null);
     }
 
     private void run14() {
         /*intent.setClass(mContext, MusicPlayActivity.class);
-        mMainActivity.startActivity(intent);*/
+        mBaseActivity.startActivity(intent);*/
         DataBackupAndRestoreFragment dataBackupAndRestoreFragment =
                 new DataBackupAndRestoreFragment();
-        /*mMainActivity.mMainActivityController.getFragOperManager().enter(
+        /*mBaseActivity.mMainActivityController.getFragOperManager().enter(
                 dataBackupAndRestoreFragment, null);*/
-        mMainActivity.getFragOperManager().enter(
-                dataBackupAndRestoreFragment, null);
+        FragOperManager.getInstance().enter(
+                mBaseActivity,dataBackupAndRestoreFragment, null);
     }
 
     private void run15() {
         intent.setClass(mContext, ProcessesManagerActivity.class);
-        mMainActivity.startActivity(intent);
+        mBaseActivity.startActivity(intent);
     }
 
     private void run16() {
         intent.setClass(mContext, TrafficStatisticsActivity.class);
-        mMainActivity.startActivity(intent);
+        mBaseActivity.startActivity(intent);
     }
 
 }

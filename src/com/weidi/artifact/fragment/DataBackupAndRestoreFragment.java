@@ -132,7 +132,8 @@ public class DataBackupAndRestoreFragment extends BaseFragment {
     }
 
     @InjectOnClick({R.id.data_phone_backup_btn, R.id.data_phone_restore_btn,
-            R.id.data_sms_backup_btn, R.id.data_sms_restore_btn})
+            R.id.data_sms_backup_btn, R.id.data_sms_restore_btn,
+            R.id.settings_showusbdebug})
     public void onClick(View view) {
         mDataBackupAndRestoreFragmentController.onClick(view);
     }

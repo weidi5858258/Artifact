@@ -96,7 +96,7 @@ public class AlarmClockFragmentController extends BaseFragmentController {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.time_picker_btn:
-                mTimePickerDialog.show(mMainActivity.getFragmentManager(), "all");
+                mTimePickerDialog.show(mBaseActivity.getFragmentManager(), "all");
                 break;
 
             case R.id.start_stop_btn:
@@ -114,9 +114,9 @@ public class AlarmClockFragmentController extends BaseFragmentController {
                         MyToast.show("设置的时间无效");
                         return;
                     }
-                    Intent intent = new Intent(mMainActivity, AlarmClockService.class);
+                    Intent intent = new Intent(mBaseActivity, AlarmClockService.class);
                     intent.putExtra(Constant.DIFFERTIME, mDifferTime);
-                    mMainActivity.startService(intent);
+                    mBaseActivity.startService(intent);
                     if (MyUtils.isSpecificServiceAlive(
                             mContext, "com.weidi.artifact.service.AlarmClockService")) {
                         mAlarmClockFragment.start_stop_btn.setText("停\t\t\t\t\t\t止");

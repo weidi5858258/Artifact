@@ -6,10 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 //import android.content.pm.IPackageStatsObserver;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageStats;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.RemoteException;
 import android.os.StatFs;
 import android.os.SystemClock;
 //import android.support.v4.app.Fragment;
@@ -25,7 +23,6 @@ import android.widget.TextView;
 
 import com.weidi.artifact.R;
 import com.weidi.artifact.activity.MainActivity;
-import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.basecontroller.BaseFragmentController;
 import com.weidi.artifact.db.bean.AppInfos;
@@ -37,14 +34,12 @@ import com.weidi.customadapter.CustomRecyclerViewAdapter;
 import com.weidi.customadapter.CustomViewHolder;
 import com.weidi.customadapter.listener.OnItemClickListener;
 import com.weidi.listener.OnResultListener;
-import com.weidi.log.Log;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
 import com.weidi.utils.MyToast;
 import com.weidi.utils.MyUtils;
 
 import java.io.File;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -190,7 +185,7 @@ public class AppsManagerFragmentController extends BaseFragmentController {
             mAppsOperationDialogFragment.setOnResultListener(mOnResultListener);
             mAppsOperationDialogFragment.setArguments(bundle);
             mAppsOperationDialogFragment.show(
-                    mMainActivity.getFragmentManager(), Constant.APPSOPERATIONDIALOGFRAGMENT);
+                    mBaseActivity.getFragmentManager(), Constant.APPSOPERATIONDIALOGFRAGMENT);
 
 
             //            dismissPopupWindow();
@@ -327,7 +322,7 @@ public class AppsManagerFragmentController extends BaseFragmentController {
                         intent = mPackageManager.getLaunchIntentForPackage(info.getPackageName());
                         if (intent != null
                                 && !mContext.getPackageName().equals(info.getPackageName())) {
-                            mMainActivity.startActivity(intent);
+                            mBaseActivity.startActivity(intent);
                         } else if (mContext.getPackageName().equals(info.getPackageName())) {
                             return;
                         } else {
@@ -380,7 +375,7 @@ public class AppsManagerFragmentController extends BaseFragmentController {
                         intent.addCategory("android.intent.category.DEFAULT");
                         intent.setType("text/plain");
                         intent.putExtra(Intent.EXTRA_TEXT, "分享一款软件：" + info.getAppName());
-                        mMainActivity.startActivity(intent);
+                        mBaseActivity.startActivity(intent);
                     }
                     break;
                 }

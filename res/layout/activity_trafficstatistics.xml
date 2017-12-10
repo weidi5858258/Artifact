@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    <TextView 
+    <TextView
 	    android:id="@+id/tv_trafficstatistics_title"
 	    android:gravity="center"
     	android:background="#0288C6"
@@ -12,21 +12,21 @@
     	android:textColor="#ff0000"
     	android:textSize="38sp"
     	android:text="流量监控"/>
-    <ScrollView 
+    <ScrollView
         android:layout_width="match_parent"
     	android:layout_height="wrap_content">
-    	<LinearLayout 
+    	<LinearLayout
     	    android:layout_width="match_parent"
     		android:layout_height="wrap_content"
     		android:orientation="vertical">
-		    <TextView 
+		    <TextView
 		        android:id="@+id/tv_trafficstatistics_time"
 		        android:background="#BED4DF"
 		        android:paddingLeft="10dip"
 		        android:layout_width="match_parent"
 		    	android:layout_height="wrap_content"
 		    	android:text="2015年4月1日至2015年4月12日"/>
-		    <LinearLayout 
+		    <LinearLayout
 		        android:paddingTop="10dip"
 		        android:background="#D7E2E4"
 		        android:paddingLeft="10dip"
@@ -34,13 +34,13 @@
 		        android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:orientation="vertical">
-				<TextView 
+				<TextView
 				    android:layout_width="wrap_content"
 			    	android:layout_height="wrap_content"
 			    	android:textSize="20sp"
 			    	android:text="流量详情"/>
-				
-				<TableLayout 
+
+				<TableLayout
 				    android:layout_marginTop="5dip"
 				    android:layout_marginBottom="5dip"
 				    android:layout_width="match_parent"
@@ -49,200 +49,200 @@
 			    	android:gravity="center">
 				    <TableRow
 				        android:paddingTop="5dip">
-				        <TextView 
+				        <TextView
 				            android:layout_marginLeft="55dip"
 				            android:layout_width="wrap_content"
 				            android:layout_height="wrap_content"
 				            android:visibility="invisible"
 				            android:text="2G/3G"/>
-				        <TextView 
+				        <TextView
 				            android:layout_marginLeft="25dip"
 				            android:layout_width="wrap_content"
 				            android:layout_height="wrap_content"
 				            android:text="2G/3G"/>
-				        <TextView  
+				        <TextView
 				            android:layout_marginLeft="45dip"
 				            android:layout_width="wrap_content"
 				            android:layout_height="wrap_content"
 				            android:text="WIFI"/>
 				    </TableRow>
-				    
+
 				    <TableRow
 				        android:paddingTop="10dip">
-				        <TextView 
+				        <TextView
 				            android:layout_marginLeft="25dip"
 				            android:layout_width="wrap_content"
 				            android:layout_height="wrap_content"
 				            android:text="今日流量"/>
-				        <TextView 
+				        <TextView
 				            android:id="@+id/tv_trafficstatistics_today_g3"
 				            android:layout_marginLeft="26dip"
 				            android:layout_width="wrap_content"
 				            android:layout_height="wrap_content"
 				            android:text="1.11MB"/>
-				        <TextView 
-				            android:id="@+id/tv_trafficstatistics_today_wifi" 
+				        <TextView
+				            android:id="@+id/tv_trafficstatistics_today_wifi"
 				            android:layout_marginLeft="43dip"
 				            android:layout_width="wrap_content"
 				            android:layout_height="wrap_content"
 				            android:text="369KB"/>
 				    </TableRow>
-				    
+
 				    <TableRow
 				        android:paddingTop="10dip">
-				        <TextView 
+				        <TextView
 				            android:layout_marginLeft="25dip"
 				            android:layout_width="wrap_content"
 				            android:layout_height="wrap_content"
 				            android:text="本周流量"/>
-				        <TextView 
+				        <TextView
 				            android:id="@+id/tv_trafficstatistics_week_g3"
 				            android:layout_marginLeft="26dip"
 				            android:layout_width="wrap_content"
 				            android:layout_height="wrap_content"
 				            android:text="1.11MB"/>
-				        <TextView  
+				        <TextView
 				            android:id="@+id/tv_trafficstatistics_week_wifi"
 				            android:layout_marginLeft="43dip"
 				            android:layout_width="wrap_content"
 				            android:layout_height="wrap_content"
 				            android:text="369KB"/>
 				    </TableRow>
-				    
+
 				    <TableRow
 				        android:paddingTop="10dip">
-				        <TextView 
+				        <TextView
 				            android:layout_marginLeft="25dip"
 				            android:layout_width="wrap_content"
 				            android:layout_height="wrap_content"
 				            android:text="当月流量"/>
-				        <TextView 
+				        <TextView
 				            android:id="@+id/tv_trafficstatistics_month_g3"
 				            android:layout_marginLeft="26dip"
 				            android:layout_width="wrap_content"
 				            android:layout_height="wrap_content"
 				            android:text="1.11MB"/>
-				        <TextView  
+				        <TextView
 				            android:id="@+id/tv_trafficstatistics_month_wifi"
 				            android:layout_marginLeft="43dip"
 				            android:layout_width="wrap_content"
 				            android:layout_height="wrap_content"
 				            android:text="369KB"/>
 				    </TableRow>
-				    
+
 				    <TableRow
 				        android:paddingTop="10dip"
 				        android:paddingBottom="5dip">
-				        <TextView 
+				        <TextView
 				            android:layout_marginLeft="25dip"
 				            android:layout_width="wrap_content"
 				            android:layout_height="wrap_content"
 				            android:text="上月流量"/>
-				        <TextView 
+				        <TextView
 				            android:id="@+id/tv_trafficstatistics_lastmonth_g3"
 				            android:layout_marginLeft="26dip"
 				            android:layout_width="wrap_content"
 				            android:layout_height="wrap_content"
 				            android:text="1.11MB"/>
-				        <TextView  
+				        <TextView
 				            android:id="@+id/tv_trafficstatistics_lastmonth_wifi"
 				            android:layout_marginLeft="43dip"
 				            android:layout_width="wrap_content"
 				            android:layout_height="wrap_content"
 				            android:text="369KB"/>
 				    </TableRow>
-				    
+
 				</TableLayout>
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				<TextView  
+
+
+
+
+
+
+
+
+
+				<TextView
 				    android:id="@+id/bt_trafficstatistics_conninfo"
 				    android:layout_marginTop="5dip"
 				    android:background="#F6EBBD"
 		            android:layout_width="match_parent"
 		            android:layout_height="wrap_content"
 		            android:text="2G/3G流量剩余500MB，距月底还有18天"/>
-				<RelativeLayout 
+				<RelativeLayout
 				    android:layout_marginTop="5dip"
 				    android:layout_marginBottom="5dip"
 				    android:layout_width="match_parent"
 		            android:layout_height="wrap_content">
-				    <TextView  
+				    <TextView
 				        android:layout_alignParentLeft="true"
 				        android:layout_centerVertical="true"
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
 			            android:text="上网包月套餐"/>
-				    <Button 
+				    <Button
 				        android:id="@+id/bt_trafficstatistics_conn"
 				        android:layout_alignParentRight="true"
 				        android:layout_width="75dip"
 			            android:layout_height="wrap_content"
 			            android:text="设置"/>
 				</RelativeLayout>
-				<View 
+				<View
 				    android:layout_marginTop="5dip"
 				    android:layout_marginBottom="5dip"
 				    android:layout_width="match_parent"
 				    android:background="#000000"
 		            android:layout_height="0.2dip"/>
-				<TextView  
+				<TextView
 				    android:id="@+id/bt_trafficstatistics_smsinfo"
 				    android:layout_marginTop="5dip"
 				    android:background="#F6EBBD"
 		            android:layout_width="match_parent"
 		            android:layout_height="wrap_content"
 		            android:text="免费短信剩余68条，跟月底还有18天"/>
-				<RelativeLayout 
+				<RelativeLayout
 				    android:layout_marginTop="5dip"
 				    android:layout_marginBottom="5dip"
 				    android:layout_width="match_parent"
 		            android:layout_height="wrap_content">
-				    <TextView  
+				    <TextView
 				        android:layout_alignParentLeft="true"
 				        android:layout_centerVertical="true"
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
 			            android:text="短信包月套餐"/>
-				    <Button 
+				    <Button
 				        android:id="@+id/bt_trafficstatistics_sms"
 				        android:layout_alignParentRight="true"
 				        android:layout_width="75dip"
 			            android:layout_height="wrap_content"
 			            android:text="设置"/>
 				</RelativeLayout>
-				<View 
+				<View
 				    android:layout_marginTop="5dip"
 				    android:layout_marginBottom="5dip"
 				    android:layout_width="match_parent"
 				    android:background="#000000"
 		            android:layout_height="0.2dip"/>
-				<TextView  
+				<TextView
 				    android:id="@+id/bt_trafficstatistics_phoneinfo"
 				    android:layout_marginTop="10dip"
 				    android:background="#F6EBBD"
 		            android:layout_width="match_parent"
 		            android:layout_height="wrap_content"
 		            android:text="免费通话时间剩余450分钟，距月底还有18天"/>
-				<RelativeLayout 
+				<RelativeLayout
 				    android:layout_marginTop="5dip"
 				    android:layout_marginBottom="5dip"
 				    android:layout_width="match_parent"
 		            android:layout_height="wrap_content">
-				    <TextView  
+				    <TextView
 				        android:layout_alignParentLeft="true"
 				        android:layout_centerVertical="true"
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
 			            android:text="电话包月套餐"/>
-				    <Button 
+				    <Button
 				        android:id="@+id/bt_trafficstatistics_phone"
 				        android:layout_alignParentRight="true"
 				        android:layout_width="75dip"
@@ -250,7 +250,7 @@
 			            android:text="设置"/>
 				</RelativeLayout>
 			</LinearLayout>
-		
+
 		    <Button
 		        android:id="@+id/bt_trafficstatistics_net"
 		        android:layout_width="match_parent"

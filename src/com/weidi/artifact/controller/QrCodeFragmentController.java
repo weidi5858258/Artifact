@@ -52,7 +52,7 @@ public class QrCodeFragmentController extends BaseFragmentController {
     @Override
     public void onResume() {
         if (DEBUG) Log.d(TAG, "onResume()");
-        ((MainActivity) mQrCodeFragment.getActivity()).title.setText("二维码");
+        // ((MainActivity) mQrCodeFragment.getActivity()).title.setText("二维码");
     }
 
     @Override
@@ -116,10 +116,10 @@ public class QrCodeFragmentController extends BaseFragmentController {
             }
 
             case R.id.scan_code_btn: {
-                Intent intent = new Intent(mMainActivity, ScanCodeActivity.class);
+                Intent intent = new Intent(mBaseActivity, ScanCodeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                mMainActivity.startActivityForResult(intent, Constant.SCANNIN_GREQUEST_CODE);
-                mMainActivity.enterActivity();
+                mBaseActivity.startActivityForResult(intent, Constant.SCANNIN_GREQUEST_CODE);
+                mBaseActivity.enterActivity();
                 break;
             }
 
@@ -147,7 +147,7 @@ public class QrCodeFragmentController extends BaseFragmentController {
 
     //初始化
     private void init() {
-        mMainActivity.getMainActivityController().setILifeCycle(mQrCodeFragment);
+        // mBaseActivity.getMainActivityController().setILifeCycle(mQrCodeFragment);
     }
 
 }

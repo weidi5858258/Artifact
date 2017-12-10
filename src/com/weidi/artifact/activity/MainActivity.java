@@ -21,7 +21,7 @@ public class MainActivity extends BaseActivity
 {
 
     private static final String TAG = "MainActivity";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     @InjectView(R.id.drawerlayout)
     public DrawerLayout mDrawerLayout;
@@ -88,7 +88,6 @@ public class MainActivity extends BaseActivity
     public void onBackPressed() {
         super.onBackPressed();
         if (DEBUG) Log.d(TAG, "onBackPressed()");
-        mMainActivityController.onBackPressed();
         // super.onBackPressed();
     }
 
@@ -133,11 +132,6 @@ public class MainActivity extends BaseActivity
         mMainActivityController.onConfigurationChanged(newConfig);
         super.onConfigurationChanged(newConfig);
     }
-
-    /*@Override
-    public void setSelectedFragment(BaseFragment selectedFragment, String fragmentTag) {
-        mMainActivityController.setSelectedFragment(selectedFragment, fragmentTag);
-    }*/
 
     public MainActivityController getMainActivityController() {
         return mMainActivityController;

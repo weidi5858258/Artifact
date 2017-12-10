@@ -17,12 +17,14 @@ import com.weidi.artifact.activity.MainActivity;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.basecontroller.BaseFragmentController;
 import com.weidi.artifact.fragment.DataBackupAndRestoreFragment;
+import com.weidi.artifact.fragment.QrCodeFragment;
 import com.weidi.artifact.modle.Contacts;
 import com.weidi.artifact.modle.Data;
 import com.weidi.artifact.modle.MimeTypes;
 import com.weidi.artifact.modle.RawContacts;
 import com.weidi.artifact.modle.Sms;
 import com.weidi.dbutil.SimpleDao;
+import com.weidi.fragment.FragOperManager;
 import com.weidi.log.Log;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
@@ -59,7 +61,7 @@ public class DataBackupAndRestoreFragmentController extends BaseFragmentControll
     @Override
     public void onResume() {
         if (DEBUG) Log.d(TAG, "onResume()");
-        ((MainActivity) mDataBackupAndRestoreFragment.getActivity()).title.setText("数据备份与恢复");
+        // ((MainActivity) mDataBackupAndRestoreFragment.getActivity()).title.setText("数据备份与恢复");
     }
 
     @Override
@@ -93,6 +95,10 @@ public class DataBackupAndRestoreFragmentController extends BaseFragmentControll
 
             case R.id.data_sms_restore_btn:
                 dataSmsRestore();
+                break;
+
+            case R.id.settings_showusbdebug:
+                FragOperManager.getInstance().enter(mBaseActivity, new QrCodeFragment(), null);
                 break;
 
             default:

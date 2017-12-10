@@ -25,6 +25,7 @@ import com.weidi.artifact.service.AppsLockService;
 import com.weidi.artifact.service.CoreService;
 import com.weidi.artifact.service.PeriodicalSerialKillerService;
 import com.weidi.artifact.service.ShowAttributionService;
+import com.weidi.fragment.FragOperManager;
 import com.weidi.log.Log;
 import com.weidi.utils.EventBusUtils;
 import com.weidi.utils.MyToast;
@@ -113,13 +114,13 @@ public class SettingsFragmentController extends BaseFragmentController {
                 if (mSettingsFragment.settings_showattribution.isChecked()) {
                     mSettingsFragment.settings_showattribution.setChecked(false);
                     mSettingsFragment.settings_showattribution.setTVContent("归属地显示已经关闭");
-                    intent = new Intent(mMainActivity, ShowAttributionService.class);
-                    mMainActivity.stopService(intent);
+                    intent = new Intent(mBaseActivity, ShowAttributionService.class);
+                    mBaseActivity.stopService(intent);
                 } else {
                     mSettingsFragment.settings_showattribution.setChecked(true);
                     mSettingsFragment.settings_showattribution.setTVContent("归属地显示已经开启");
-                    intent = new Intent(mMainActivity, ShowAttributionService.class);
-                    mMainActivity.startService(intent);
+                    intent = new Intent(mBaseActivity, ShowAttributionService.class);
+                    mBaseActivity.startService(intent);
                 }
                 break;
             }
@@ -145,7 +146,7 @@ public class SettingsFragmentController extends BaseFragmentController {
                             mSharedPreferences.getBoolean(Constant.ISINTERCEPTUNINSTALL, true));
                 }
                 editor.commit();
-//                mMainActivity.sendBroadcastAsUser(intent, UserHandle.OWNER);
+//                mBaseActivity.sendBroadcastAsUser(intent, UserHandle.OWNER);
                 break;
             }
 
@@ -170,7 +171,7 @@ public class SettingsFragmentController extends BaseFragmentController {
                     intent.putExtra(Constant.ISINTERCEPTUNINSTALL, true);
                 }
                 editor.commit();
-//                mMainActivity.sendBroadcastAsUser(intent, UserHandle.OWNER);
+//                mBaseActivity.sendBroadcastAsUser(intent, UserHandle.OWNER);
                 break;
             }
 
@@ -212,8 +213,8 @@ public class SettingsFragmentController extends BaseFragmentController {
                 } else {
                     mSettingsFragment.settings_blacklist.setChecked(true);
                     mSettingsFragment.settings_blacklist.setTVContent("核心服务已经开启");
-                    intent = new Intent(mMainActivity, CoreService.class);
-                    mMainActivity.startService(intent);
+                    intent = new Intent(mBaseActivity, CoreService.class);
+                    mBaseActivity.startService(intent);
                 }
                 break;
             }
@@ -228,8 +229,8 @@ public class SettingsFragmentController extends BaseFragmentController {
                 } else {
                     mSettingsFragment.settings_periodicalserialkiller.setChecked(true);
                     mSettingsFragment.settings_periodicalserialkiller.setTVContent("连环杀进程已经开启");
-                    intent = new Intent(mMainActivity, PeriodicalSerialKillerService.class);
-                    mMainActivity.startService(intent);
+                    intent = new Intent(mBaseActivity, PeriodicalSerialKillerService.class);
+                    mBaseActivity.startService(intent);
                 }
                 break;
             }
@@ -245,8 +246,8 @@ public class SettingsFragmentController extends BaseFragmentController {
                     } else {
                         mSettingsFragment.settings_applock.setChecked(true);
                         mSettingsFragment.settings_applock.setTVContent("程序锁已经开启");
-                        intent = new Intent(mMainActivity, AppsLockService.class);
-                        mMainActivity.startService(intent);
+                        intent = new Intent(mBaseActivity, AppsLockService.class);
+                        mBaseActivity.startService(intent);
                     }
                 } else {
                     MyToast.show("先设置一个密码后再开启程序锁");
@@ -256,9 +257,9 @@ public class SettingsFragmentController extends BaseFragmentController {
 
             case R.id.settings_applock_password: {
                 TestImageFragment testImageFragment = new TestImageFragment();
-                /*mMainActivity.mMainActivityController
+                /*mBaseActivity.mMainActivityController
                         .getFragOperManager().enter(testImageFragment, "TestImageFragment");*/
-                mMainActivity.getFragOperManager().enter(testImageFragment, "TestImageFragment");
+                FragOperManager.getInstance().enter(mBaseActivity, testImageFragment, "TestImageFragment");
                 // setAppsLockPassword();
                 break;
             }
@@ -315,7 +316,7 @@ public class SettingsFragmentController extends BaseFragmentController {
             mSettingsFragment.settings_showuninstallpackage.setTVContent("允许应用卸载已经关闭");
             intent.putExtra(Constant.ISINTERCEPTUNINSTALL, false);
         }
-//        mMainActivity.sendBroadcastAsUser(intent, UserHandle.OWNER);
+//        mBaseActivity.sendBroadcastAsUser(intent, UserHandle.OWNER);
 
         flag = mSharedPreferences.getBoolean(Constant.USB_DEBUG, true);
         if (flag) {
@@ -379,7 +380,7 @@ public class SettingsFragmentController extends BaseFragmentController {
         final String password = mSharedPreferences.getString(Constant.APPSLOCK_PASSWORD, "");
         boolean flag = mSharedPreferences.getBoolean("applock", false);
         View v = View.inflate(mContext, R.layout.activity_password, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(mMainActivity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mBaseActivity);
         tv = (TextView) v.findViewById(R.id.title);
         et_one = (EditText) v.findViewById(R.id.passwordone);
         et_two = (EditText) v.findViewById(R.id.passwordtwo);

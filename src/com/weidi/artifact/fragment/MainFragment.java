@@ -20,7 +20,7 @@ import com.weidi.log.Log;
 public class MainFragment extends BaseFragment {
 
     private static final String TAG = "MainFragment";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     @InjectView(R.id.recyclerview)
     public RecyclerView factionlist_recycleview;

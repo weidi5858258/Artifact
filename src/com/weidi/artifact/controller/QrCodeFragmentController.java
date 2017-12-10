@@ -52,7 +52,9 @@ public class QrCodeFragmentController extends BaseFragmentController {
     @Override
     public void onResume() {
         if (DEBUG) Log.d(TAG, "onResume()");
-        // ((MainActivity) mQrCodeFragment.getActivity()).title.setText("二维码");
+        if (mQrCodeFragment.getActivity() instanceof MainActivity) {
+            ((MainActivity) mQrCodeFragment.getActivity()).title.setText("二维码");
+        }
     }
 
     @Override

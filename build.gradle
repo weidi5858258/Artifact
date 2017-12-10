@@ -39,7 +39,7 @@ android {
     defaultConfig {
         applicationId "com.weidi.artifact"
         minSdkVersion 23
-        targetSdkVersion 26
+        targetSdkVersion 25
         signingConfig signingConfigs.debug
 //        multiDexEnabled true
 

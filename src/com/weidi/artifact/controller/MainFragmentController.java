@@ -114,7 +114,9 @@ public class MainFragmentController extends BaseFragmentController {
     @Override
     public void onResume() {
         if (DEBUG) Log.d(TAG, "onResume()");
-        ((MainActivity) mMainFragment.getActivity()).title.setText("功能列表");
+        if (mMainFragment.getActivity() instanceof MainActivity) {
+            ((MainActivity) mMainFragment.getActivity()).title.setText("功能列表");
+        }
     }
 
     @Override
@@ -134,7 +136,7 @@ public class MainFragmentController extends BaseFragmentController {
 
     public Object onEvent(int what, Object object) {
         Object result = null;
-        switch (what){
+        switch (what) {
 
             default:
         }
@@ -406,20 +408,20 @@ public class MainFragmentController extends BaseFragmentController {
         BaseFragment mAppsManagerFragment = new AppsManagerFragment();
         /*mBaseActivity.mMainActivityController.getFragOperManager().enter(mAppsManagerFragment,
                 null);*/
-        FragOperManager.getInstance().enter(mBaseActivity,mAppsManagerFragment,
+        FragOperManager.getInstance().enter(mBaseActivity, mAppsManagerFragment,
                 null);
     }
 
     private void run3() {
         BaseFragment phoneFragment = new PhoneFragment();
 //        mBaseActivity.mMainActivityController.getFragOperManager().enter(phoneFragment, null);
-        FragOperManager.getInstance().enter(mBaseActivity,phoneFragment, null);
+        FragOperManager.getInstance().enter(mBaseActivity, phoneFragment, null);
     }
 
     private void run4() {
         BaseFragment smsFragment = new SmsFragment();
 //        mBaseActivity.mMainActivityController.getFragOperManager().enter(smsFragment, null);
-        FragOperManager.getInstance().enter(mBaseActivity,smsFragment, null);
+        FragOperManager.getInstance().enter(mBaseActivity, smsFragment, null);
     }
 
     private void run5() {
@@ -448,7 +450,7 @@ public class MainFragmentController extends BaseFragmentController {
     private void run8() {
         BaseFragment settingsFragment = new SettingsFragment();
 //        mBaseActivity.mMainActivityController.getFragOperManager().enter(settingsFragment, null);
-        FragOperManager.getInstance().enter(mBaseActivity,settingsFragment, null);
+        FragOperManager.getInstance().enter(mBaseActivity, settingsFragment, null);
     }
 
     private void run9() {
@@ -492,7 +494,7 @@ public class MainFragmentController extends BaseFragmentController {
         /*mBaseActivity.mMainActivityController.getFragOperManager().enter(
                 dataBackupAndRestoreFragment, null);*/
         FragOperManager.getInstance().enter(
-                mBaseActivity,dataBackupAndRestoreFragment, null);
+                mBaseActivity, dataBackupAndRestoreFragment, null);
     }
 
     private void run15() {

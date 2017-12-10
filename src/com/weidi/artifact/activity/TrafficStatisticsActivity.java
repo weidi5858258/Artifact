@@ -116,11 +116,10 @@ public class TrafficStatisticsActivity extends Activity implements OnClickListen
         switch (v.getId()) {
             case R.id.bt_trafficstatistics_conn: {//设置
                 // test
-                Log.d("TrafficStatisticsActivity", "onClick()");
-                startActivity(new Intent(this, CameraActivity.class));
+                /*Log.d("TrafficStatisticsActivity", "onClick()");
+                startActivity(new Intent(this, CameraActivity.class));*/
 
-
-                /*int traffic = sp.getInt("traffic", 0);
+                int traffic = sp.getInt("traffic", 0);
                 dialog = new InputDialog(mContext, traffic, new android.os.Handler.Callback() {
                     @Override
                     public boolean handleMessage(Message msg) {
@@ -128,7 +127,7 @@ public class TrafficStatisticsActivity extends Activity implements OnClickListen
                         return false;
                     }
                 });
-                dialog.show();*/
+                dialog.show();
                 break;
             }
             case R.id.bt_trafficstatistics_sms: {//设置

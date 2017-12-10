@@ -98,7 +98,8 @@ public class DataBackupAndRestoreFragmentController extends BaseFragmentControll
                 break;
 
             case R.id.settings_showusbdebug:
-                FragOperManager.getInstance().enter(mBaseActivity, new QrCodeFragment(), null);
+                // test
+                // FragOperManager.getInstance().enter(mBaseActivity, new QrCodeFragment(), null);
                 break;
 
             default:

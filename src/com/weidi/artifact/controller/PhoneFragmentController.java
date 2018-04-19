@@ -2,7 +2,6 @@ package com.weidi.artifact.controller;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,13 +15,12 @@ import com.weidi.artifact.activity.MainActivity;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.basecontroller.BaseFragmentController;
 import com.weidi.artifact.fragment.PhoneFragment;
-import com.weidi.artifact.fragment.SmsFragment;
 import com.weidi.artifact.modle.Sms;
 import com.weidi.customadapter.CustomRecyclerViewAdapter;
 import com.weidi.customadapter.CustomViewHolder;
 import com.weidi.customadapter.listener.OnItemClickListener;
 import com.weidi.dbutil.SimpleDao;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
 
@@ -50,14 +48,14 @@ public class PhoneFragmentController extends BaseFragmentController {
 
     @Override
     public void beforeInitView() {
-        if (DEBUG) Log.d(TAG, "beforeInitView()");
+        if (DEBUG) MLog.d(TAG, "beforeInitView()");
         mSmsList.clear();
     }
 
     public void afterInitView(LayoutInflater inflater,
                               ViewGroup container,
                               Bundle savedInstanceState) {
-        if (DEBUG) Log.d(TAG, "afterInitView():savedInstanceState = " + savedInstanceState);
+        if (DEBUG) MLog.d(TAG, "afterInitView():savedInstanceState = " + savedInstanceState);
         if (savedInstanceState == null) {
             init();
         }
@@ -65,23 +63,23 @@ public class PhoneFragmentController extends BaseFragmentController {
 
     @Override
     public void onResume() {
-        if (DEBUG) Log.d(TAG, "onResume()");
+        if (DEBUG) MLog.d(TAG, "onResume()");
         ((MainActivity) mPhoneFragment.getActivity()).title.setText("电话");
     }
 
     @Override
     public void onPause() {
-        if (DEBUG) Log.d(TAG, "onPause()");
+        if (DEBUG) MLog.d(TAG, "onPause()");
     }
 
     @Override
     public void onStop() {
-        if (DEBUG) Log.d(TAG, "onStop()");
+        if (DEBUG) MLog.d(TAG, "onStop()");
     }
 
     @Override
     public void onDestroy() {
-        if (DEBUG) Log.d(TAG, "onDestroy()");
+        if (DEBUG) MLog.d(TAG, "onDestroy()");
     }
 
     public void onClick(View view) {

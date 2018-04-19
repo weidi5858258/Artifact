@@ -14,7 +14,7 @@ import com.weidi.artifact.controller.AppsOperationDialogFragmentController;
 import com.weidi.fragment.base.BaseDialogFragment;
 import com.weidi.inject.InjectOnClick;
 import com.weidi.inject.InjectView;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 
 /**
  * Created by root on 17-1-13.
@@ -44,7 +44,7 @@ public class AppsOperationDialogFragment extends BaseDialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         if (DEBUG)
-            Log.d(TAG, "onAttach(): activity = " + activity);
+            MLog.d(TAG, "onAttach(): activity = " + activity);
         mAppsOperationDialogFragmentController = new AppsOperationDialogFragmentController(this);
         mAppsOperationDialogFragmentController.beforeInitView();
     }
@@ -113,7 +113,7 @@ public class AppsOperationDialogFragment extends BaseDialogFragment {
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if (DEBUG) Log.d(TAG, "onHiddenChanged():hidden = " + hidden);
+        if (DEBUG) MLog.d(TAG, "onHiddenChanged():hidden = " + hidden);
         if (hidden) {
             mAppsOperationDialogFragmentController.onPause();
         } else {

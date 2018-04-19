@@ -19,7 +19,7 @@ import com.weidi.artifact.modle.Image;
 import com.weidi.customadapter.CustomRecyclerViewAdapter;
 import com.weidi.customadapter.CustomViewHolder;
 import com.weidi.customadapter.listener.OnItemClickListener;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
 import com.weidi.volley.image.ImageVolley;
@@ -46,14 +46,14 @@ public class TestImageFragmentController extends BaseFragmentController {
 
     @Override
     public void beforeInitView() {
-        if (DEBUG) Log.d(TAG, "beforeInitView()");
+        if (DEBUG) MLog.d(TAG, "beforeInitView()");
         mImageList.clear();
     }
 
     public void afterInitView(LayoutInflater inflater,
                               ViewGroup container,
                               Bundle savedInstanceState) {
-        if (DEBUG) Log.d(TAG, "afterInitView():savedInstanceState = " + savedInstanceState);
+        if (DEBUG) MLog.d(TAG, "afterInitView():savedInstanceState = " + savedInstanceState);
         if (savedInstanceState == null) {
             init();
         }
@@ -61,23 +61,23 @@ public class TestImageFragmentController extends BaseFragmentController {
 
     @Override
     public void onResume() {
-        if (DEBUG) Log.d(TAG, "onResume()");
+        if (DEBUG) MLog.d(TAG, "onResume()");
         ((MainActivity) mTestImageFragment.getActivity()).title.setText("图片");
     }
 
     @Override
     public void onPause() {
-        if (DEBUG) Log.d(TAG, "onPause()");
+        if (DEBUG) MLog.d(TAG, "onPause()");
     }
 
     @Override
     public void onStop() {
-        if (DEBUG) Log.d(TAG, "onStop()");
+        if (DEBUG) MLog.d(TAG, "onStop()");
     }
 
     @Override
     public void onDestroy() {
-        if (DEBUG) Log.d(TAG, "onDestroy()");
+        if (DEBUG) MLog.d(TAG, "onDestroy()");
     }
 
     public void onClick(View view) {
@@ -170,14 +170,14 @@ public class TestImageFragmentController extends BaseFragmentController {
 
                         @Override
                         public void onSuccess(Bitmap result) {
-                            Log.d(TAG, "imageView = " + imageView +
+                            MLog.d(TAG, "imageView = " + imageView +
                                     " layoutPosition = " + layoutPosition);
                             // customViewHolder.setImageBitmap(R.id.iv_image_icon, result);
                         }
 
                         @Override
                         public void onFailed(String response) {
-                            Log.d(TAG, "imageView = " + imageView +
+                            MLog.d(TAG, "imageView = " + imageView +
                                     " layoutPosition = " + layoutPosition +
                                     " onFailed(): " + response);
                             customViewHolder.setImageResource(

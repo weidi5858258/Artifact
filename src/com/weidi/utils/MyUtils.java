@@ -26,9 +26,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.RemoteException;
 import android.os.Vibrator;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.view.Surface;
@@ -39,7 +37,7 @@ import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.db.bean.AppInfos;
 import com.weidi.artifact.db.bean.ProcessInfos;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -62,8 +60,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static com.weidi.artifact.R.id.call;
 
 //import org.apache.http.HttpResponse;
 //import org.apache.http.client.HttpClient;
@@ -648,7 +644,7 @@ public class MyUtils {
     public static void serialKiller(Context context) {//杀后台，不杀前台
         /*ICallSystemMethod call = ((MyApplication) context.getApplicationContext()).getSystemCall();
         if (call == null) {
-            Log.d(TAG, "call == null");
+            MLog.d(TAG, "call == null");
             return;
         }*/
 
@@ -675,7 +671,7 @@ public class MyUtils {
         for (int i = 0; i < mRunningAppProcessInfoListCount; i++) {
             RunningAppProcessInfo processInfo = mRunningAppProcessInfoList.get(i);
             String processName = processInfo.processName;
-            //            Log.d(TAG, "活着的进程名: "+processName);
+            //            MLog.d(TAG, "活着的进程名: "+processName);
 
             for (int j = 0; j < mApplicationInfoListCount; j++) {
                 ApplicationInfo applicationInfo = mApplicationInfoList.get(j);
@@ -690,7 +686,7 @@ public class MyUtils {
 //                                call.forceStopPackage(processName.split(":")[0]);
                             }
 //                            call.forceStopPackage(processName);
-                            Log.d(TAG, "被杀的进程名: " + processName);
+                            MLog.d(TAG, "被杀的进程名: " + processName);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

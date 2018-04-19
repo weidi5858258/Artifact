@@ -10,7 +10,7 @@ import android.text.TextUtils;
 
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.AlarmClockFragmentController;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 import com.weidi.service.BaseService;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
@@ -50,7 +50,7 @@ public class AlarmClockService extends BaseService {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "onCreate()");
+        MLog.d(TAG, "onCreate()");
         EventBusUtils.register(this);
         mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), AlarmClockService.class);
@@ -64,20 +64,20 @@ public class AlarmClockService extends BaseService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand():intent = " + intent);
+        MLog.d(TAG, "onStartCommand():intent = " + intent);
         if (intent == null) {
             return START_STICKY_COMPATIBILITY;
         }
         mDifferTime = intent.getLongExtra(Constant.DIFFERTIME, 0);
         if (mDifferTime > 0) {
-            Log.d(TAG, "onStartCommand():mDifferTime = " + mDifferTime);
+            MLog.d(TAG, "onStartCommand():mDifferTime = " + mDifferTime);
             mAlarmManager.set(AlarmManager.RTC_WAKEUP, mDifferTime, mPendingIntent);
             return super.onStartCommand(intent, flags, startId);
         }
 
         String startAlarmClock = intent.getStringExtra(Constant.STARTALARMCLOCK);
         if (Constant.STARTALARMCLOCK.equals(startAlarmClock)) {
-            Log.d(TAG, "onStartCommand():startAlarmClock = " + startAlarmClock);
+            MLog.d(TAG, "onStartCommand():startAlarmClock = " + startAlarmClock);
             startPlayback();
         }
 
@@ -86,7 +86,7 @@ public class AlarmClockService extends BaseService {
 
     @Override
     public void onDestroy() {
-        Log.d(TAG, "onDestroy()");
+        MLog.d(TAG, "onDestroy()");
         if (mMediaPlayer != null) {
             try {
                 mMediaPlayer.setOnPreparedListener(null);
@@ -149,13 +149,13 @@ public class AlarmClockService extends BaseService {
 
             mMediaPlayer = new MediaPlayer();
             mMediaPlayer.setDataSource(mCurrentPlayMusicPath);
-            Log.d(TAG, "setDataSource(): " + mCurrentPlayMusicPath);
+            MLog.d(TAG, "setDataSource(): " + mCurrentPlayMusicPath);
             mMediaPlayer.prepareAsync();
             mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
                 @Override
                 public void onPrepared(MediaPlayer mp) {
-                    Log.d(TAG, "onPrepared()");
+                    MLog.d(TAG, "onPrepared()");
                     mMediaPlayer.start();
                     if (mHasPlayedMusicPath != null) {
                         mHasPlayedMusicPath.add(mCurrentPlayMusicPath);
@@ -166,7 +166,7 @@ public class AlarmClockService extends BaseService {
 
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    Log.d(TAG, "onCompletion()");
+                    MLog.d(TAG, "onCompletion()");
                     if (mIsPlaying) {
                         synchronized (obj) {
                             mIsPlaying = false;
@@ -175,7 +175,7 @@ public class AlarmClockService extends BaseService {
                     }
                     if (mHasPlayedMusicPath != null
                             && mHasPlayedMusicPath.size() == mMusicPath.length) {
-                        Log.d(TAG, "onDestroy_()");
+                        MLog.d(TAG, "onDestroy_()");
                         onDestroy_();
                     }
                 }
@@ -187,7 +187,7 @@ public class AlarmClockService extends BaseService {
     }
 
     private void startPlayback() {
-        Log.d(TAG, "startPlayback():音乐响起");
+        MLog.d(TAG, "startPlayback():音乐响起");
         // EventBusUtils.post(Constant.TRANSPORT_TIME_COMPLETE, null);
         MyToast.show("音乐响起");
 

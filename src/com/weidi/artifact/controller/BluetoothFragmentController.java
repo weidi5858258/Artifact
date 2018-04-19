@@ -3,8 +3,6 @@ package com.weidi.artifact.controller;
 import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothProfile;
-import android.bluetooth.BluetoothSocket;
 //import android.bluetooth.BluetoothUuid;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -12,8 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.ParcelUuid;
-import android.os.RemoteException;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +19,6 @@ import android.widget.CompoundButton;
 import com.weidi.artifact.R;
 import com.weidi.artifact.activity.MainActivity;
 import com.weidi.artifact.adapter.DevicesAdapter;
-import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.basecontroller.BaseFragmentController;
 import com.weidi.artifact.fragment.BluetoothFragment;
@@ -32,17 +27,14 @@ import com.weidi.artifact.modle.BTDevice;
 import com.weidi.customadapter.listener.OnItemClickListener;
 import com.weidi.dbutil.SimpleDao;
 import com.weidi.listener.OnResultListener;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 import com.weidi.threadpool.ThreadPool;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE;
-import static com.weidi.artifact.constant.Constant.FIXEDTHREADPOOLCOUNT;
 
 /**
  * Created by root on 17-1-13.
@@ -73,13 +65,13 @@ public class BluetoothFragmentController extends BaseFragmentController {
 
     @Override
     public void beforeInitView() {
-        if (DEBUG) Log.d(TAG, "beforeInitView()");
+        if (DEBUG) MLog.d(TAG, "beforeInitView()");
     }
 
     public void afterInitView(LayoutInflater inflater,
                               ViewGroup container,
                               Bundle savedInstanceState) {
-        if (DEBUG) Log.d(TAG, "afterInitView():savedInstanceState = " + savedInstanceState);
+        if (DEBUG) MLog.d(TAG, "afterInitView():savedInstanceState = " + savedInstanceState);
         if (savedInstanceState == null) {
             init();
         }
@@ -87,23 +79,23 @@ public class BluetoothFragmentController extends BaseFragmentController {
 
     @Override
     public void onResume() {
-        if (DEBUG) Log.d(TAG, "onResume()");
+        if (DEBUG) MLog.d(TAG, "onResume()");
         ((MainActivity) mBluetoothFragment.getActivity()).title.setText("蓝牙");
     }
 
     @Override
     public void onPause() {
-        if (DEBUG) Log.d(TAG, "onPause()");
+        if (DEBUG) MLog.d(TAG, "onPause()");
     }
 
     @Override
     public void onStop() {
-        if (DEBUG) Log.d(TAG, "onStop()");
+        if (DEBUG) MLog.d(TAG, "onStop()");
     }
 
     @Override
     public void onDestroy() {
-        if (DEBUG) Log.d(TAG, "onDestroy()");
+        if (DEBUG) MLog.d(TAG, "onDestroy()");
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -351,7 +343,7 @@ public class BluetoothFragmentController extends BaseFragmentController {
 //                            .INPUT_DEVICE);
 //                    int pan = mICallSystemMethod.getProfileConnectionState(BluetoothProfile.PAN);
 //                    int pbap = mICallSystemMethod.getProfileConnectionState(BluetoothProfile.PBAP);
-//                    Log.d(TAG, "headset = " + headset +
+//                    MLog.d(TAG, "headset = " + headset +
 //                            " a2dp = " + a2dp +
 //                            " health = " + health +
 //                            " input = " + input +
@@ -365,7 +357,7 @@ public class BluetoothFragmentController extends BaseFragmentController {
                                 BluetoothUuid.isUuidPresent(uuids, BluetoothUuid.HSP)) ||
                                 (BluetoothUuid.isUuidPresent(localUuids, BluetoothUuid.Handsfree_AG) &&
                                         BluetoothUuid.isUuidPresent(uuids, BluetoothUuid.Handsfree))) {
-                            Log.d(TAG, "Adding local HEADSET profile");
+                            MLog.d(TAG, "Adding local HEADSET profile");
                         }
 
                         ParcelUuid[] SINK_UUIDS = {
@@ -373,11 +365,11 @@ public class BluetoothFragmentController extends BaseFragmentController {
                                 BluetoothUuid.AdvAudioDist,
                         };
                         if (BluetoothUuid.containsAnyUuid(uuids, SINK_UUIDS)) {
-                            Log.d(TAG, "Adding local A2DP profile");
+                            MLog.d(TAG, "Adding local A2DP profile");
                         }
 
                         if (BluetoothUuid.isUuidPresent(uuids, BluetoothUuid.ObexObjectPush)) {
-                            Log.d(TAG, "Adding local OPP profile");
+                            MLog.d(TAG, "Adding local OPP profile");
                         }
 
                         if (BluetoothUuid.isUuidPresent(uuids, BluetoothUuid.Hid)){
@@ -410,7 +402,7 @@ public class BluetoothFragmentController extends BaseFragmentController {
                         boolean result2 = mICallSystemMethod.connectA2dp(mBluetoothDevice);
                         int state1 = mICallSystemMethod.getConnectionStateHeadset(mBluetoothDevice);
                         int state2 = mICallSystemMethod.getConnectionStateA2dp(mBluetoothDevice);
-                        Log.d(TAG, "result1 = " + result1+
+                        MLog.d(TAG, "result1 = " + result1+
                         " result2 = "+result2+
                         " state1 = "+state1+
                         " state2 = "+state2);*/
@@ -425,7 +417,7 @@ public class BluetoothFragmentController extends BaseFragmentController {
                     /*try {
                         boolean result = mICallSystemMethod.connectA2dp(mBluetoothDevice);
                         int state = mICallSystemMethod.getConnectionStateA2dp(mBluetoothDevice);
-                        Log.d(TAG, "resultA2dp = " + result);
+                        MLog.d(TAG, "resultA2dp = " + result);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }*/

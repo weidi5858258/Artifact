@@ -10,10 +10,9 @@ import android.widget.TextView;
 import com.weidi.activity.base.BaseActivity;
 import com.weidi.artifact.R;
 import com.weidi.artifact.controller.MainActivityController;
-import com.weidi.fragment.base.BaseFragment;
 import com.weidi.inject.InjectLayout;
 import com.weidi.inject.InjectView;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 
 @InjectLayout(R.layout.activity_main)
 public class MainActivity extends BaseActivity
@@ -36,7 +35,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (DEBUG) Log.d(TAG, "onCreate():savedInstanceState = " + savedInstanceState);
+        if (DEBUG) MLog.d(TAG, "onCreate():savedInstanceState = " + savedInstanceState);
         mMainActivityController = new MainActivityController(this);
         super.onCreate(savedInstanceState);
         mMainActivityController.onCreate(savedInstanceState);
@@ -45,41 +44,41 @@ public class MainActivity extends BaseActivity
     @Override
     public void onStart() {
         super.onStart();
-        if (DEBUG) Log.d(TAG, "onStart()");
+        if (DEBUG) MLog.d(TAG, "onStart()");
         mMainActivityController.onStart();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (DEBUG) Log.d(TAG, "onRestart()");
+        if (DEBUG) MLog.d(TAG, "onRestart()");
         mMainActivityController.onRestart();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (DEBUG) Log.d(TAG, "onResume()");
+        if (DEBUG) MLog.d(TAG, "onResume()");
         mMainActivityController.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (DEBUG) Log.d(TAG, "onPause()");
+        if (DEBUG) MLog.d(TAG, "onPause()");
         mMainActivityController.onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (DEBUG) Log.d(TAG, "onStop()");
+        if (DEBUG) MLog.d(TAG, "onStop()");
         mMainActivityController.onStop();
     }
 
     @Override
     public void onDestroy() {
-        if (DEBUG) Log.d(TAG, "onDestroy()");
+        if (DEBUG) MLog.d(TAG, "onDestroy()");
         mMainActivityController.onDestroy();
         super.onDestroy();
     }
@@ -87,7 +86,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (DEBUG) Log.d(TAG, "onBackPressed()");
+        if (DEBUG) MLog.d(TAG, "onBackPressed()");
         // super.onBackPressed();
     }
 
@@ -98,7 +97,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (DEBUG)
-            Log.d(TAG, "onActivityResult():requestCode = " + requestCode +
+            MLog.d(TAG, "onActivityResult():requestCode = " + requestCode +
                     " resultCode = " + resultCode +
                     " data = " + data);
         // super.onActivityResult(requestCode, resultCode, data);
@@ -108,7 +107,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void onSaveInstanceState(Bundle outState) {
         if (DEBUG)
-            Log.d(TAG, "onSaveInstanceState():outState = " + outState);
+            MLog.d(TAG, "onSaveInstanceState():outState = " + outState);
         mMainActivityController.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }
@@ -116,7 +115,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         if (DEBUG)
-            Log.d(TAG, "onRestoreInstanceState():savedInstanceState = " + savedInstanceState);
+            MLog.d(TAG, "onRestoreInstanceState():savedInstanceState = " + savedInstanceState);
         mMainActivityController.onRestoreInstanceState(savedInstanceState);
         super.onRestoreInstanceState(savedInstanceState);
     }
@@ -128,7 +127,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         if (DEBUG)
-            Log.d(TAG, "onConfigurationChanged():newConfig = " + newConfig);
+            MLog.d(TAG, "onConfigurationChanged():newConfig = " + newConfig);
         mMainActivityController.onConfigurationChanged(newConfig);
         super.onConfigurationChanged(newConfig);
     }

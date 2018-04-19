@@ -1,7 +1,5 @@
 package com.weidi.artifact.controller;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -9,18 +7,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.view.SurfaceHolder;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.weidi.artifact.activity.CameraActivity;
 import com.weidi.artifact.controller.basecontroller.BaseActivityController;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 import com.weidi.threadpool.ThreadPool;
 
 import java.io.File;
@@ -114,23 +109,23 @@ public class CameraActivityController extends BaseActivityController {
     private void initCamera() {
         // 如果存在摄像头
         if (checkCameraHardware(mContext)) {
-            Log.d(TAG, "initCamera(): 存在摄像头");
+            MLog.d(TAG, "initCamera(): 存在摄像头");
             // 获取摄像头（首选前置，无前置选后置）
             if (openFacingFrontCamera(0)) {
-                Log.d(TAG, "initCamera(): 开启摄像头成功");
+                MLog.d(TAG, "initCamera(): 开启摄像头成功");
                 // 开启摄像头成功
 
                 // 进行对焦
                 autoFocus();
 
             } else {
-                Log.d(TAG, "initCamera(): 开启摄像头失败");
+                MLog.d(TAG, "initCamera(): 开启摄像头失败");
                 // 开启摄像头失败就关闭服务然后退出
 
             }
 
         } else {
-            Log.d(TAG, "initCamera(): 没有摄像头");
+            MLog.d(TAG, "initCamera(): 没有摄像头");
             // 没有摄像头的话就关闭服务然后退出
 
         }
@@ -138,7 +133,7 @@ public class CameraActivityController extends BaseActivityController {
 
     // 对焦并拍照
     private void autoFocus() {
-        Log.d(TAG, "autoFocus(): 对焦并拍照1");
+        MLog.d(TAG, "autoFocus(): 对焦并拍照1");
         SystemClock.sleep(2000);
         // 自动对焦(现在不能这样了,不知道为什么)
         //        myCamera.autoFocus(myAutoFocus);
@@ -146,7 +141,7 @@ public class CameraActivityController extends BaseActivityController {
         //        myCamera.autoFocus(myAutoFocus);
         // 对焦后拍照
         myCamera.takePicture(null, null, mPictureCallback);
-        Log.d(TAG, "autoFocus(): 对焦并拍照2");
+        MLog.d(TAG, "autoFocus(): 对焦并拍照2");
     }
 
     // 判断是否存在摄像头
@@ -232,7 +227,7 @@ public class CameraActivityController extends BaseActivityController {
     private Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            Log.d(TAG, "onPictureTaken(): 拍照成功回调函数");
+            MLog.d(TAG, "onPictureTaken(): 拍照成功回调函数");
             try {
                 // 完成拍照后关闭Activity
                 mCameraActivity.finish();

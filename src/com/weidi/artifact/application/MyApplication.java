@@ -25,7 +25,7 @@ import com.weidi.artifact.modle.RawContacts;
 import com.weidi.artifact.modle.Sms;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.dbutil.DbUtils;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
 import com.weidi.utils.MyUtils;
@@ -77,7 +77,7 @@ public class MyApplication extends WeidiApplication implements ServiceConnection
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
 //        mICallSystemMethod = ICallSystemMethod.Stub.asInterface(service);
-//        Log.d(TAG, "mICallSystemMethod = " + mICallSystemMethod);
+//        MLog.d(TAG, "mICallSystemMethod = " + mICallSystemMethod);
     }
 
     @Override
@@ -165,7 +165,7 @@ public class MyApplication extends WeidiApplication implements ServiceConnection
                                 tableNameClass);
                         Runtime rt = Runtime.getRuntime();
                         long maxMemory = rt.maxMemory();
-                        Log.d("maxMemory:", Long.toString(maxMemory / (1024 * 1024)));
+                        MLog.d("maxMemory:", Long.toString(maxMemory / (1024 * 1024)));
                         return null;
                     }
 
@@ -191,7 +191,7 @@ public class MyApplication extends WeidiApplication implements ServiceConnection
         MyToast.getInstance();
         EventBus.getDefault();
 
-        Log.init();*/
+        MLog.init();*/
 
         /*// 初始化sdk
         JPushInterface.setDebugMode(true);//正式版的时候设置false，关闭调试

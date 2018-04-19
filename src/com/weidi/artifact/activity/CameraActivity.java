@@ -10,7 +10,7 @@ import com.weidi.activity.base.BaseActivity;
 import com.weidi.artifact.controller.CameraActivityController;
 import com.weidi.inject.InjectLayout;
 import com.weidi.inject.InjectView;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 
 //做一个没有焦点的弹出框
 @InjectLayout(R.layout.activity_camera)
@@ -26,7 +26,7 @@ public class CameraActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        if (DEBUG) Log.d(TAG, "onCreate():savedInstanceState = " + savedInstanceState);
+        if (DEBUG) MLog.d(TAG, "onCreate():savedInstanceState = " + savedInstanceState);
         mCameraActivityController = new CameraActivityController(this);
         mCameraActivityController.onCreate(savedInstanceState);
         //		// 全屏
@@ -37,34 +37,34 @@ public class CameraActivity extends BaseActivity {
     @Override
     public void onStart() {
         super.onStart();
-        if (DEBUG) Log.d(TAG, "onStart()");
+        if (DEBUG) MLog.d(TAG, "onStart()");
         mCameraActivityController.onStart();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (DEBUG) Log.d(TAG, "onResume()");
+        if (DEBUG) MLog.d(TAG, "onResume()");
         mCameraActivityController.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (DEBUG) Log.d(TAG, "onPause()");
+        if (DEBUG) MLog.d(TAG, "onPause()");
         mCameraActivityController.onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (DEBUG) Log.d(TAG, "onStop()");
+        if (DEBUG) MLog.d(TAG, "onStop()");
         mCameraActivityController.onStop();
     }
 
     @Override
     public void onDestroy() {
-        if (DEBUG) Log.d(TAG, "onDestroy()");
+        if (DEBUG) MLog.d(TAG, "onDestroy()");
         mCameraActivityController.onDestroy();
         super.onDestroy();
     }

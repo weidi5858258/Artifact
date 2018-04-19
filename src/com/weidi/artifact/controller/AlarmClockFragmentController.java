@@ -15,7 +15,7 @@ import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.basecontroller.BaseFragmentController;
 import com.weidi.artifact.fragment.AlarmClockFragment;
 import com.weidi.artifact.service.AlarmClockService;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 import com.weidi.timepicker.TimePickerDialog;
 import com.weidi.timepicker.data.Type;
 import com.weidi.utils.EventBusUtils;
@@ -49,13 +49,13 @@ public class AlarmClockFragmentController extends BaseFragmentController {
 
     @Override
     public void beforeInitView() {
-        if (DEBUG) Log.d(TAG, "beforeInitView()");
+        if (DEBUG) MLog.d(TAG, "beforeInitView()");
     }
 
     public void afterInitView(LayoutInflater inflater,
                               ViewGroup container,
                               Bundle savedInstanceState) {
-        if (DEBUG) Log.d(TAG, "afterInitView():savedInstanceState = " + savedInstanceState);
+        if (DEBUG) MLog.d(TAG, "afterInitView():savedInstanceState = " + savedInstanceState);
         if (savedInstanceState == null) {
             init();
         }
@@ -63,7 +63,7 @@ public class AlarmClockFragmentController extends BaseFragmentController {
 
     @Override
     public void onResume() {
-        if (DEBUG) Log.d(TAG, "onResume()");
+        if (DEBUG) MLog.d(TAG, "onResume()");
         ((MainActivity) mAlarmClockFragment.getActivity()).title.setText("设置闹钟");
         if (MyUtils.isSpecificServiceAlive(
                 mContext, "com.weidi.artifact.service.AlarmClockService")) {
@@ -79,17 +79,17 @@ public class AlarmClockFragmentController extends BaseFragmentController {
 
     @Override
     public void onPause() {
-        if (DEBUG) Log.d(TAG, "onPause()");
+        if (DEBUG) MLog.d(TAG, "onPause()");
     }
 
     @Override
     public void onStop() {
-        if (DEBUG) Log.d(TAG, "onStop()");
+        if (DEBUG) MLog.d(TAG, "onStop()");
     }
 
     @Override
     public void onDestroy() {
-        if (DEBUG) Log.d(TAG, "onDestroy()");
+        if (DEBUG) MLog.d(TAG, "onDestroy()");
         EventBusUtils.unregister(mAlarmClockFragment);
     }
 

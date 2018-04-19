@@ -17,7 +17,7 @@ import com.weidi.artifact.controller.QrCodeFragmentController;
 import com.weidi.fragment.base.BaseFragment;
 import com.weidi.inject.InjectOnClick;
 import com.weidi.inject.InjectView;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 
 /**
  * Created by root on 17-1-13.
@@ -51,7 +51,7 @@ public class QrCodeFragment extends BaseFragment implements ILifeCycle {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         if (DEBUG)
-            Log.d(TAG, "onAttach(): activity = " + activity);
+            MLog.d(TAG, "onAttach(): activity = " + activity);
         mQrCodeFragmentController = new QrCodeFragmentController(this);
         mQrCodeFragmentController.beforeInitView();
     }
@@ -59,7 +59,7 @@ public class QrCodeFragment extends BaseFragment implements ILifeCycle {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (DEBUG) Log.d(TAG, "onCreate():savedInstanceState = " + savedInstanceState);
+        if (DEBUG) MLog.d(TAG, "onCreate():savedInstanceState = " + savedInstanceState);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class QrCodeFragment extends BaseFragment implements ILifeCycle {
             LayoutInflater inflater,
             ViewGroup container,
             Bundle savedInstanceState) {
-        if (DEBUG) Log.d(TAG, "onCreateView():savedInstanceState = " + savedInstanceState);
+        if (DEBUG) MLog.d(TAG, "onCreateView():savedInstanceState = " + savedInstanceState);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -75,53 +75,53 @@ public class QrCodeFragment extends BaseFragment implements ILifeCycle {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (DEBUG)
-            Log.d(TAG, "onActivityCreated(): savedInstanceState = " + savedInstanceState);
+            MLog.d(TAG, "onActivityCreated(): savedInstanceState = " + savedInstanceState);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         if (DEBUG)
-            Log.d(TAG, "onStart()");
+            MLog.d(TAG, "onStart()");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (DEBUG) Log.d(TAG, "onResume()");
+        if (DEBUG) MLog.d(TAG, "onResume()");
         mQrCodeFragmentController.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (DEBUG) Log.d(TAG, "onPause()");
+        if (DEBUG) MLog.d(TAG, "onPause()");
         mQrCodeFragmentController.onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (DEBUG) Log.d(TAG, "onStop()");
+        if (DEBUG) MLog.d(TAG, "onStop()");
         mQrCodeFragmentController.onStop();
     }
 
     @Override
     public void onDestroyView() {
-        if (DEBUG) Log.d(TAG, "onDestroyView()");
+        if (DEBUG) MLog.d(TAG, "onDestroyView()");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        if (DEBUG) Log.d(TAG, "onDestroy()");
+        if (DEBUG) MLog.d(TAG, "onDestroy()");
         mQrCodeFragmentController.onDestroy();
         super.onDestroy();
     }
 
     @Override
     public void onDetach() {
-        if (DEBUG) Log.d(TAG, "onDetach()");
+        if (DEBUG) MLog.d(TAG, "onDetach()");
         super.onDetach();
     }
 
@@ -168,7 +168,7 @@ public class QrCodeFragment extends BaseFragment implements ILifeCycle {
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if (DEBUG) Log.d(TAG, "onHiddenChanged():hidden = " + hidden);
+        if (DEBUG) MLog.d(TAG, "onHiddenChanged():hidden = " + hidden);
         if (hidden) {
             mQrCodeFragmentController.onPause();
         } else {

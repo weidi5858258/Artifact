@@ -8,7 +8,7 @@ import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.service.AppsLockService;
 import com.weidi.artifact.service.CoreService;
 import com.weidi.artifact.service.PeriodicalSerialKillerService;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 import com.weidi.utils.MyUtils;
 
 /**
@@ -28,7 +28,7 @@ public class CoreServiceBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "onReceive():intent = " + intent);
+        MLog.d(TAG, "onReceive():intent = " + intent);
         // 开启核心服务
         if (!MyUtils.isSpecificServiceAlive(
                 context,

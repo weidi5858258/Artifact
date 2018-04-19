@@ -26,7 +26,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.modle.Event;
 import com.weidi.dbutil.SimpleDao;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 import com.weidi.threadpool.ThreadPool;
 import com.weidi.utils.EventBusUtils;
 import com.weidi.utils.MyToast;
@@ -73,64 +73,64 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
     public void onAccessibilityEvent(AccessibilityEvent event) {
         switch (event.getEventType()) {
             case AccessibilityEvent.TYPE_ANNOUNCEMENT:
-                Log.d(TAG, "AccessibilityEvent.TYPE_ANNOUNCEMENT");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_ANNOUNCEMENT");
                 break;
             case AccessibilityEvent.TYPE_GESTURE_DETECTION_END:
-                Log.d(TAG, "AccessibilityEvent.TYPE_GESTURE_DETECTION_END");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_GESTURE_DETECTION_END");
                 break;
             case AccessibilityEvent.TYPE_GESTURE_DETECTION_START:
-                Log.d(TAG, "AccessibilityEvent.TYPE_GESTURE_DETECTION_START");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_GESTURE_DETECTION_START");
                 break;
             case AccessibilityEvent.TYPE_TOUCH_EXPLORATION_GESTURE_END:
-                Log.d(TAG, "AccessibilityEvent.TYPE_TOUCH_EXPLORATION_GESTURE_END");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_TOUCH_EXPLORATION_GESTURE_END");
                 break;
             case AccessibilityEvent.TYPE_TOUCH_EXPLORATION_GESTURE_START:
-                Log.d(TAG, "AccessibilityEvent.TYPE_TOUCH_EXPLORATION_GESTURE_START");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_TOUCH_EXPLORATION_GESTURE_START");
                 break;
             case AccessibilityEvent.TYPE_TOUCH_INTERACTION_END:
-                Log.d(TAG, "AccessibilityEvent.TYPE_TOUCH_INTERACTION_END");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_TOUCH_INTERACTION_END");
                 break;
             case AccessibilityEvent.TYPE_TOUCH_INTERACTION_START:
-                Log.d(TAG, "AccessibilityEvent.TYPE_TOUCH_INTERACTION_START");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_TOUCH_INTERACTION_START");
                 break;
             case AccessibilityEvent.TYPE_VIEW_CLICKED:
-                Log.d(TAG, "AccessibilityEvent.TYPE_VIEW_CLICKED");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_VIEW_CLICKED");
                 break;
             case AccessibilityEvent.TYPE_VIEW_LONG_CLICKED:
-                Log.d(TAG, "AccessibilityEvent.TYPE_VIEW_LONG_CLICKED");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_VIEW_LONG_CLICKED");
                 break;
             case AccessibilityEvent.TYPE_VIEW_SELECTED:
-                Log.d(TAG, "AccessibilityEvent.TYPE_VIEW_SELECTED");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_VIEW_SELECTED");
                 break;
             case AccessibilityEvent.TYPE_VIEW_FOCUSED:
-                Log.d(TAG, "AccessibilityEvent.TYPE_VIEW_FOCUSED");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_VIEW_FOCUSED");
                 break;
             case AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED:
-                Log.d(TAG, "AccessibilityEvent.TYPE_ANNOUNCEMENT");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_ANNOUNCEMENT");
                 break;
             case AccessibilityEvent.TYPE_VIEW_HOVER_ENTER:
-                Log.d(TAG, "AccessibilityEvent.TYPE_VIEW_HOVER_ENTER");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_VIEW_HOVER_ENTER");
                 break;
             case AccessibilityEvent.TYPE_VIEW_HOVER_EXIT:
-                Log.d(TAG, "AccessibilityEvent.TYPE_VIEW_HOVER_EXIT");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_VIEW_HOVER_EXIT");
                 break;
             case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
-                Log.d(TAG, "AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED");
                 break;
             case AccessibilityEvent.TYPE_VIEW_SCROLLED:
-                Log.d(TAG, "AccessibilityEvent.TYPE_VIEW_SCROLLED");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_VIEW_SCROLLED");
                 break;
             case AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED:
-                Log.d(TAG, "AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED");
                 break;
             case AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED:
-                Log.d(TAG, "AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED");
                 break;
             case AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED:
-                Log.d(TAG, "AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED");
                 break;
             case AccessibilityEvent.TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY:
-                Log.d(TAG, "AccessibilityEvent.TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY");
+                MLog.d(TAG, "AccessibilityEvent.TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY");
                 break;
             case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
                 // 通知栏事件
@@ -143,13 +143,13 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
                 break;
             
             /*case AccessibilityEvent.TYPE_ASSIST_READING_CONTEXT:
-                Log.d(TAG,"AccessibilityEvent.TYPE_ASSIST_READING_CONTEXT");
+                MLog.d(TAG,"AccessibilityEvent.TYPE_ASSIST_READING_CONTEXT");
                 break;
             case AccessibilityEvent.TYPE_WINDOWS_CHANGED:
-                Log.d(TAG,"AccessibilityEvent.TYPE_WINDOWS_CHANGED");
+                MLog.d(TAG,"AccessibilityEvent.TYPE_WINDOWS_CHANGED");
                 break;
             case AccessibilityEvent.TYPE_VIEW_CONTEXT_CLICKED:
-                Log.d(TAG,"AccessibilityEvent.TYPE_VIEW_CONTEXT_CLICKED");
+                MLog.d(TAG,"AccessibilityEvent.TYPE_VIEW_CONTEXT_CLICKED");
                 break;*/
 
             default:
@@ -206,11 +206,11 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
 
         EventBusUtils.register(this);
 
-        Log.d(TAG, "成功连接上AccessibilityService服务");
+        MLog.d(TAG, "成功连接上AccessibilityService服务");
     }
 
     private void type_notification_state_changed(AccessibilityEvent event) {
-        Log.d(TAG, "有通知来了...");
+        MLog.d(TAG, "有通知来了...");
         List<CharSequence> texts = event.getText();
         if (texts == null || texts.isEmpty()) {
             return;
@@ -221,12 +221,12 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
          event.getClassName() = android.app.Notification
          张    丹: 可口可乐
          */
-        Log.d(TAG, "event.getBeforeText() = " + event.getBeforeText());
-        Log.d(TAG, "event.getPackageName() = " + event.getPackageName());
-        Log.d(TAG, "event.getClassName() = " + event.getClassName());
+        MLog.d(TAG, "event.getBeforeText() = " + event.getBeforeText());
+        MLog.d(TAG, "event.getPackageName() = " + event.getPackageName());
+        MLog.d(TAG, "event.getClassName() = " + event.getClassName());
         for (CharSequence text : texts) {
             String content = text.toString();
-            Log.d(TAG, content);
+            MLog.d(TAG, content);
             if (content.contains("[微信红包]")) {
                 if (!mIsScreenOn) {
                     openScreen();
@@ -242,7 +242,7 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
                         startThread = true;
                         mIsHongBaoInfo = true;
                         hongBaoCount++;
-                        Log.d(TAG, "红包到来...");
+                        MLog.d(TAG, "红包到来...");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -259,7 +259,7 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
      */
     private void type_window_state_changed(AccessibilityEvent event) {
         String className = event.getClassName().toString();
-        Log.d(TAG, className);
+        MLog.d(TAG, className);
         if ("com.tencent.mm.ui.LauncherUI".equals(className)) {
 
             if (mIsHongBaoInfo) {
@@ -342,15 +342,15 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
     private boolean flag = false;
 
     private void getPacket() {
-        Log.d(TAG, "开始抢红包啦");
+        MLog.d(TAG, "开始抢红包啦");
         AccessibilityNodeInfo rootNode = getRootInActiveWindow();
         if (rootNode == null) {
-            Log.d(TAG, "AccessibilityNodeInfo对象为null");
+            MLog.d(TAG, "AccessibilityNodeInfo对象为null");
             return;
         }
 
         childCount = rootNode.getChildCount();
-        Log.d(TAG, "rootNode.getChildCount() = " + childCount);
+        MLog.d(TAG, "rootNode.getChildCount() = " + childCount);
 
         if (childCount == 6) {
             flag = true;
@@ -383,7 +383,7 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
             if (child == null) {
                 return;
             }
-            Log.d(TAG, child.toString() + " " + child.getChildCount());
+            MLog.d(TAG, child.toString() + " " + child.getChildCount());
             recycle(child);
 
             //            AccessibilityNodeInfo child = null;
@@ -403,11 +403,11 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
             //                        boundsInScreen.top == 146 &&
             //                        boundsInScreen.right == 720 &&
             //                        boundsInScreen.bottom == 1280) {
-            //                    Log.d(TAG,"-" + child.toString() + " " +
+            //                    MLog.d(TAG,"-" + child.toString() + " " +
             // child.getChildCount() + " i = " + i);
             //                    recycle(child);
             //                }
-            //                Log.d(TAG,"=========>" + child.toString() + " " + child
+            //                MLog.d(TAG,"=========>" + child.toString() + " " + child
             // .getChildCount());
             //                recycle(child);
             //            }
@@ -470,7 +470,7 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
             }
 
             //            if(rootNode.isClickable()){
-            //                Log.d(TAG,"----------------" + rootNode.toString());
+            //                MLog.d(TAG,"----------------" + rootNode.toString());
             //                if (!mAccessibilityNodeInfoList.contains(rootNode)) {
             //                    mAccessibilityNodeInfoList.add(rootNode);
             //                }
@@ -485,8 +485,8 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
                 }
             } else {
                 if (rootNode.getParent() != null) {
-                    //                    Log.d(TAG,"----"+rootNode.toString());
-                    //                    Log.d(TAG,"----------------"+rootNode
+                    //                    MLog.d(TAG,"----"+rootNode.toString());
+                    //                    MLog.d(TAG,"----------------"+rootNode
                     // .getParent().toString());
                     doSomething(rootNode.getParent());
                 }
@@ -597,7 +597,7 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
             //            int count = nodeInfo.getChildCount();// count = 5
             //            for(int i=0;i<count;i++){
             //                AccessibilityNodeInfo node = nodeInfo.getChild(i);
-            //                Log.d(TAG,"--------- i = "+i+" "+node.toString());
+            //                MLog.d(TAG,"--------- i = "+i+" "+node.toString());
             //            }
 
             if (nodeInfo.getChildCount() < 4) {
@@ -605,7 +605,7 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
             }
             AccessibilityNodeInfo clickedNode = nodeInfo.getChild(3);
             if (clickedNode != null) {
-                Log.d(TAG, "恭喜，抢到一个红包");
+                MLog.d(TAG, "恭喜，抢到一个红包");
                 setHongBaoCount();
                 clickedNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 return;
@@ -616,22 +616,22 @@ public class RobMoneyAccessibilityService extends AccessibilityService {
             List<AccessibilityNodeInfo> list2 = nodeInfo.findAccessibilityNodeInfosByText("红包派完了");
             List<AccessibilityNodeInfo> list3 = nodeInfo.findAccessibilityNodeInfosByText("红包已失效");
             if (list == null || list2 == null || list3 == null) {
-                Log.d(TAG, list == null ? "list = null" : "list != null");
-                Log.d(TAG, list2 == null ? "list2 = null" : "list2 != null");
-                Log.d(TAG, list3 == null ? "list3 = null" : "list3 != null");
+                MLog.d(TAG, list == null ? "list = null" : "list != null");
+                MLog.d(TAG, list2 == null ? "list2 = null" : "list2 != null");
+                MLog.d(TAG, list3 == null ? "list3 = null" : "list3 != null");
                 return;
             }
             if (list.size() == 1) {
-                Log.d(TAG, "恭喜，抢到一个红包");
+                MLog.d(TAG, "恭喜，抢到一个红包");
                 setHongBaoCount();
                 list.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
             } else if (list2.size() == 1) {
-                Log.d(TAG, "手慢了，红包派完了");
+                MLog.d(TAG, "手慢了，红包派完了");
                 setHongBaoCount();
                 goBack();
                 list2 = null;
             } else if (list3.size() == 1) {
-                Log.d(TAG, "超过1天未领取，红包已失效");
+                MLog.d(TAG, "超过1天未领取，红包已失效");
                 setHongBaoCount();
                 goBack();
                 list3 = null;

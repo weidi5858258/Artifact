@@ -25,12 +25,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.weidi.activity.base.BaseActivity;
 import com.weidi.artifact.R;
 import com.weidi.artifact.db.dao.PhoneNumberAddressQueryUtils;
-import com.weidi.artifact.fragment.DataBackupAndRestoreFragment;
 import com.weidi.artifact.ui.InputDialog;
-import com.weidi.log.Log;
 import com.weidi.utils.MyToast;
 
 public class TrafficStatisticsActivity extends Activity implements OnClickListener {
@@ -116,7 +113,7 @@ public class TrafficStatisticsActivity extends Activity implements OnClickListen
         switch (v.getId()) {
             case R.id.bt_trafficstatistics_conn: {//设置
                 // test
-                /*Log.d("TrafficStatisticsActivity", "onClick()");
+                /*MLog.d("TrafficStatisticsActivity", "onClick()");
                 startActivity(new Intent(this, CameraActivity.class));*/
 
                 int traffic = sp.getInt("traffic", 0);

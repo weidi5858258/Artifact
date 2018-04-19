@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.weidi.artifact.R;
 import com.weidi.artifact.controller.ProcessManagerFragmentController;
 import com.weidi.fragment.base.BaseFragment;
-import com.weidi.log.Log;
 
 /**
  * Created by root on 17-1-13.
@@ -87,7 +86,7 @@ public class ProcessManagerFragment extends BaseFragment {
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        // if (DEBUG) Log.d(TAG, "onHiddenChanged():hidden = " + hidden);
+        // if (DEBUG) MLog.d(TAG, "onHiddenChanged():hidden = " + hidden);
         if (hidden) {
             mProcessManagerFragmentController.onPause();
         } else {

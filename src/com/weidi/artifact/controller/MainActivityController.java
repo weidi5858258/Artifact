@@ -7,18 +7,14 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.View;
 
-import com.nineoldandroids.view.ViewHelper;
 import com.weidi.artifact.R;
 import com.weidi.artifact.activity.MainActivity;
-import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.controller.basecontroller.BaseActivityController;
 import com.weidi.artifact.fragment.MainFragment;
 import com.weidi.fragment.FragOperManager;
 import com.weidi.fragment.base.BaseFragment;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +40,7 @@ public class MainActivityController extends BaseActivityController {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (DEBUG) Log.d(TAG, "onCreate():mSavedInstanceState = " + savedInstanceState);
+        if (DEBUG) MLog.d(TAG, "onCreate():mSavedInstanceState = " + savedInstanceState);
 
         /*mMainActivity.mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
 
@@ -113,12 +109,12 @@ public class MainActivityController extends BaseActivityController {
                 switch (action) {
                     case MotionEvent.ACTION_DOWN:
                         downX = event.getX();
-                        Log.d(TAG, "downX = " + downX);
+                        MLog.d(TAG, "downX = " + downX);
                         break;
 
                     case MotionEvent.ACTION_UP:
                         upX = event.getX();
-                        Log.d(TAG, "upX = " + upX);
+                        MLog.d(TAG, "upX = " + upX);
 
                         if ((upX - downX) > 200) {
                             if (drawerViewTag != null
@@ -138,7 +134,7 @@ public class MainActivityController extends BaseActivityController {
                         break;
 
                     case MotionEvent.ACTION_MOVE:
-                        Log.d(TAG, "moveX = " + event.getX());
+                        MLog.d(TAG, "moveX = " + event.getX());
                         break;
 
                     default:
@@ -156,17 +152,17 @@ public class MainActivityController extends BaseActivityController {
 
     @Override
     public void onStart() {
-        if (DEBUG) Log.d(TAG, "onStart()");
+        if (DEBUG) MLog.d(TAG, "onStart()");
     }
 
     @Override
     public void onRestart() {
-        if (DEBUG) Log.d(TAG, "onRestart()");
+        if (DEBUG) MLog.d(TAG, "onRestart()");
     }
 
     @Override
     public void onResume() {
-        if (DEBUG) Log.d(TAG, "onResume()");
+        if (DEBUG) MLog.d(TAG, "onResume()");
         mMainActivity.title.setText("功能列表");
 
         // 开启核心服务
@@ -194,17 +190,17 @@ public class MainActivityController extends BaseActivityController {
 
     @Override
     public void onPause() {
-        if (DEBUG) Log.d(TAG, "onPause()");
+        if (DEBUG) MLog.d(TAG, "onPause()");
     }
 
     @Override
     public void onStop() {
-        if (DEBUG) Log.d(TAG, "onStop()");
+        if (DEBUG) MLog.d(TAG, "onStop()");
     }
 
     @Override
     public void onDestroy() {
-        if (DEBUG) Log.d(TAG, "onDestroy()");
+        if (DEBUG) MLog.d(TAG, "onDestroy()");
     }
 
     public Object onEvent(int what, Object[] object) {
@@ -216,7 +212,7 @@ public class MainActivityController extends BaseActivityController {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (DEBUG) Log.d(TAG, "onActivityResult():requestCode = " + requestCode
+        if (DEBUG) MLog.d(TAG, "onActivityResult():requestCode = " + requestCode
                 + " resultCode = " + resultCode + " intent = " + data);
     }
 
@@ -226,18 +222,18 @@ public class MainActivityController extends BaseActivityController {
      * @param outState
      */
     public void onSaveInstanceState(Bundle outState) {
-        if (DEBUG) Log.d(TAG, "onSaveInstanceState():outState = " + outState);
+        if (DEBUG) MLog.d(TAG, "onSaveInstanceState():outState = " + outState);
     }
 
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         if (DEBUG)
-            Log.d(TAG, "onRestoreInstanceState():mSavedInstanceState = " + savedInstanceState);
+            MLog.d(TAG, "onRestoreInstanceState():mSavedInstanceState = " + savedInstanceState);
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
-        Log.d(TAG, "onConfigurationChanged():newConfig = " + newConfig);
+        MLog.d(TAG, "onConfigurationChanged():newConfig = " + newConfig);
         if (DEBUG)
-            Log.d(TAG, "onConfigurationChanged():newConfig = " + newConfig);
+            MLog.d(TAG, "onConfigurationChanged():newConfig = " + newConfig);
     }
 
     public void openLeftFragment() {

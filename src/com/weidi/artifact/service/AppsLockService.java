@@ -12,7 +12,7 @@ import android.os.Looper;
 import com.weidi.artifact.activity.AppsLockActivity;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.db.dao.AppLockDao;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 import com.weidi.service.BaseService;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
@@ -68,7 +68,7 @@ public class AppsLockService extends BaseService {
                          * 只不过前者可以操作界面元素,后者不行.
                          */
                         Looper.prepare();
-                        Log.d(TAG, "prepare()");
+                        MLog.d(TAG, "prepare()");
                         // 里面就是主线程,不能执行耗时任务
                         mHandler = new Handler() {
                             public void handleMessage(android.os.Message msg) {
@@ -83,7 +83,7 @@ public class AppsLockService extends BaseService {
                             }
                         };
                         mHandler.sendEmptyMessage(0);
-                        Log.d(TAG, "loop()");
+                        MLog.d(TAG, "loop()");
                         Looper.loop();
 
                         /*while (isRunning) {

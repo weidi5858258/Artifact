@@ -11,9 +11,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.text.TextUtils;
 
-import com.weidi.artifact.application.MyApplication;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 
 import java.lang.reflect.Method;
 import java.util.UUID;
@@ -231,7 +230,7 @@ public class BTController {
             if (TextUtils.isEmpty(localBluetoothName)) {
                 localBluetoothName = getLocalBluetoothAdress();
             }
-            if (DBG) Log.d(TAG, "localBluetoothName = " + localBluetoothName);
+            if (DBG) MLog.d(TAG, "localBluetoothName = " + localBluetoothName);
         }
         return localBluetoothName;
     }
@@ -250,7 +249,7 @@ public class BTController {
             if (TextUtils.isEmpty(localBluetoothAdress)) {
                 localBluetoothAdress = UUID.randomUUID().toString();
             }
-            if (DBG) Log.d(TAG, "localBluetoothAdress = " + localBluetoothAdress);
+            if (DBG) MLog.d(TAG, "localBluetoothAdress = " + localBluetoothAdress);
         }
         return localBluetoothAdress;
     }
@@ -354,7 +353,7 @@ public class BTController {
             Method createBond = bdClass.getDeclaredMethod("createBond");
             createBond.setAccessible(true);
             returnValue = (Boolean) createBond.invoke(btDevice);
-            if (DBG) Log.d(TAG, "createBond() = " + returnValue);
+            if (DBG) MLog.d(TAG, "createBond() = " + returnValue);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -380,12 +379,12 @@ public class BTController {
             returnValue = (Boolean) removeBond.invoke(btDevice);
             if (returnValue) {
                 //                if (BTClient.getInstance().getIRemoteConnection() != null) {
-                //                    if(DBG)Log.d(TAG, "客户端removeBond()方法中断开配对!");
+                //                    if(DBG)MLog.d(TAG, "客户端removeBond()方法中断开配对!");
                 //                    BTClient.getInstance().getIRemoteConnection().onConnected
                 // (false);
                 //                }
             }
-            if (DBG) Log.d(TAG, "removeBond() = " + returnValue);
+            if (DBG) MLog.d(TAG, "removeBond() = " + returnValue);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -406,7 +405,7 @@ public class BTController {
             Method cancelBondProcess = bdClass.getDeclaredMethod("cancelBondProcess");
             cancelBondProcess.setAccessible(true);
             returnValue = (Boolean) cancelBondProcess.invoke(btDevice);
-            if (DBG) Log.d(TAG, "cancelBondProcess() = " + returnValue);
+            if (DBG) MLog.d(TAG, "cancelBondProcess() = " + returnValue);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -466,7 +465,7 @@ public class BTController {
             Method convertPinToBytes = bdClass.getDeclaredMethod("convertPinToBytes", String.class);
             byte[] pinBytes = (byte[]) convertPinToBytes.invoke(null, pwd);
             returnValue = (Boolean) setPin.invoke(btDevice, pinBytes);
-            if (DBG) Log.d(TAG, "setPin() = " + returnValue);
+            if (DBG) MLog.d(TAG, "setPin() = " + returnValue);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -483,7 +482,7 @@ public class BTController {
             Method cancelPairingUserInput = bdClass.getMethod("cancelPairingUserInput");
             //            cancelBondProcess(btDevice);
             returnValue = (Boolean) cancelPairingUserInput.invoke(btDevice);
-            if (DBG) Log.d(TAG, "cancelPairingUserInput() = " + returnValue);
+            if (DBG) MLog.d(TAG, "cancelPairingUserInput() = " + returnValue);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -509,35 +508,35 @@ public class BTController {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent == null) {
-                if (DBG) Log.d(TAG, "intent == null");
+                if (DBG) MLog.d(TAG, "intent == null");
                 return;
             }
-            if (DBG) Log.d(TAG, "intent = " + intent);
+            if (DBG) MLog.d(TAG, "intent = " + intent);
             String action = intent.getAction();
             if (mIBluetoothAction == null) {
-                if (DBG) Log.d(TAG, "mIBluetoothAction == null");
+                if (DBG) MLog.d(TAG, "mIBluetoothAction == null");
                 return;
             }
             if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-                if (DBG) Log.d(TAG, "接收到 action=BluetoothAdapter.ACTION_DISCOVERY_STARTED");
+                if (DBG) MLog.d(TAG, "接收到 action=BluetoothAdapter.ACTION_DISCOVERY_STARTED");
                 mIBluetoothAction.actionDiscoveryStarted();
                 return;
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                if (DBG) Log.d(TAG, "接收到 action=BluetoothAdapter.ACTION_DISCOVERY_FINISHED");
+                if (DBG) MLog.d(TAG, "接收到 action=BluetoothAdapter.ACTION_DISCOVERY_FINISHED");
                 mIBluetoothAction.actionDiscoveryFinished();
                 return;
             }
             BluetoothDevice mBluetoothDevice = intent.getParcelableExtra(
                     BluetoothDevice.EXTRA_DEVICE);
             if (mBluetoothDevice == null) {
-                if (DBG) Log.d(TAG, "mBluetoothDevice == null");
+                if (DBG) MLog.d(TAG, "mBluetoothDevice == null");
                 return;
             }
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                //                Log.e(TAG, "接收到action=BluetoothDevice.ACTION_FOUND");
+                //                MLog.e(TAG, "接收到action=BluetoothDevice.ACTION_FOUND");
                 mIBluetoothAction.actionFound(mBluetoothDevice);
             } else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
-                if (DBG) Log.d(TAG, "接收到 action=BluetoothDevice.ACTION_BOND_STATE_CHANGED");
+                if (DBG) MLog.d(TAG, "接收到 action=BluetoothDevice.ACTION_BOND_STATE_CHANGED");
                 mIBluetoothAction.actionBondStateChanged(mBluetoothDevice);
                 if (mBluetoothDevice.getBondState() == BluetoothDevice.BOND_BONDING) {
                     mIBluetoothAction.btBondBonding(mBluetoothDevice);
@@ -546,7 +545,7 @@ public class BTController {
                 } else if (mBluetoothDevice.getBondState() == BluetoothDevice.BOND_NONE) {
                     //                    if (BTClient.getInstance().getIRemoteConnection() !=
                     // null) {
-                    //                        if(DBG)Log.d(TAG, "接收到\"BluetoothDevice
+                    //                        if(DBG)MLog.d(TAG, "接收到\"BluetoothDevice
                     // .BOND_NONE\"的广播");
                     //                        BTClient.getInstance().getIRemoteConnection()
                     // .onConnected(false);
@@ -554,7 +553,7 @@ public class BTController {
                     mIBluetoothAction.btBondNone(mBluetoothDevice);
                 }
             } else if ("android.bluetooth.device.action.PAIRING_REQUEST".equals(action)) {
-                if (DBG) Log.d(TAG, "接收到 action=BluetoothDevice.ACTION_PAIRING_REQUEST");
+                if (DBG) MLog.d(TAG, "接收到 action=BluetoothDevice.ACTION_PAIRING_REQUEST");
                 mIBluetoothAction.actionPairingRequest();
             }
         }

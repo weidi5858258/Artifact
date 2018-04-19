@@ -70,7 +70,7 @@ import com.weidi.artifact.modle.Event;
 import com.weidi.artifact.modle.Sms;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.dbutil.SimpleDao;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 import com.weidi.service.BaseService;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
@@ -157,7 +157,7 @@ public class CoreService extends BaseService implements
 
     @Override
     public void onCreate() {
-        Log.d(TAG, "onCreate()");
+        MLog.d(TAG, "onCreate()");
 
         init();
 
@@ -175,13 +175,13 @@ public class CoreService extends BaseService implements
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand():intent = " + intent);
+        MLog.d(TAG, "onStartCommand():intent = " + intent);
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDestroy() {
-        Log.d(TAG, "onDestroy()");
+        MLog.d(TAG, "onDestroy()");
         if (mPhoneStateListener != null) {
             mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
             mPhoneStateListener = null;
@@ -292,7 +292,7 @@ public class CoreService extends BaseService implements
                 try {
                     x0 = (int) event.getX(0);
                     y0 = (int) event.getY(0);
-                    // Log.d(TAG, "x0 = "+x0+" y0 = "+y0);
+                    // MLog.d(TAG, "x0 = "+x0+" y0 = "+y0);
                     x1 = (int) event.getX(1);// 不要注释掉
                     y1 = (int) event.getY(1);// 不要注释掉
                     time0 = System.currentTimeMillis();
@@ -364,7 +364,7 @@ public class CoreService extends BaseService implements
      * @param object
      */
     public Object onEvent(int what, final Object object) {
-        // Log.d(TAG, "onEvent():what = " + what);
+        // MLog.d(TAG, "onEvent():what = " + what);
         switch (what) {
             case Constant.CORESERVICE:
                 stopSelf();
@@ -414,7 +414,7 @@ public class CoreService extends BaseService implements
                 try {
                     enabled = ((MyApplication) mContext.getApplicationContext())
                             .getSystemCall().getWifiEnabledState();
-                    Log.d(TAG, "enabled = " + enabled);
+                    MLog.d(TAG, "enabled = " + enabled);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -707,23 +707,23 @@ public class CoreService extends BaseService implements
                     installAppThread.start();
                     break;
                 // case FileObserver.OPEN:
-                // if(path != null)Log.d(TAG, "event: 文件或目录被打开, path: "
+                // if(path != null)MLog.d(TAG, "event: 文件或目录被打开, path: "
                 // + path);
                 // break;
                 // case FileObserver.CLOSE_WRITE:
-                // if(path != null)Log.d(TAG, "event: 文件或目录被关闭, path: "
+                // if(path != null)MLog.d(TAG, "event: 文件或目录被关闭, path: "
                 // + path);
                 // break;
                 // case FileObserver.ACCESS:
-                // if(path != null)Log.d(TAG, "event: 文件或目录被访问, path: "
+                // if(path != null)MLog.d(TAG, "event: 文件或目录被访问, path: "
                 // + path);
                 // break;
                 // case FileObserver.MODIFY:
-                // if(path != null)Log.d(TAG, "event: 文件或目录被修改, path: "
+                // if(path != null)MLog.d(TAG, "event: 文件或目录被修改, path: "
                 // + path);
                 // break;
                 // case FileObserver.DELETE:
-                // if(path != null)Log.d(TAG, "event: 文件或目录被删除, path: "
+                // if(path != null)MLog.d(TAG, "event: 文件或目录被删除, path: "
                 // + path);
                 // break;
             }
@@ -757,7 +757,7 @@ public class CoreService extends BaseService implements
                     outNumber = getResultData();
                     outCallTime = System.currentTimeMillis();
                     outRing = true;
-                    Log.d(TAG, "NEW_OUTGOING_CALL---outNumber = " + outNumber);
+                    MLog.d(TAG, "NEW_OUTGOING_CALL---outNumber = " + outNumber);
                     MyToast.show("NEW_OUTGOING_CALL");
                 } else if ("android.intent.action.SCREEN_OFF".equals(intent.getAction())) {
                     EventBusUtils.postAsync(CoreService.class, Constant.SCREEN_OFF, null);
@@ -1430,7 +1430,7 @@ public class CoreService extends BaseService implements
                 // 手指靠左边缘划动
                 if (y0 >= 0 && y0 <= (int) (dy / 3.0f) && y0 - event.getY(0) >= PX && System
                         .currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "左边缘上---》向上滑动---》");
+                    // MLog.d(TAG, "左边缘上---》向上滑动---》");
 
                     vibrate(20);
                     if (MyUtils.isSpecificServiceAlive(
@@ -1451,7 +1451,7 @@ public class CoreService extends BaseService implements
                     y0 = (int) event.getY(0);
                 } else if (y0 >= 0 && y0 <= (int) (dy / 3.0f) && event.getY(0) - y0 >= PX &&
                         System.currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "左边缘上---》向下滑动---》");
+                    // MLog.d(TAG, "左边缘上---》向下滑动---》");
 
                     vibrate(20);
                     if (!MyUtils.isSpecificServiceAlive(
@@ -1468,7 +1468,7 @@ public class CoreService extends BaseService implements
                     y0 = (int) event.getY(0);
                 } else if (y0 >= (int) (dy / 3.0f) && y0 <= (int) (2 * dy / 3.0f) && y0 - event
                         .getY(0) >= PX && System.currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "左边缘中---》向上滑动---》");
+                    // MLog.d(TAG, "左边缘中---》向上滑动---》");
 
                     vibrate(20);
                     lockScreen();
@@ -1477,7 +1477,7 @@ public class CoreService extends BaseService implements
                     y0 = (int) event.getY(0);
                 } else if (y0 >= (int) (dy / 3.0f) && y0 <= (int) (2 * dy / 3.0f) && event.getY
                         (0) - y0 >= PX && System.currentTimeMillis() - time0 >= 500) {
-                    Log.d(TAG, "左边缘中---》向下滑动---》");
+                    MLog.d(TAG, "左边缘中---》向下滑动---》");
 
                     vibrate(20);
                     goBack();
@@ -1486,7 +1486,7 @@ public class CoreService extends BaseService implements
                     y0 = (int) event.getY(0);
                 } else if (y0 >= (int) (2 * dy / 3.0f) && y0 - event.getY(0) >= PX && System
                         .currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "左边缘下---》向上滑动---》");
+                    // MLog.d(TAG, "左边缘下---》向上滑动---》");
 
                     vibrate(20);
                     lockScreen();
@@ -1495,7 +1495,7 @@ public class CoreService extends BaseService implements
                     y0 = (int) event.getY(0);
                 } else if (y0 >= (int) (2 * dy / 3.0f) && event.getY(0) - y0 >= PX && System
                         .currentTimeMillis() - time0 >= 500) {
-                    Log.d(TAG, "左边缘下---》向下滑动---》");
+                    MLog.d(TAG, "左边缘下---》向下滑动---》");
 
                     vibrate(20);
                     goBack();
@@ -1510,7 +1510,7 @@ public class CoreService extends BaseService implements
                 // 手指靠下边缘划动
                 if (x0 >= 0 && x0 <= (int) (dx / 2.0) && event.getX(0) - x0 >= PX && System
                         .currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "下边缘左---》向右滑动---》");
+                    // MLog.d(TAG, "下边缘左---》向右滑动---》");
 
                     vibrate(20);
                     killForegroundApp();
@@ -1519,7 +1519,7 @@ public class CoreService extends BaseService implements
                     x0 = (int) event.getX(0);
                 } else if (x0 >= 0 && x0 <= (int) (dx / 2.0) && x0 - event.getX(0) >= PX &&
                         System.currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "下边缘左---》向左滑动---》");
+                    // MLog.d(TAG, "下边缘左---》向左滑动---》");
 
                     vibrate(20);
                     goRecentTaskActivity();
@@ -1528,7 +1528,7 @@ public class CoreService extends BaseService implements
                     x0 = (int) event.getX(0);
                 } else if (x0 >= (int) (dx / 2.0) && x0 <= dx && event.getX(0) - x0 >= PX &&
                         System.currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "下边缘右---》向右滑动---》");
+                    // MLog.d(TAG, "下边缘右---》向右滑动---》");
 
                     time0 = System.currentTimeMillis();
                     vibrate(20);
@@ -1537,7 +1537,7 @@ public class CoreService extends BaseService implements
                     x0 = (int) event.getX(0);
                 } else if (x0 >= (int) (dx / 2.0) && x0 <= dx && x0 - event.getX(0) >= PX &&
                         System.currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "下边缘右---》向左滑动---》");
+                    // MLog.d(TAG, "下边缘右---》向左滑动---》");
 
                     vibrate(20);
                     goRecentTaskActivity();
@@ -1550,7 +1550,7 @@ public class CoreService extends BaseService implements
 
             if (event.getX(0) - x0 >= PX && System.currentTimeMillis() - time0 >= 500) {
                 if (event.getY(0) >= 0 && event.getY(0) < (int) (dy / 3.0f)) {
-                    Log.d(TAG, "上");
+                    MLog.d(TAG, "上");
 
                     vibrate(20);
                     takeScreenshot();
@@ -1559,7 +1559,7 @@ public class CoreService extends BaseService implements
                     x0 = (int) event.getX(0);
                 } else if (event.getY(0) >= (int) (dy / 3.0f) && event.getY(0) < (int) (2 * dy /
                         3.0f)) {
-                    Log.d(TAG, "中");
+                    MLog.d(TAG, "中");
 
                     vibrate(20);
                     showFunctionDialog();
@@ -1567,7 +1567,7 @@ public class CoreService extends BaseService implements
                     time0 = System.currentTimeMillis();
                     x0 = (int) event.getX(0);
                 } else if (event.getY(0) >= (int) (2 * dy / 3.0f)) {
-                    Log.d(TAG, "下");
+                    MLog.d(TAG, "下");
 
                     vibrate(20);
                     changeApp();
@@ -1582,13 +1582,13 @@ public class CoreService extends BaseService implements
                 time0 = System.currentTimeMillis();
                 y0 = (int) event.getY(0);
                 if (event.getX(0) >= 0 && event.getX(0) < (int) (dx / 2.0f)) {
-                    // Log.d(TAG, "左");
+                    // MLog.d(TAG, "左");
 
                     vibrate(20);
                     goHome();
 
                 } else if (event.getX(0) >= (int) (dx / 2.0f)) {
-                    // Log.d(TAG, "右 ");
+                    // MLog.d(TAG, "右 ");
 
                     vibrate(20);
                     goHome();
@@ -1611,7 +1611,7 @@ public class CoreService extends BaseService implements
                 // 手指靠左边缘划动
                 if (y0 >= 0 && y0 <= (int) (dy / 2.0f) && y0 - event.getY(0) >= PX && System
                         .currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "左边缘上---》向上滑动---》");
+                    // MLog.d(TAG, "左边缘上---》向上滑动---》");
 
                     vibrate(20);
 
@@ -1619,7 +1619,7 @@ public class CoreService extends BaseService implements
                     y0 = (int) event.getY(0);
                 } else if (y0 >= 0 && y0 <= (int) (dy / 2.0f) && event.getY(0) - y0 >= PX &&
                         System.currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "左边缘上---》向下滑动---》");
+                    // MLog.d(TAG, "左边缘上---》向下滑动---》");
 
                     vibrate(20);
                     goHome();
@@ -1628,7 +1628,7 @@ public class CoreService extends BaseService implements
                     y0 = (int) event.getY(0);
                 } else if (y0 >= (int) (dy / 2.0f) && y0 <= dy && y0 - event.getY(0) >= PX &&
                         System.currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "左边缘下---》向上滑动---》");
+                    // MLog.d(TAG, "左边缘下---》向上滑动---》");
 
                     vibrate(20);
                     lockScreen();
@@ -1637,7 +1637,7 @@ public class CoreService extends BaseService implements
                     y0 = (int) event.getY(0);
                 } else if (y0 >= (int) (dy / 2.0f) && y0 <= dy && event.getY(0) - y0 >= PX &&
                         System.currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "左边缘下---》向下滑动---》");
+                    // MLog.d(TAG, "左边缘下---》向下滑动---》");
 
                     vibrate(20);
                     goBack();
@@ -1652,7 +1652,7 @@ public class CoreService extends BaseService implements
                 // 手指靠下边缘划动
                 if (x0 >= 0 && x0 <= (int) (dx / 3.0f) && event.getX(0) - x0 >= PX && System
                         .currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "下边缘左---》向右滑动---》");
+                    // MLog.d(TAG, "下边缘左---》向右滑动---》");
 
                     vibrate(20);
                     killForegroundApp();
@@ -1661,7 +1661,7 @@ public class CoreService extends BaseService implements
                     x0 = (int) event.getX(0);
                 } else if (x0 >= 0 && x0 <= (int) (dx / 3.0f) && x0 - event.getX(0) >= PX &&
                         System.currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "下边缘左---》向左滑动---》");
+                    // MLog.d(TAG, "下边缘左---》向左滑动---》");
 
                     vibrate(20);
                     goRecentTaskActivity();
@@ -1670,7 +1670,7 @@ public class CoreService extends BaseService implements
                     x0 = (int) event.getX(0);
                 } else if (x0 >= (int) (dx / 3.0f) && x0 <= (int) (2 * dx / 3.0f) && event.getX
                         (0) - x0 >= PX && System.currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "下边缘中---》向右滑动---》");
+                    // MLog.d(TAG, "下边缘中---》向右滑动---》");
 
                     vibrate(20);
 
@@ -1678,7 +1678,7 @@ public class CoreService extends BaseService implements
                     x0 = (int) event.getX(0);
                 } else if (x0 >= (int) (dx / 3.0f) && x0 <= (int) (2 * dx / 3.0f) && x0 - event
                         .getX(0) >= PX && System.currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "下边缘中---》向左滑动---》");
+                    // MLog.d(TAG, "下边缘中---》向左滑动---》");
 
                     vibrate(20);
 
@@ -1686,7 +1686,7 @@ public class CoreService extends BaseService implements
                     x0 = (int) event.getX(0);
                 } else if (x0 >= (int) (2 * dx / 3.0f) && x0 <= dx && event.getX(0) - x0 >= PX &&
                         System.currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "下边缘右---》向右滑动---》");
+                    // MLog.d(TAG, "下边缘右---》向右滑动---》");
 
                     vibrate(20);
 
@@ -1694,7 +1694,7 @@ public class CoreService extends BaseService implements
                     x0 = (int) event.getX(0);
                 } else if (x0 >= (int) (2 * dx / 3.0f) && x0 <= dx && x0 - event.getX(0) >= PX &&
                         System.currentTimeMillis() - time0 >= 500) {
-                    // Log.d(TAG, "下边缘右---》向左滑动---》");
+                    // MLog.d(TAG, "下边缘右---》向左滑动---》");
 
                     vibrate(20);
 
@@ -1708,12 +1708,12 @@ public class CoreService extends BaseService implements
                 time0 = System.currentTimeMillis();
                 x0 = (int) event.getX(0);
                 if (event.getY(0) >= 0 && event.getY(0) < (int) (dy / 2.0f)) {
-                    // Log.d(TAG, "上");
+                    // MLog.d(TAG, "上");
 
                     vibrate(20);
 
                 } else {
-                    // Log.d(TAG, "下");
+                    // MLog.d(TAG, "下");
 
                     vibrate(20);
 
@@ -1725,18 +1725,18 @@ public class CoreService extends BaseService implements
                 time0 = System.currentTimeMillis();
                 y0 = (int) event.getY(0);
                 if (event.getX(0) >= 0 && event.getX(0) < (int) (dx / 3.0f)) {
-                    // Log.d(TAG, "左");
+                    // MLog.d(TAG, "左");
 
                     vibrate(20);
 
                 } else if (event.getX(0) >= (int) (dx / 3.0f) && event.getX(0) < (int) (2 * dx /
                         3.0f)) {
-                    // Log.d(TAG, "中");
+                    // MLog.d(TAG, "中");
 
                     vibrate(20);
 
                 } else {
-                    // Log.d(TAG, "右");
+                    // MLog.d(TAG, "右");
 
                     vibrate(20);
 
@@ -2213,7 +2213,7 @@ public class CoreService extends BaseService implements
                         return;
                     }
                     mIsConnectedForCall = false;
-                    Log.d(TAG, "mPhoneNumberForCall = " + mPhoneNumberForCall);
+                    MLog.d(TAG, "mPhoneNumberForCall = " + mPhoneNumberForCall);
                     break;
 
                 case R.id.bt_querytools_cancel:
@@ -2269,7 +2269,7 @@ public class CoreService extends BaseService implements
              .intent.action.STARTING_A_PHONE_CALL flg=0x10 (has extras) }
              */
             // 电话打出去时incomingNumber为null
-            Log.d(TAG, "onCallStateChanged(): state = " + state +
+            MLog.d(TAG, "onCallStateChanged(): state = " + state +
                     " incomingNumber = " + incomingNumber);
             if (state == 1) {
                 // 此时才有号码
@@ -2299,7 +2299,7 @@ public class CoreService extends BaseService implements
 
     private void callStateIdle(String incomingNumber) {
         callStateIdleTime = System.currentTimeMillis();
-        Log.d(TAG, "CALL_STATE_IDLE---callStateIdleTime = " + callStateIdleTime);
+        MLog.d(TAG, "CALL_STATE_IDLE---callStateIdleTime = " + callStateIdleTime);
 
         BlacklistPhone phone = null;
         String address = null;
@@ -2314,7 +2314,7 @@ public class CoreService extends BaseService implements
             phone = new BlacklistPhone(incomingNumber, address, callStateRingingTime, (int)
                     (callStateOffHookTime /
                             1000), time, 1, 1, 1);
-            Log.d(TAG, "flag:1" + " inNumber:" + incomingNumber + " " + address);
+            MLog.d(TAG, "flag:1" + " inNumber:" + incomingNumber + " " + address);
         } else if (inRing && !inBlackRing && !inHook) {
             address = PhoneNumberAddressQueryUtils.phoneNumberAddressQuery(incomingNumber);
             inRing = false;
@@ -2323,7 +2323,7 @@ public class CoreService extends BaseService implements
             phone = new BlacklistPhone(incomingNumber, address, callStateRingingTime, (int)
                     (callStateRingingTime /
                             1000), time, 3, 1, 0);
-            Log.d(TAG, "flag:0" + " inNumber:" + incomingNumber + " " + address);
+            MLog.d(TAG, "flag:0" + " inNumber:" + incomingNumber + " " + address);
         }
 
         // http://192.168.1.158:8080/UploadFileServer/upload.jsp
@@ -2344,7 +2344,7 @@ public class CoreService extends BaseService implements
             String time = mPhoneSimpleDateFormat.format(new Date(outCallTime));
             phone = new BlacklistPhone(outNumber, address, outCallTime, (int)
                     (outHookTime / 1000), time, 2, 1, 4);
-            Log.d(TAG, "flag:4");
+            MLog.d(TAG, "flag:4");
         } else if (outRing && !outHook) {// 拨打出去的电话没有接通（根本执行不到）
             address = PhoneNumberAddressQueryUtils.phoneNumberAddressQuery(outNumber);
             outRing = false;
@@ -2352,7 +2352,7 @@ public class CoreService extends BaseService implements
             outCallTime = outIdleTime - outCallTime;
             phone = new BlacklistPhone(outNumber, address, outCallTime, (int)
                     (outCallTime / 1000), time, 2, 1, 3);
-            Log.d(TAG, "flag:3");
+            MLog.d(TAG, "flag:3");
         }
 
         if (phone != null) {
@@ -2366,7 +2366,7 @@ public class CoreService extends BaseService implements
 
         outNumber = null;
         address = null;
-        Log.d(TAG, "CALL_STATE_IDLE---outIdleTime = " + outIdleTime);
+        MLog.d(TAG, "CALL_STATE_IDLE---outIdleTime = " + outIdleTime);
     }
 
     private void callStateRinging(String incomingNumber) {
@@ -2375,7 +2375,7 @@ public class CoreService extends BaseService implements
         inRing = true;
         inBlackRing = false;
         callStateRingingTime = System.currentTimeMillis();
-        Log.d(TAG, "CALL_STATE_RINGING---callStateRingingTime = " + callStateRingingTime);
+        MLog.d(TAG, "CALL_STATE_RINGING---callStateRingingTime = " + callStateRingingTime);
         // 此号码是黑名单
         if (mBlacklistDao.isNumberExist(incomingNumber)) {
             BlacklistInfo blacklistInfo = mBlacklistDao.query(incomingNumber);
@@ -2407,7 +2407,7 @@ public class CoreService extends BaseService implements
                 intent.putExtra("phone", phone);
                 mContext.sendBroadcast(intent);
 
-                // Log.d(TAG, "flag:2");
+                // MLog.d(TAG, "flag:2");
                 // iTelephony.answerRingingCall();
                 // iTelephony.setRadio(false);
                 // iTelephony.setRadioPower(false);
@@ -2419,7 +2419,7 @@ public class CoreService extends BaseService implements
             }
         }
         address = null;
-        Log.d(TAG, "CALL_STATE_RINGING---callStateRingingTime = " + callStateRingingTime);
+        MLog.d(TAG, "CALL_STATE_RINGING---callStateRingingTime = " + callStateRingingTime);
     }
 
     private void callStateOffHook() {
@@ -2427,7 +2427,7 @@ public class CoreService extends BaseService implements
         outHookTime = System.currentTimeMillis();
         inHook = true;
         outHook = true;
-        Log.d(TAG, "CALL_STATE_OFFHOOK---outHookTime = " + outHookTime);
+        MLog.d(TAG, "CALL_STATE_OFFHOOK---outHookTime = " + outHookTime);
     }
 
     private static final String mediaRecorderPath = "/storage/sdcard1/Sounds/";
@@ -2440,11 +2440,11 @@ public class CoreService extends BaseService implements
             if (intent == null) {
                 return;
             }
-            Log.d(TAG, "mStartCallBroadcastReceiver onReceive():intent = " + intent);
+            MLog.d(TAG, "mStartCallBroadcastReceiver onReceive():intent = " + intent);
             vibrate(1000);
             String state = intent.getStringExtra("Call.State");// mPhoneSimpleDateFormat
             if ("ACTIVE".equals(state)) {// 接通
-                Log.d(TAG, "mStartCallBroadcastReceiver onReceive():ACTIVE");
+                MLog.d(TAG, "mStartCallBroadcastReceiver onReceive():ACTIVE");
                 mIsConnectedForCall = true;
                 mPhoneNumberForCall = null;
                 /*String currentTime = mSimpleDateFormat.format(new Date());
@@ -2460,7 +2460,7 @@ public class CoreService extends BaseService implements
                 mRecorder.setOutputFile(mOutputFile);
                 mRecorder.startRecording();*/
             } else if ("DISCONNECTING".equals(state)) {// 挂断
-                Log.d(TAG, "mStartCallBroadcastReceiver onReceive():DISCONNECTING");
+                MLog.d(TAG, "mStartCallBroadcastReceiver onReceive():DISCONNECTING");
                 mIsConnectedForCall = false;
                 /*mRecorder.stopRecording();
                 mRecorder = null;*/
@@ -2500,7 +2500,7 @@ public class CoreService extends BaseService implements
                     // onChange():selfChange = false,uri = content://sms/raw
                     // onChange():selfChange = false,uri = content://sms/4861
                     try {
-                        Log.d(TAG, "onChange():selfChange = " + selfChange + ",uri = " + uri);
+                        MLog.d(TAG, "onChange():selfChange = " + selfChange + ",uri = " + uri);
                         String path = uri.getLastPathSegment();
                         Pattern pattern = Pattern.compile("[0-9]+");
                         Matcher matcher = pattern.matcher(path);

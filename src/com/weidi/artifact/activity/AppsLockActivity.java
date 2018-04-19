@@ -18,7 +18,7 @@ import com.weidi.artifact.controller.AppsLockActivityController;
 import com.weidi.inject.InjectLayout;
 import com.weidi.inject.InjectOnClick;
 import com.weidi.inject.InjectView;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 
 @InjectLayout(R.layout.activity_appslock)
 public class AppsLockActivity extends BaseActivity
@@ -52,7 +52,7 @@ public class AppsLockActivity extends BaseActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if (DBG) {
-            Log.d(TAG, "onCreate():savedInstanceState = " + savedInstanceState);
+            MLog.d(TAG, "onCreate():savedInstanceState = " + savedInstanceState);
         }
         super.onCreate(savedInstanceState);
         mAppsLockActivityController = new AppsLockActivityController(this);
@@ -62,7 +62,7 @@ public class AppsLockActivity extends BaseActivity
     @Override
     public void onStart() {
         if (DBG) {
-            Log.d(TAG, "onStart(): " + this);
+            MLog.d(TAG, "onStart(): " + this);
         }
         super.onStart();
         mAppsLockActivityController.onStart();
@@ -71,7 +71,7 @@ public class AppsLockActivity extends BaseActivity
     @Override
     protected void onRestart() {
         if (DBG) {
-            Log.d(TAG, "onRestart(): " + this);
+            MLog.d(TAG, "onRestart(): " + this);
         }
         super.onRestart();
     }
@@ -79,7 +79,7 @@ public class AppsLockActivity extends BaseActivity
     @Override
     public void onResume() {
         if (DBG) {
-            Log.d(TAG, "onResume(): " + this);
+            MLog.d(TAG, "onResume(): " + this);
         }
         super.onResume();
         mAppsLockActivityController.onResume();
@@ -88,7 +88,7 @@ public class AppsLockActivity extends BaseActivity
     @Override
     public void onPause() {
         if (DBG) {
-            Log.d(TAG, "onPause(): " + this);
+            MLog.d(TAG, "onPause(): " + this);
         }
         super.onPause();
         mAppsLockActivityController.onPause();
@@ -97,7 +97,7 @@ public class AppsLockActivity extends BaseActivity
     @Override
     public void onStop() {
         if (DBG) {
-            Log.d(TAG, "onStop(): " + this);
+            MLog.d(TAG, "onStop(): " + this);
         }
         super.onStop();
         mAppsLockActivityController.onStop();
@@ -106,7 +106,7 @@ public class AppsLockActivity extends BaseActivity
     @Override
     public void onDestroy() {
         if (DBG) {
-            Log.d(TAG, "onDestroy(): " + this);
+            MLog.d(TAG, "onDestroy(): " + this);
         }
         mAppsLockActivityController.onDestroy();
         super.onDestroy();
@@ -121,7 +121,7 @@ public class AppsLockActivity extends BaseActivity
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (DBG) {
-            Log.d(TAG, "onNewIntent():intent = " + intent + " " + this);
+            MLog.d(TAG, "onNewIntent():intent = " + intent + " " + this);
         }
         mAppsLockActivityController.onNewIntent(intent);
     }
@@ -129,7 +129,7 @@ public class AppsLockActivity extends BaseActivity
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (DBG) {
-            Log.d(TAG, "dispatchKeyEvent():event = " + event);
+            MLog.d(TAG, "dispatchKeyEvent():event = " + event);
         }
         if (mAppsLockActivityController.dispatchKeyEvent(event)) {
             return true;
@@ -141,7 +141,7 @@ public class AppsLockActivity extends BaseActivity
     @InjectOnClick({R.id.back_tv, R.id.appslock_entry_ibtn})
     public void onClick(View view) {
         if (DBG) {
-            Log.d(TAG, "onClick():view = " + view);
+            MLog.d(TAG, "onClick():view = " + view);
         }
         mAppsLockActivityController.onClick(view);
     }

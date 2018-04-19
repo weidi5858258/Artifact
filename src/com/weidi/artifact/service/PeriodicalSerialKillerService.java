@@ -10,7 +10,7 @@ import android.os.Looper;
 import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.constant.Constant;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 import com.weidi.service.BaseService;
 import com.weidi.threadpool.ThreadPool;
 import com.weidi.utils.EventBusUtils;
@@ -37,7 +37,7 @@ public class PeriodicalSerialKillerService extends BaseService {
 
     @Override
     public void onCreate() {
-        Log.d(TAG, "onCreate(): " + this);
+        MLog.d(TAG, "onCreate(): " + this);
 
         EventBusUtils.register(this);
 
@@ -58,7 +58,7 @@ public class PeriodicalSerialKillerService extends BaseService {
         }
 
         /*for (ApplicationInfo applicationInfo : userApplicationInfoList) {
-            Log.d(TAG, "packagename = " + applicationInfo.processName);
+            MLog.d(TAG, "packagename = " + applicationInfo.processName);
         }*/
 
         ThreadPool.getFixedThreadPool(Constant.FIXEDTHREADPOOLCOUNT).execute(new Runnable() {
@@ -83,7 +83,7 @@ public class PeriodicalSerialKillerService extends BaseService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand():intent = " + intent +
+        MLog.d(TAG, "onStartCommand():intent = " + intent +
                 " flags = " + flags + " startId = " + startId + " " + this);
         return super.onStartCommand(intent, flags, startId);
     }
@@ -95,7 +95,7 @@ public class PeriodicalSerialKillerService extends BaseService {
 
     @Override
     public void onDestroy() {
-        Log.d(TAG, "onDestroy(): " + this);
+        MLog.d(TAG, "onDestroy(): " + this);
         mIsRunning = false;
         mHandler.removeMessages(0);
         mHandler = null;
@@ -131,17 +131,17 @@ public class PeriodicalSerialKillerService extends BaseService {
                     /*for (Intent intent : mRecentTaskIntentList) {
                         ComponentName componentName = intent.getComponent();
                         String className = componentName.getClassName();
-                        Log.d(TAG, "className3 = " + className);
+                        MLog.d(TAG, "className3 = " + className);
                     }*/
                 }
                 break;
 
             case Constant.CHANGEAPP:
                 /*for (Intent intent : mRecentTaskIntentList) {
-                    // Log.d(TAG, "intent = " + intent.toString());
+                    // MLog.d(TAG, "intent = " + intent.toString());
                     ComponentName componentName = intent.getComponent();
                     String className = componentName.getClassName();
-                    Log.d(TAG, "className1 = " + className);
+                    MLog.d(TAG, "className1 = " + className);
                 }*/
                 if (mRecentTaskIntentList != null
                         && mRecentTaskIntentList.size() > 1) {
@@ -157,10 +157,10 @@ public class PeriodicalSerialKillerService extends BaseService {
                     MyToast.show(intent0.getComponent().getClassName());
                 }
                 /*for (Intent intent : mRecentTaskIntentList) {
-                    // Log.d(TAG, "intent = " + intent.toString());
+                    // MLog.d(TAG, "intent = " + intent.toString());
                     ComponentName componentName = intent.getComponent();
                     String className = componentName.getClassName();
-                    Log.d(TAG, "className2 = " + className);
+                    MLog.d(TAG, "className2 = " + className);
                 }*/
                 break;
 
@@ -176,7 +176,7 @@ public class PeriodicalSerialKillerService extends BaseService {
             ArrayList<ApplicationInfo> userApplicationInfoList) {
         /*ICallSystemMethod call = ((MyApplication) getApplicationContext()).getSystemCall();
         if (call == null) {
-            Log.d(TAG, "call == null " + this);
+            MLog.d(TAG, "call == null " + this);
             return;
         }*/
 
@@ -195,7 +195,7 @@ public class PeriodicalSerialKillerService extends BaseService {
         ArrayList<String> userPackageNameList = ((MyApplication) getApplicationContext()).pkgList;
 
         int runningTaskInfoListCount = runningTaskInfoList.size();
-        // Log.d(TAG, "runningTaskInfoListCount = " + runningTaskInfoListCount);
+        // MLog.d(TAG, "runningTaskInfoListCount = " + runningTaskInfoListCount);
         // 当前正在运行的应用
         if (runningTaskInfoListCount > 0) {
             topAppPackageName = runningTaskInfoList.get(0).topActivity.getPackageName();
@@ -217,16 +217,16 @@ public class PeriodicalSerialKillerService extends BaseService {
                         /*for (Intent inten : mRecentTaskIntentList) {
                             ComponentName componentName = inten.getComponent();
                             String className = componentName.getClassName();
-                            Log.d(TAG, "className1 = " + className);
+                            MLog.d(TAG, "className1 = " + className);
                         }*/
-                        Log.d(TAG, "pkgName1 = " + pkgName);
+                        MLog.d(TAG, "pkgName1 = " + pkgName);
                         // 在添加的时候之前的位置排列有时会反过来,还不知道怎么回事
                         mRecentTaskIntentList.add(intent);
                         mRecentTaskPackageNameList.add(pkgName);
                         /*for (Intent inten : mRecentTaskIntentList) {
                             ComponentName componentName = inten.getComponent();
                             String className = componentName.getClassName();
-                            Log.d(TAG, "className2 = " + className);
+                            MLog.d(TAG, "className2 = " + className);
                         }*/
                         break;
                     } else {
@@ -247,14 +247,14 @@ public class PeriodicalSerialKillerService extends BaseService {
                             if (pName.equals(topAppPackageName)) {
                                 mRecentTaskIntentList.remove(intenT);
                                 mRecentTaskIntentList.add(0, intenT);
-                                // Log.d(TAG, "=====================================");
+                                // MLog.d(TAG, "=====================================");
                                 break;
                             }
                         }
                         /*for (Intent inten : mRecentTaskIntentList) {
                             ComponentName componentName = inten.getComponent();
                             String className = componentName.getClassName();
-                            Log.d(TAG, "className = " + className);
+                            MLog.d(TAG, "className = " + className);
                         }*/
                     }
                 }
@@ -279,7 +279,7 @@ public class PeriodicalSerialKillerService extends BaseService {
                             if (!mRecentTaskIntentList.contains(intent)
                                     && !mRecentTaskPackageNameList.contains(pkgName)
                                     && !getPackageName().equals(topAppPackageName)) {
-                                Log.d(TAG, "pkgName2 = " + pkgName);
+                                MLog.d(TAG, "pkgName2 = " + pkgName);
                                 mRecentTaskIntentList.add(intent);
                                 mRecentTaskPackageNameList.add(pkgName);
                                 break;
@@ -315,7 +315,7 @@ public class PeriodicalSerialKillerService extends BaseService {
                             if (!mRecentTaskIntentList.contains(intent)
                                     && !mRecentTaskPackageNameList.contains(pkgName)
                                     && !getPackageName().equals(secondAppPackageName)) {
-                                Log.d(TAG, "pkgName3 = " + pkgName);
+                                MLog.d(TAG, "pkgName3 = " + pkgName);
                                 mRecentTaskIntentList.add(intent);
                                 mRecentTaskPackageNameList.add(pkgName);
                                 break;
@@ -334,7 +334,7 @@ public class PeriodicalSerialKillerService extends BaseService {
                 }
             } else {
                 if (runningTaskInfoListCount > 1) {
-                    // Log.d(TAG, "runningTaskInfoListCount = " + runningTaskInfoListCount);
+                    // MLog.d(TAG, "runningTaskInfoListCount = " + runningTaskInfoListCount);
                     secondAppPackageName = runningTaskInfoList.get(1).topActivity.getPackageName();
                     if (!userPackageNameList.contains(secondAppPackageName)
                             && mCannotBeKilledPackageNameList != null
@@ -352,7 +352,7 @@ public class PeriodicalSerialKillerService extends BaseService {
                             if (!mRecentTaskIntentList.contains(intent)
                                     && !mRecentTaskPackageNameList.contains(pkgName)
                                     && !getPackageName().equals(secondAppPackageName)) {
-                                Log.d(TAG, "pkgName4 = " + pkgName);
+                                MLog.d(TAG, "pkgName4 = " + pkgName);
                                 mRecentTaskIntentList.add(intent);
                                 mRecentTaskPackageNameList.add(pkgName);
                                 break;
@@ -363,10 +363,10 @@ public class PeriodicalSerialKillerService extends BaseService {
             }
         }
         /*for (Intent intent : mRecentTaskIntentList) {
-            // Log.d(TAG, "intent = " + intent.toString());
+            // MLog.d(TAG, "intent = " + intent.toString());
             ComponentName componentName = intent.getComponent();
             String className = componentName.getClassName();
-            Log.d(TAG, "className = " + className);
+            MLog.d(TAG, "className = " + className);
         }*/
 
         List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfoList =
@@ -379,7 +379,7 @@ public class PeriodicalSerialKillerService extends BaseService {
         for (int i = 0; i < runningAppProcessInfoListCount; i++) {
             // 进程名可能就不单纯是应用的包名了
             String runningAppProcessName = runningAppProcessInfoList.get(i).processName;
-            // Log.d(TAG, "正在运行的进程名: " + runningAppProcessName);
+            // MLog.d(TAG, "正在运行的进程名: " + runningAppProcessName);
 
             for (int j = 0; j < userApplicationInfoListCount; j++) {
                 // 应用的包名
@@ -388,7 +388,7 @@ public class PeriodicalSerialKillerService extends BaseService {
                 if ((runningAppProcessName.equals(userPackageName)
                         || runningAppProcessName.contains(userPackageName))// 可能就是包含":"
                         || runningAppProcessName.startsWith(".")) {
-                    // Log.d(TAG, "正在运行的进程名: " + runningAppProcessName);
+                    // MLog.d(TAG, "正在运行的进程名: " + runningAppProcessName);
                     if (runningAppProcessName.contains(":")) {
                         String processNameTemp = runningAppProcessName.split(":")[0];
                         if (!userPackageNameList.contains(processNameTemp)
@@ -397,8 +397,8 @@ public class PeriodicalSerialKillerService extends BaseService {
                             try {
 //                                call.forceStopPackage(processNameTemp);
 //                                call.forceStopPackage(runningAppProcessName);
-                                // Log.d(TAG, "被杀的进程名1: " + processNameTemp);
-                                // Log.d(TAG, "被杀的进程名2: " + runningAppProcessName);
+                                // MLog.d(TAG, "被杀的进程名1: " + processNameTemp);
+                                // MLog.d(TAG, "被杀的进程名2: " + runningAppProcessName);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -410,7 +410,7 @@ public class PeriodicalSerialKillerService extends BaseService {
                             && !mCannotBeKilledPackageNameList.contains(runningAppProcessName)) {
                         try {
 //                            call.forceStopPackage(runningAppProcessName);
-                            // Log.d(TAG, "被杀的进程名3: " + runningAppProcessName);
+                            // MLog.d(TAG, "被杀的进程名3: " + runningAppProcessName);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -427,7 +427,7 @@ public class PeriodicalSerialKillerService extends BaseService {
                     && !mCannotBeKilledPackageNameList.contains(userPackageName)) {
                 try {
 //                    call.forceStopPackage(userPackageName);
-                    // Log.d(TAG, "被杀的进程名4: " + userPackageName);
+                    // MLog.d(TAG, "被杀的进程名4: " + userPackageName);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

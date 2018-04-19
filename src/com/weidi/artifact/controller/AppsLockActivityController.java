@@ -27,7 +27,7 @@ import com.weidi.artifact.controller.basecontroller.BaseActivityController;
 import com.weidi.artifact.service.AppsLockService;
 import com.weidi.artifact.service.CoreService;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 import com.weidi.utils.EventBusUtils;
 import com.weidi.utils.MyUtils;
 
@@ -91,7 +91,7 @@ public class AppsLockActivityController extends BaseActivityController {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (DBG) Log.d(TAG, "onCreate():savedInstanceState = " + savedInstanceState);
+        if (DBG) MLog.d(TAG, "onCreate():savedInstanceState = " + savedInstanceState);
 
         init();
 
@@ -114,7 +114,7 @@ public class AppsLockActivityController extends BaseActivityController {
 
     @Override
     public void onStart() {
-        if (DBG) Log.d(TAG, "onStart()");
+        if (DBG) MLog.d(TAG, "onStart()");
     }
 
     @Override
@@ -124,7 +124,7 @@ public class AppsLockActivityController extends BaseActivityController {
 
     @Override
     public void onResume() {
-        if (DBG) Log.d(TAG, "onResume()");
+        if (DBG) MLog.d(TAG, "onResume()");
         // 必须要放在这里
         sendBroadcastToInputManagerService(mContext, true);
 
@@ -161,17 +161,17 @@ public class AppsLockActivityController extends BaseActivityController {
 
     @Override
     public void onPause() {
-        if (DBG) Log.d(TAG, "onPause()");
+        if (DBG) MLog.d(TAG, "onPause()");
     }
 
     @Override
     public void onStop() {
-        if (DBG) Log.d(TAG, "onStop()");
+        if (DBG) MLog.d(TAG, "onStop()");
     }
 
     @Override
     public void onDestroy() {
-        if (DBG) Log.d(TAG, "onDestroy()");
+        if (DBG) MLog.d(TAG, "onDestroy()");
         EventBusUtils.unregister(mAppsLockActivity);
         // 开启核心服务
         if (!MyUtils.isSpecificServiceAlive(
@@ -253,7 +253,7 @@ public class AppsLockActivityController extends BaseActivityController {
     public Object onEvent(int what, Object[] object) {
         switch (what) {
             case Constant.SCREEN_OFF:
-                if (DBG) Log.d(TAG, "SCREEN_OFF");
+                if (DBG) MLog.d(TAG, "SCREEN_OFF");
                 sendBroadcastToInputManagerService(mContext, false);
                 break;
 
@@ -520,7 +520,7 @@ public class AppsLockActivityController extends BaseActivityController {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            //            Log.d(TAG, "onTouch():view = " + v + " event = " + event);
+            //            MLog.d(TAG, "onTouch():view = " + v + " event = " + event);
 
             if (v instanceof android.widget.LinearLayout
                     && event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -600,7 +600,7 @@ public class AppsLockActivityController extends BaseActivityController {
             if (intent == null) {
                 return;
             }
-            Log.i(LOG_TAG, "onReceive():intent: " + intent);
+            MLog.i(LOG_TAG, "onReceive():intent: " + intent);
             String action = intent.getAction();
             if (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(action)) {
                 // android.intent.action.CLOSE_SYSTEM_DIALOGS
@@ -608,22 +608,22 @@ public class AppsLockActivityController extends BaseActivityController {
 
                 if (SYSTEM_DIALOG_REASON_HOME_KEY.equals(reason)) {
                     // 短按Home键
-                    Log.i(LOG_TAG, "Home");
+                    MLog.i(LOG_TAG, "Home");
 
                 } else if (SYSTEM_DIALOG_REASON_RECENT_APPS.equals(reason)) {
                     // startSelf();
                     // 长按Menu键 或者 activity切换键
-                    Log.i(LOG_TAG, "long press Menu key or switch Activity");
+                    MLog.i(LOG_TAG, "long press Menu key or switch Activity");
                 }
                 // 下面两个接收不到
                 else if (SYSTEM_DIALOG_REASON_LOCK.equals(reason)) {
 
                     // 锁屏
-                    Log.i(LOG_TAG, "lock");
+                    MLog.i(LOG_TAG, "lock");
                 } else if (SYSTEM_DIALOG_REASON_ASSIST.equals(reason)) {
 
                     // samsung 长按Home键
-                    Log.i(LOG_TAG, "assist");
+                    MLog.i(LOG_TAG, "assist");
                 }
 
             }

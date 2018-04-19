@@ -26,7 +26,7 @@ import com.weidi.artifact.service.CoreService;
 import com.weidi.artifact.service.PeriodicalSerialKillerService;
 import com.weidi.artifact.service.ShowAttributionService;
 import com.weidi.fragment.FragOperManager;
-import com.weidi.log.Log;
+import com.weidi.log.MLog;
 import com.weidi.utils.EventBusUtils;
 import com.weidi.utils.MyToast;
 import com.weidi.utils.MyUtils;
@@ -55,13 +55,13 @@ public class SettingsFragmentController extends BaseFragmentController {
 
     @Override
     public void beforeInitView() {
-        if (DEBUG) Log.d(TAG, "beforeInitView()");
+        if (DEBUG) MLog.d(TAG, "beforeInitView()");
     }
 
     public void afterInitView(LayoutInflater inflater,
                               ViewGroup container,
                               Bundle savedInstanceState) {
-        if (DEBUG) Log.d(TAG, "afterInitView():savedInstanceState = " + savedInstanceState);
+        if (DEBUG) MLog.d(TAG, "afterInitView():savedInstanceState = " + savedInstanceState);
         if (savedInstanceState == null) {
             init();
         }
@@ -69,23 +69,23 @@ public class SettingsFragmentController extends BaseFragmentController {
 
     @Override
     public void onResume() {
-        if (DEBUG) Log.d(TAG, "onResume()");
+        if (DEBUG) MLog.d(TAG, "onResume()");
         ((MainActivity) mSettingsFragment.getActivity()).title.setText("设置中心");
     }
 
     @Override
     public void onPause() {
-        if (DEBUG) Log.d(TAG, "onPause()");
+        if (DEBUG) MLog.d(TAG, "onPause()");
     }
 
     @Override
     public void onStop() {
-        if (DEBUG) Log.d(TAG, "onStop()");
+        if (DEBUG) MLog.d(TAG, "onStop()");
     }
 
     @Override
     public void onDestroy() {
-        if (DEBUG) Log.d(TAG, "onDestroy()");
+        if (DEBUG) MLog.d(TAG, "onDestroy()");
     }
 
     public void onClick(View view) {

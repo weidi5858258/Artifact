@@ -1,7 +1,6 @@
 package com.weidi.artifact.activity;
 
 import java.io.File;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +13,11 @@ import android.content.Context;
 import android.content.Intent;
 //import android.content.pm.IPackageStatsObserver;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageStats;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.RemoteException;
 import android.os.StatFs;
 import android.text.format.Formatter;
 import android.view.Gravity;
@@ -42,11 +39,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.weidi.artifact.R;
-import com.weidi.artifact.application.MyApplication;
 import com.weidi.artifact.db.dao.AppLockDao;
 import com.weidi.artifact.db.bean.AppInfos;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
-import com.weidi.log.Log;
 import com.weidi.utils.MyToast;
 import com.weidi.utils.MyUtils;
 
@@ -340,7 +335,7 @@ public class AppsManagerActivity extends Activity {
                                             @Override
                                             public void packageDeleted(String s, int i)
                                                     throws RemoteException {
-                                                Log.d(TAG, "s = " + s + " i = " + i);
+                                                MLog.d(TAG, "s = " + s + " i = " + i);
 //                                                loadData();
                                             }
                                         });

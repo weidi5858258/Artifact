@@ -28,7 +28,7 @@ import com.weidi.artifact.modle.Event;
 import com.weidi.dbutil.SimpleDao;
 import com.weidi.log.MLog;
 import com.weidi.threadpool.ThreadPool;
-import com.weidi.utils.EventBusUtils;
+import com.weidi.eventbus.EventBusUtils;
 import com.weidi.utils.MyToast;
 
 import java.text.SimpleDateFormat;

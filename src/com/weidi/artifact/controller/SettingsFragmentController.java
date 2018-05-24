@@ -27,7 +27,7 @@ import com.weidi.artifact.service.PeriodicalSerialKillerService;
 import com.weidi.artifact.service.ShowAttributionService;
 import com.weidi.fragment.FragOperManager;
 import com.weidi.log.MLog;
-import com.weidi.utils.EventBusUtils;
+import com.weidi.eventbus.EventBusUtils;
 import com.weidi.utils.MyToast;
 import com.weidi.utils.MyUtils;
 

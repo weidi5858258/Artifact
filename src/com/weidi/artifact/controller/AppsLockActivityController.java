@@ -28,7 +28,7 @@ import com.weidi.artifact.service.AppsLockService;
 import com.weidi.artifact.service.CoreService;
 //import com.weidi.callsystemmethod.ICallSystemMethod;
 import com.weidi.log.MLog;
-import com.weidi.utils.EventBusUtils;
+import com.weidi.eventbus.EventBusUtils;
 import com.weidi.utils.MyUtils;
 
 import java.security.NoSuchAlgorithmException;

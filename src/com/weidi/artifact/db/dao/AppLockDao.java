@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.weidi.artifact.constant.Constant;
 import com.weidi.artifact.db.MyInfosSQLiteOpenHelper;
 import com.weidi.artifact.service.AppsLockService;
-import com.weidi.utils.EventBusUtils;
+import com.weidi.eventbus.EventBusUtils;
 
 public class AppLockDao {
     private MyInfosSQLiteOpenHelper help;

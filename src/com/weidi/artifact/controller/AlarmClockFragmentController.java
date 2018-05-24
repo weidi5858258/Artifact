@@ -18,7 +18,7 @@ import com.weidi.artifact.service.AlarmClockService;
 import com.weidi.log.MLog;
 import com.weidi.timepicker.TimePickerDialog;
 import com.weidi.timepicker.data.Type;
-import com.weidi.utils.EventBusUtils;
+import com.weidi.eventbus.EventBusUtils;
 import com.weidi.utils.MyToast;
 import com.weidi.utils.MyUtils;
 

@@ -74,7 +74,7 @@ import com.weidi.log.MLog;
 import com.weidi.service.BaseService;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
-import com.weidi.utils.EventBusUtils;
+import com.weidi.eventbus.EventBusUtils;
 import com.weidi.utils.MyToast;
 import com.weidi.utils.MyUtils;
 import com.weidi.utils.Recorder;

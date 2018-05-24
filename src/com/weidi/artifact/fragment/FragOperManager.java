@@ -8,7 +8,7 @@ import android.text.TextUtils;
 
 import com.weidi.artifact.R;
 import com.weidi.artifact.constant.Constant;
-import com.weidi.utils.EventBusUtils;
+import com.weidi.eventbus.EventBusUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;

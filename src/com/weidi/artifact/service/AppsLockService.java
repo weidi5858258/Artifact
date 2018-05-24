@@ -16,7 +16,7 @@ import com.weidi.log.MLog;
 import com.weidi.service.BaseService;
 import com.weidi.threadpool.CustomRunnable;
 import com.weidi.threadpool.ThreadPool;
-import com.weidi.utils.EventBusUtils;
+import com.weidi.eventbus.EventBusUtils;
 
 import java.util.ArrayList;
 import java.util.List;
